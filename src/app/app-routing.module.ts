@@ -1,11 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardDemoComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { InventoryComponent } from './pages/inventory/inventory.component'
+import { LoginComponent } from './pages/login/login.component';
+import { EventsComponent } from './pages/events/events.component'
+import { PartnersComponent } from './pages/partners/partners.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login' , component: LoginComponent},
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'inventory', component: InventoryComponent },
+  { path: 'events' , component: EventsComponent },
+  { path: 'partners' , component: PartnersComponent} ,
+  { path: 'template' , component: DashboardDemoComponent},
   { path: 'basic-ui', loadChildren: () => import('./basic-ui/basic-ui.module').then(m => m.BasicUiModule) },
   { path: 'charts', loadChildren: () => import('./charts/charts.module').then(m => m.ChartsDemoModule) },
   { path: 'forms', loadChildren: () => import('./forms/form.module').then(m => m.FormModule) },

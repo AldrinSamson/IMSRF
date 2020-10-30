@@ -10,12 +10,17 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { FooterComponent } from './shared/footer/footer.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardDemoComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TodoComponent } from './apps/todo-list/todo/todo.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ContentAnimateDirective } from './shared/directives/content-animate.directive';
 import { TodoListComponent } from './apps/todo-list/todo-list.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { InventoryComponent } from './pages/inventory/inventory.component'
+import { LoginComponent } from './pages/login/login.component';
+import { EventsComponent } from './pages/events/events.component'
+import { PartnersComponent } from './pages/partners/partners.component';
 
 @NgModule({
   declarations: [
@@ -23,11 +28,16 @@ import { TodoListComponent } from './apps/todo-list/todo-list.component';
     NavbarComponent,
     SidebarComponent,
     FooterComponent,
-    DashboardComponent,
+    DashboardDemoComponent,
     TodoListComponent,
     TodoComponent,
     SpinnerComponent,
-    ContentAnimateDirective
+    ContentAnimateDirective,
+    DashboardComponent,
+    LoginComponent,
+    InventoryComponent,
+    EventsComponent,
+    PartnersComponent
   ],
   imports: [
     BrowserModule,
