@@ -44,17 +44,17 @@
       img {
         width: calc(#{$sidebar-width-lg} - 120px );
         max-width: 100%;
-        height: 28px;
+        height: 50px;
         margin: auto;
         vertical-align: middle;
       }
       &.brand-logo-mini {
         display: none;
         img {
-          width: calc(#{$sidebar-width-icon} - 50px );
+          margin-left: 15px;
           max-width: 100%;
-          height: 28px;
-          margin: auto;
+          height: 100px;
+
         }
       }
     }
@@ -187,7 +187,7 @@
             -moz-box-shadow: 0px 3px 21px 0px rgba(0, 0, 0, 0.2);
             box-shadow: 0px 3px 21px 0px rgba(0, 0, 0, 0.2);
             &.navbar-dropdown {
-              position: absolute;            
+              position: absolute;
               font-size: 0.9rem;
               margin-top: 0;
               right: 0;
@@ -350,7 +350,7 @@
         color: $white;
         .nav-profile-text {
           p {
-            @extend .text-white;         
+            @extend .text-white;
           }
         }
         .search-field {

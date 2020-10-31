@@ -21,6 +21,11 @@ import { InventoryComponent } from './pages/inventory/inventory.component'
 import { LoginComponent } from './pages/login/login.component';
 import { EventsComponent } from './pages/events/events.component'
 import { PartnersComponent } from './pages/partners/partners.component';
+import { MainComponent } from './pages/main/main.component';
+import { DonorsComponent } from './pages/donors/donors.component';
+import { DispatchComponent } from './pages/dispatch/dispatch.component';
+import { AccountsComponent } from './pages/accounts/accounts.component';
+import { ReportsComponent } from './pages/reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +42,12 @@ import { PartnersComponent } from './pages/partners/partners.component';
     LoginComponent,
     InventoryComponent,
     EventsComponent,
-    PartnersComponent
+    PartnersComponent,
+    MainComponent,
+    DonorsComponent,
+    DispatchComponent,
+    AccountsComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
