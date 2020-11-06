@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '@shared';
 
 @Component({
   selector: 'app-navbar',
@@ -10,8 +11,8 @@ import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 export class NavbarComponent implements OnInit {
   public iconOnlyToggled = false;
   public sidebarToggled = false;
-  
-  constructor(config: NgbDropdownConfig) {
+
+  constructor(config: NgbDropdownConfig, public auth: AuthService) {
     config.placement = 'bottom-right';
   }
 
@@ -41,6 +42,10 @@ export class NavbarComponent implements OnInit {
         body.classList.remove('sidebar-hidden');
       }
     }
+  }
+
+  logout() {
+    this.auth.logout();
   }
 
   // toggle right sidebar

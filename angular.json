@@ -28,11 +28,17 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/material-design-icons/iconfont/material-icons.css",
               "src/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js"
-            ]
+            ],
+            "allowedCommonJsDependencies": [
+              "@angular/fire/firestore",
+              "chart.js",
+              "firebase/app"
+           ]
           },
           "configurations": {
             "production": {

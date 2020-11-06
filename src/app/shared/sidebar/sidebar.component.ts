@@ -8,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class SidebarComponent implements OnInit {
   public uiBasicCollapsed = false;
   public samplePagesCollapsed = false;
-  
+  userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
+
   constructor() { }
 
   ngOnInit() {
@@ -28,5 +29,4 @@ export class SidebarComponent implements OnInit {
       });
     });
   }
-
 }

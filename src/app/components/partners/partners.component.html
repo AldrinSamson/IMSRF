@@ -1,0 +1,37 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Partners
+  </h3>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <!-- <h4 class="card-title">Bordered table</h4> -->
+        <p class="card-description">
+          <button type="button" class="btn btn-gradient-primary btn-fw" (click)= 'openAddPartner()'>Add Partner</button>
+        </p>
+        <div class="table-responsive pt-3">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Institution Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr  *ngFor="let partner of partner$ | async; trackBy: trackByFn" (click)="openViewPartner(partner)">
+                <td>
+                  {{partner.partnerID}}
+                </td>
+                <td>
+                  {{partner.institutionName}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

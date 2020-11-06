@@ -3,12 +3,13 @@
     <li class="nav-item nav-profile">
       <a href="javascript:;" class="nav-link">
         <div class="nav-profile-image">
-          <img src="assets/images/faces/face1.jpg" alt="profile">
+          <img src={{userDetails.photoUrl}} alt="profile">
           <span class="login-status online"></span> <!--change to offline or busy as needed-->
         </div>
         <div class="nav-profile-text">
-          <span class="font-weight-bold mb-2">John Doe</span>
-          <span class="text-secondary text-small">Admin</span>
+          <span class="font-weight-bold mb-2">{{userDetails.fullName}}</span>
+          <span class="text-secondary text-small">{{userDetails.institutionName}}</span>
+          <span class="text-secondary text-small">{{userDetails.position}}</span>
         </div>
       </a>
     </li>

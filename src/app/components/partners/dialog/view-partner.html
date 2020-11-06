@@ -1,0 +1,26 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Partner {{value.institutionName}}</h5>
+        <button type="button" class="close" (click) = "activeModal.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label>Institution Name</label>
+            <input type="text" class="form-control" formControlName="institutionName" >
+            <control-messages [control]="editForm.get('institutionName')"></control-messages>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)='updatePartner()' [disabled]="!editForm.valid">Edit</button>
+        <button type="button" class="btn btn-warning" (click)='deletePartner()'>Delete</button>
+        <button type="button" class="btn btn-light" (click) = "activeModal.close()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

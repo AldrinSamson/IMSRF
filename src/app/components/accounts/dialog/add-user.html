@@ -1,0 +1,72 @@
+
+
+<div class="modal demo-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add New Partner</h5>
+      </div>
+      <div class="modal-body">
+        <form  [formGroup]="addForm" class="post-form">
+            <img
+              *ngIf="profileImagePreview"
+              [src]="profileImagePreview"
+              alt="Profile Picture"
+              class="preview-image"
+            />
+            <!-- <mat-progress-bar  mode="determinate">
+            </mat-progress-bar> -->
+            <ngb-progressbar type="success" *ngIf="submitted" [value]="uploadProgress$ | async"></ngb-progressbar>
+
+            <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+              <mat-label>Profile Photo</mat-label>
+              <ngx-mat-file-input formControlName="photo" ngDefaultControl placeholder="Basic outline placeholder">
+              </ngx-mat-file-input>
+              <mat-error *ngIf="addForm.controls['photo'].hasError('image')">
+                That doesn't look like a Image to me
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-group">
+              <label for="exampleInputName1">First Name</label>
+              <input type="text" class="form-control" formControlName="firstName">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail3">Last Name</label>
+              <input type="text" class="form-control" formControlName="lastName">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword4">Email</label>
+              <input type="email" class="form-control form-control-lg" formControlName="email">
+              <control-messages [control]="addForm.get('email')"></control-messages>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword4">Contact Number</label>
+              <input type="text" class="form-control" formControlName="contactNumber">
+            </div>
+            <div class="form-group" *ngIf="isPartnerUser === false">
+              <label for="exampleInputPassword4">Position</label>
+              <input type="text" class="form-control" formControlName="position">
+            </div>
+            <div class="form-group" *ngIf="isPartnerUser">
+              <label for="exampleInputPassword4">Institution Name</label>
+              <input type="text" class="form-control" formControlName="institutionName">
+            </div>
+            <div class="form-group" *ngIf="isPartnerUser">
+              <label for="exampleInputPassword4">partnerID</label>
+              <input type="text" class="form-control" formControlName="partnerID">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" placeholder="Password" formControlName="password">
+              <control-messages [control]="addForm.get('password')"></control-messages>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="addUser()" [disabled]="addForm.invalid || submitted" >Submit</button>
+        <button type="button" class="btn btn-light" (click) = "activeModal.close()" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -54,7 +54,7 @@ $theme-colors: (
 $theme-gradient-colors: (
   primary:         linear-gradient(to right, #1850A3, #9AB9E3),
   secondary:       linear-gradient(to right, #992F38, #EEC6CA),
-  success:         linear-gradient(to right, #84d9d2, #07cdae),
+  success:         linear-gradient(to right, #84d9d2, #84d9d2),
   info:            linear-gradient(to right, #90caf9, #047edf 99%),
   warning:         linear-gradient(to right, #f6e384, #ffd500),
   danger:          linear-gradient(to right, #ffbf96, #fe7096),
@@ -70,6 +70,7 @@ $content-bg: #EEC6CA;
 $footer-bg: $content-bg;
 $footer-color: color(dark);
 $border-color: #E0D1D2;
+$border-color-2: #1850A3;
 
 ////////// COLOR VARIABLES //////////
 

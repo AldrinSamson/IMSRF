@@ -7,12 +7,12 @@
         <app-spinner *ngIf="isLoading"></app-spinner>
         <div contentAnimate *ngIf="!isLoading" class="h-100">
           <router-outlet></router-outlet>
+          <app-toasts></app-toasts>
         </div>
       </div>
-      <app-footer *ngIf="showFooter"></app-footer>
 
     </div>
-
   </div>
-
 </div>
+
+

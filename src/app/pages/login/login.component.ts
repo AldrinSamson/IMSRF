@@ -1,15 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component , Inject } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AuthService, ValidationService } from '@shared';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent  {
 
-  constructor() { }
+  loginForm: any;
 
-  ngOnInit(): void {
+  constructor(private authService: AuthService,
+    private formBuilder: FormBuilder
+  ) {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, ValidationService.emailValidator]],
+      password: ['', Validators.required]
+    });
   }
+
+  login() {
+    if (this.loginForm.dirty && this.loginForm.valid) {
+      this.authService.login(this.loginForm.value.email, this.loginForm.value.password).then(() => {
+      });
+    }
+  }
+
 
 }

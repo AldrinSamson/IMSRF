@@ -1,0 +1,25 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add New Partner</h5>
+        <button type="button" class="close" (click) = "activeModal.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addForm">
+          <div class="form-group">
+            <label>Institution Name</label>
+            <input type="text" class="form-control" formControlName="institutionName" >
+            <control-messages [control]="addForm.get('institutionName')"></control-messages>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)='addPartner()' [disabled]="!addForm.valid">Submit</button>
+        <button type="button" class="btn btn-light" (click) = "activeModal.close()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
