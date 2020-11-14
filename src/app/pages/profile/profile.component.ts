@@ -14,7 +14,7 @@ export class ChangePasswordComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly activeModal: NgbActiveModal,
+    public readonly activeModal: NgbActiveModal,
     private readonly userService: UserService) {
     this.passwordForm = this.formBuilder.group({
       oldPassword: ['' , Validators.required],
