@@ -21,6 +21,11 @@ export class FirebaseService {
     return this.db.collection<T>(model.collectionName, ref => ref.where(value1 , expression , value2)).valueChanges({idField: 'id'});
   }
 
+  getWithTwoFilter<T>(model: T | any , value1 , expression1 , value2 , value3 , expression2 , value4): Observable<T[]> {
+    return this.db.collection<T>(model.collectionName, ref => ref.where(value1 , expression1 , value2)
+    .where(value3 , expression2 , value4)).valueChanges({idField: 'id'});
+  }
+
   getOne<T>( model: T | any, id: string) {
     return this.db.collection<T>(model.collectionName).doc(id).valueChanges();
   }
@@ -95,6 +100,7 @@ export class FirebaseService {
       date: new Date(),
       level: userDetails.position,
       name: userDetails.fullName,
+      uid: userDetails.uid,
       type: service,
       // tslint:disable-next-line: object-literal-shorthand
       action: action

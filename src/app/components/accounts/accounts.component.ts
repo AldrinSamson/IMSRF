@@ -34,7 +34,7 @@ export class AddUserComponent implements OnInit, OnDestroy{
     private readonly storageService: StorageService,
     private readonly utilService: UtilService,
     private readonly alertService: AlertService,
-    private readonly activeModal: NgbActiveModal
+    public readonly activeModal: NgbActiveModal
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class AddUserComponent implements OnInit, OnDestroy{
       fullName: [''],
       email: ['', [Validators.required]],
       password: ['', [Validators.required, ValidationService.passwordValidator]],
-      contactNumber: ['', [Validators.required]],
+      contactNumber: ['', [Validators.required, Validators.max(12)]],
       photo: ['', [ this.image.bind(this)]],
       photoUrl: [''],
       position: [''],
@@ -154,7 +154,7 @@ export class ViewUserComponent implements OnInit{
     private readonly storageService: StorageService,
     private readonly utilService: UtilService,
     private readonly alertService: AlertService,
-    private readonly activeModal: NgbActiveModal
+    public readonly activeModal: NgbActiveModal
   ) {}
 
   ngOnInit(): void {
@@ -163,7 +163,7 @@ export class ViewUserComponent implements OnInit{
       firstName: [this.value.firstName, [Validators.required]],
       lastName: [this.value.lastName, [Validators.required]],
       fullName: [this.value.fullName],
-      contactNumber: [this.value.contactNumber, [Validators.required]],
+      contactNumber: [this.value.contactNumber, [Validators.required, Validators.max(12)]],
       institutionName: [this.value.institutionName],
       partnerID: [this.value.partnerID],
     });
@@ -177,34 +177,11 @@ export class ViewUserComponent implements OnInit{
   // }
 
   editUser() {
-    this.userService.updateOne(this.value.id , this.editForm.value);
-  }
-
-}
-
-@Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'change-password-dialog',
-  templateUrl: './dialog/change-password.html',
-  styleUrls: ['./accounts.component.scss'],
-})
-export class ChangePasswordComponent {
-  addForm: any;
-
-  constructor(private formBuilder: FormBuilder,
-    public activeModal: NgbActiveModal,
-    private userService: UserService) {
-    this.addForm = this.formBuilder.group({
-      institutionName: ['', Validators.required]
-    });
-  }
-
-  addUser() {
-    if (this.addForm.dirty && this.addForm.valid) {
+    if (this.editForm.dirty && this.editForm.valid) {
+      this.userService.updateOne(this.value.id , this.editForm.value);
       this.activeModal.close();
     }
   }
-
 }
 
 @Component({
@@ -230,16 +207,16 @@ export class AccountsComponent implements OnInit {
     this.partner$ = this.userService.getPartner();
   }
 
-  trackByFn(index) {
+  trackByFn(index: any) {
     return index;
   }
 
-  openAddUser(isPartnerUser) {
+  openAddUser(isPartnerUser: any) {
     const modalRef = this.modalService.open(AddUserComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.isPartnerUser = isPartnerUser;
   }
 
-  openViewUser(value , isPartnerUser) {
+  openViewUser(value: any , isPartnerUser: any) {
     const modalRef = this.modalService.open(ViewUserComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.isPartnerUser = isPartnerUser;
     modalRef.componentInstance.value = value;

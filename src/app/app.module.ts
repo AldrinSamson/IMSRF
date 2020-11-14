@@ -7,24 +7,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule, ThemeService } from 'ng2-charts';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InputFileConfig, InputFileModule } from 'ngx-input-file';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 
-import { AlertService, AuthGuardService, AuthService, ValidationService, PartnerAuthGuardService } from '@shared';
+import { AlertService, AuthGuardService, AuthService, ValidationService, PartnerAuthGuardService , MainAuthGuardService } from '@shared';
 import { firebaseKeys } from './firebase.config';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -39,9 +28,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { MainComponent } from './pages/main/main.component';
 import { ToasterComponent } from './shared/toaster/toaster.component';
 import { ControlMessagesComponent } from './shared/control-messages/control-messages.component';
-import { PartnerComponent } from './pages/partner/partner.component'
-
-const config: InputFileConfig = {};
+import { PartnerComponent } from './pages/partner/partner.component';
+import { ProfileComponent, ChangePasswordComponent } from './pages/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +43,9 @@ const config: InputFileConfig = {};
     MainComponent,
     ToasterComponent,
     ControlMessagesComponent,
-    PartnerComponent
+    PartnerComponent,
+    ProfileComponent,
+    ChangePasswordComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseKeys),
@@ -67,21 +57,9 @@ const config: InputFileConfig = {};
     ReactiveFormsModule,
     ChartsModule,
     AngularFireAuthModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    InputFileModule.forRoot(config),
-
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatCardModule,
     MaterialFileInputModule,
     MatFormFieldModule,
-    MatInputModule,
-    MatProgressBarModule,
+
   ],
   providers: [
     ThemeService,
@@ -92,7 +70,8 @@ const config: InputFileConfig = {};
     AngularFireStorage,
     BrowserAnimationsModule,
     BrowserModule,
-    PartnerAuthGuardService
+    PartnerAuthGuardService,
+    MainAuthGuardService,
   ],
   bootstrap: [AppComponent]
 })

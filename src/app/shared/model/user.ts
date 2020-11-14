@@ -1,12 +1,13 @@
 export class User {
+  static modelName = 'user';
   static collectionName = 'user';
-  static prefix = 'UR';
+  static prefix = 'USR';
   uid: any;
   firstName: string;
   lastName: string;
   fullName: string;
   email: string;
-  contactNumber: string;
+  contactNumber: number;
   photoUrl: string;
   position: string;
   institutionName: string; // default Red Bank Foundation

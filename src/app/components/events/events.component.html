@@ -1,1 +1,146 @@
-<p>events works!</p>
+<div class="page-header">
+  <h3 class="page-title">
+    Events
+  </h3>
+  <p class="page-description">
+    <button type="button" class="btn btn-secondary btn-fw" (click)= 'openInitEvent()'>Add Event</button>
+  </p>
+</div>
+<ngb-tabset type="pills" class="pills-primary">
+  <ngb-tab title="Active">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Active Events</h4>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Event ID</th>
+                      <th>Institution Name</th>
+                      <th>Date Of Event</th>
+                      <th>Location</th>
+                      <th>Options</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let activeEvent of activeEvent$ | async; trackBy: trackByFn">
+                      <td>
+                        {{activeEvent.eventID}}
+                      </td>
+                      <td>
+                        {{activeEvent.institutionName}}
+                      </td>
+                      <td>
+                        {{activeEvent.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy' }}
+                      </td>
+                      <td>
+                        {{activeEvent.location}}
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-primary btn-sm" (click)= 'openUpdatePreEvent(activeEvent)'>Update Event</button>
+                        <button type="button" class="btn btn-primary btn-sm" (click)= 'openUpdatePostEvent(activeEvent)'>Complete Event</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="History">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Past Events</h4>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Event ID</th>
+                      <th>Institution Name</th>
+                      <th>Date Of Event</th>
+                      <th>Location</th>
+                      <th>Date Submitted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let historicalEvent of historicalEvent$ | async; trackBy: trackByFn" (click)="openViewEvent(historicalEvent,false)">
+                      <td>
+                        {{historicalEvent.eventID}}
+                      </td>
+                      <td>
+                        {{historicalEvent.institutionName}}
+                      </td>
+                      <td>
+                        {{historicalEvent.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}
+                      </td>
+                      <td>
+                        {{historicalEvent.location}}
+                      </td>
+                      <td>
+                        {{historicalEvent.dateSubmitted.seconds * 1000 | date:'MM-dd-yyyy'}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Archived">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Archived Events</h4>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Event ID</th>
+                      <th>Institution Name</th>
+                      <th>Date Of Event</th>
+                      <th>Location</th>
+                      <th>Date Submitted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let archivedEvent of archivedEvent$ | async; trackBy: trackByFn" (click)="openViewEvent(archivedEvent,true)">
+                      <td>
+                        {{archivedEvent.eventID}}
+                      </td>
+                      <td>
+                        {{archivedEvent.institutionName}}
+                      </td>
+                      <td>
+                        {{archivedEvent.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}
+                      </td>
+                      <td>
+                        {{archivedEvent.location}}
+                      </td>
+                      <td>
+                        {{archivedEvent.dateSubmitted.seconds * 1000 | date:'MM-dd-yyyy'}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>

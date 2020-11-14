@@ -1,0 +1,31 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{value.batchID}}</h5>
+        <button type="button" class="close" (click) = "activeModal.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-justify">Institution: {{value.institutionName}}</p>
+        <p class="text-justify">Event ID: {{value.eventID}} <button type="button" class="btn btn-primary btn-sm" >View Event</button></p>
+        <p class="text-justify">Blood Type: {{value.bloodType}}</p>
+        <form [formGroup]="updateInventoryForm">
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" class="form-control" formControlName="quantity" >
+            <control-messages [control]="updateInventoryForm.get('quantity')"></control-messages>
+          </div>
+        </form>
+        <p class="text-justify">Expiry Date:  {{value.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy' }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)='updateInventory()' [disabled]="!updateInventoryForm.valid">Edit</button>
+        <button type="button" class="btn btn-warning" (click)='archiveBatch()'>Archive</button>
+        <button type="button" class="btn btn-danger" (click)='manualExpire()'>Expire Override</button>
+        <button type="button" class="btn btn-light" (click) = "activeModal.close()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

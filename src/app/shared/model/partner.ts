@@ -1,11 +1,12 @@
 export class Partner {
+  static modelName = 'partner'
   static collectionName = 'partner';
-  static prefix = 'PN';
+  static prefix = 'PTR';
   partnerID: string;
   institutionName: string;
+  num: number;
 
   // Meta Data
-  num: number;
   dateCreated: Date;
   dateLastModified: Date;
   createdBy: string;

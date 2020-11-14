@@ -11,13 +11,14 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 // Main Components
 import { DashboardComponent } from '../../components/dashboard/dashboard.component';
-import { InventoryComponent } from '../../components/inventory/inventory.component'
-import { EventsComponent } from '../../components/events/events.component'
+import { InventoryComponent, ViewBatchComponent } from '../../components/inventory/inventory.component'
+import { EventsComponent, InitEventComponent, UpdatePreEventComponent , UpdatePostEventComponent, ViewEventComponent } from '../../components/events/events.component'
 import { PartnersComponent, AddPartnerComponent, ViewPartnerComponent } from '../../components/partners/partners.component';
 import { DonorsComponent } from '../../components/donors/donors.component';
 import { DispatchComponent } from '../../components/dispatch/dispatch.component';
-import { AccountsComponent, AddUserComponent, ViewUserComponent, ChangePasswordComponent } from '../../components/accounts/accounts.component';
+import { AccountsComponent, AddUserComponent, ViewUserComponent } from '../../components/accounts/accounts.component';
 import { ReportsComponent } from '../../components/reports/reports.component';
+import { SummaryComponent } from '../../components/summary/summary.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'partners',
     component: PartnersComponent,
+  },
+  {
+    path: 'partners/summary',
+    component: SummaryComponent,
   },
   {
     path: 'donors',
@@ -66,13 +71,18 @@ const routes: Routes = [
     DispatchComponent,
     AccountsComponent,
     ReportsComponent,
+    SummaryComponent,
 
     // Dialogs
     AddPartnerComponent,
     ViewPartnerComponent,
     AddUserComponent,
     ViewUserComponent,
-    ChangePasswordComponent
+    InitEventComponent,
+    UpdatePreEventComponent ,
+    UpdatePostEventComponent,
+    ViewEventComponent,
+    ViewBatchComponent
   ],
   imports: [
     CommonModule,

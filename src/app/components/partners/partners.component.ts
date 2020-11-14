@@ -15,7 +15,7 @@ export class AddPartnerComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly activeModal: NgbActiveModal,
+    public readonly activeModal: NgbActiveModal,
     private readonly partnerService: PartnerService) {
     this.addForm = this.formBuilder.group({
       institutionName: ['', Validators.required]
@@ -43,7 +43,7 @@ export class ViewPartnerComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly activeModal: NgbActiveModal,
+    public readonly activeModal: NgbActiveModal,
     private readonly partnerService: PartnerService) {
   }
 
@@ -79,9 +79,7 @@ export class PartnersComponent implements OnInit {
   partner$: Observable<any>;
   constructor(
     private readonly partnerService: PartnerService,
-    private readonly firebaseService: FirebaseService,
-    private readonly modalService: NgbModal,
-    private readonly alertService: AlertService
+    private readonly modalService: NgbModal
     ) { }
 
   ngOnInit(): void {

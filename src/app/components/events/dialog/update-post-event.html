@@ -1,0 +1,122 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Event</h5>
+        <button type="button" class="close" (click) = "activeModal.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="postEventForm">
+          <div class="row">
+            <div class="col-4">
+              <div class="form-group">
+                <label>donorsRegistered</label>
+                <input type="number" class="form-control" formControlName="donorsRegistered" >
+                <control-messages [control]="postEventForm.get('donorsRegistered')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>donorsDefferTotal</label>
+                <input type="number" class="form-control" formControlName="donorsDefferTotal" >
+                <control-messages [control]="postEventForm.get('donorsDefferTotal')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>donorsDefferScreen</label>
+                <input type="number" class="form-control" formControlName="donorsDefferScreen" >
+                <control-messages [control]="postEventForm.get('donorsDefferScreen')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>donorsDefferLow</label>
+                <input type="number" class="form-control" formControlName="donorsDefferLow" >
+                <control-messages [control]="postEventForm.get('donorsDefferLow')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>donorsBledTotal</label>
+                <input type="number" class="form-control" formControlName="donorsBledTotal" >
+                <control-messages [control]="postEventForm.get('donorsBledTotal')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>donorsBledOk</label>
+                <input type="number" class="form-control" formControlName="donorsBledOk" >
+                <control-messages [control]="postEventForm.get('donorsBledOk')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>donorsBledFail</label>
+                <input type="number" class="form-control" formControlName="donorsBledFail" >
+                <control-messages [control]="postEventForm.get('donorsBledFail')"></control-messages>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Date of Expiry</label><br>
+                <ngb-datepicker #dp formControlName="dateExpiry" (navigate)="date = $event.next"></ngb-datepicker>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>quantityAP</label>
+                <input type="number" class="form-control" formControlName="quantityAP" >
+                <control-messages [control]="postEventForm.get('quantityAP')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label> quantityAN</label>
+                <input type="number" class="form-control" formControlName="quantityAN" >
+                <control-messages [control]="postEventForm.get('quantityAN')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>quantityBP </label>
+                <input type="number" class="form-control" formControlName="quantityBP" >
+                <control-messages [control]="postEventForm.get('quantityBP')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>quantityBN </label>
+                <input type="number" class="form-control" formControlName="quantityBN" >
+                <control-messages [control]="postEventForm.get('quantityBN')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label> quantityOP</label>
+                <input type="number" class="form-control" formControlName="quantityOP" >
+                <control-messages [control]="postEventForm.get('quantityOP')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label> quantityON</label>
+                <input type="number" class="form-control" formControlName="quantityON" >
+                <control-messages [control]="postEventForm.get('quantityON')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label> quantityABP</label>
+                <input type="number" class="form-control" formControlName="quantityABP" >
+                <control-messages [control]="postEventForm.get('quantityABP')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label>quantityABN </label>
+                <input type="number" class="form-control" formControlName="quantityABN" >
+                <control-messages [control]="postEventForm.get('quantityABN')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label> quantityTotal</label>
+                <input type="number" class="form-control" formControlName="quantityTotal" >
+                <control-messages [control]="postEventForm.get('quantityTotal')"></control-messages>
+              </div>
+              <div class="form-group">
+                <label> remarks</label>
+                <input type="text" class="form-control" formControlName="remarks" >
+                <control-messages [control]="postEventForm.get('remarks')"></control-messages>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)='postEvent()' [disabled]="!postEventForm.valid">Submit</button>
+        <button type="button" class="btn btn-light" (click) = "activeModal.close()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

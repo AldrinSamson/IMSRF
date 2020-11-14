@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@shared';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,8 +10,15 @@ export class SidebarComponent implements OnInit {
   public uiBasicCollapsed = false;
   public samplePagesCollapsed = false;
   userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
+  isPartner;
+  isAdmin;
+  isStaff;
 
-  constructor() { }
+  constructor( private readonly authService: AuthService ) {
+     this.isPartner = this.authService.isPartner();
+     this.isAdmin = this.authService.isAdmin();
+     this.isStaff = this.authService.isStaff();
+  }
 
   ngOnInit() {
     const body = document.querySelector('body');

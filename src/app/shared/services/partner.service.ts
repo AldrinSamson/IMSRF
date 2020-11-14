@@ -11,7 +11,8 @@ import { AlertService } from './alert.service';
 })
 export class PartnerService {
 
-  constructor( public firebase: FirebaseService,
+  constructor(
+    public firebase: FirebaseService,
     public db: AngularFirestore,
     public authService: AuthService,
     public genService: IdGeneratorService,
@@ -29,15 +30,18 @@ export class PartnerService {
   addOne(values) {
     this.genService.generateID(Partner).then(val => {
         this.db.collection<Partner>(Partner.collectionName).add({
-        partnerID: val[0],
-        num: val[1],
+        partnerID: val.newID,
+        num: val.newNum,
         institutionName: values.institutionName,
         dateCreated: new Date(),
         dateLastModified: new Date(),
-        createdBy: 'admin',
-        lastModifiedBy: 'admin'
+        createdBy:  this.authService.userName(),
+        lastModifiedBy:  this.authService.userName()
+      }).catch(error => {
+        throw new Error('Error: Updating document:' + error);
+      }).then( () => {
+        this.alertService.showToaster(values.institutionName+' Partner Added' , { classname: 'bg-success text-light', delay: 10000 })
       });
-      this.alertService.showToaster(values.institutionName+' Partner Added' , { classname: 'bg-success text-light', delay: 10000 })
     })
 
   }
@@ -46,9 +50,12 @@ export class PartnerService {
     this.db.collection<Partner>(Partner.collectionName).doc(id).update({
       institutionName: values.institutionName,
       dateLastModified: new Date(),
-      lastModifiedBy: 'admin'
+      lastModifiedBy:  this.authService.userName()
+    }).catch(error => {
+      throw new Error('Error: Updating document:' + error);
+    }).then( () => {
+      this.alertService.showToaster(values.institutionName+' Partner Modified' , { classname: 'bg-success text-light', delay: 10000 })
     });
-    this.alertService.showToaster(values.institutionName+' Partner Modified' , { classname: 'bg-success text-light', delay: 10000 })
   }
 
   archive(id) {

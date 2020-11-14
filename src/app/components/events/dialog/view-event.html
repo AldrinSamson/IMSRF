@@ -1,0 +1,97 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{value.eventID}}</h5>
+        <button type="button" class="close" (click) = "activeModal.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-4">
+            <p class="text-justify">Institution: {{value.institutionName}}</p>
+            <p class="text-justify">Date of Event: {{value.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
+            <p class="text-justify">Location: {{value.location}}</p>
+            <br>
+            <p class="text-justify">Date Submitted: {{value.dateSubmitted.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
+            <p class="text-justify">donorsRegistered: {{value.donorsRegistered}}</p>
+            <p class="text-justify">donorsDefferTotal: {{value.donorsDefferTotal}}</p>
+            <p class="text-justify">donorsDefferScreen: {{value.donorsDefferScreen}}</p>
+            <p class="text-justify">donorsDefferLow: {{value.donorsDefferLow}}</p>
+            <p class="text-justify">donorsBledTotal: {{value.donorsBledTotal}}</p>
+            <p class="text-justify">donorsBledOk: {{value.donorsBledOk}}</p>
+            <p class="text-justify">donorsBledFail: {{value.donorsBledFail}}</p>
+            <br>
+            <p class="text-justify">Remarks: {{value.remarks}}</p>
+          </div>
+          <div class="col-8">
+            <p class="text-justify">Expiry Date: {{value.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Batch ID</th>
+                  <th>Type</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{value.batchIDIndex[0]}}</td>
+                  <td>{{bloodTypes[0]}}</td>
+                  <td>{{value.quantityAP}}</td>
+                </tr>
+                <tr>
+                  <td>{{value.batchIDIndex[1]}}</td>
+                  <td>{{bloodTypes[1]}}</td>
+                  <td>{{value.quantityAN}}</td>
+                </tr>
+                <tr>
+                  <td>{{value.batchIDIndex[2]}}</td>
+                  <td>{{bloodTypes[2]}}</td>
+                  <td>{{value.quantityBP}}</td>
+                </tr>
+                <tr>
+                  <td>{{value.batchIDIndex[3]}}</td>
+                  <td>{{bloodTypes[3]}}</td>
+                  <td>{{value.quantityBN}}</td>
+                </tr>
+                <tr>
+                  <td>{{value.batchIDIndex[4]}}</td>
+                  <td>{{bloodTypes[4]}}</td>
+                  <td>{{value.quantityOP}}</td>
+                </tr>
+                <tr>
+                  <td>{{value.batchIDIndex[5]}}</td>
+                  <td>{{bloodTypes[5]}}</td>
+                  <td>{{value.quantityON}}</td>
+                </tr>
+                <tr>
+                  <td>{{value.batchIDIndex[6]}}</td>
+                  <td>{{bloodTypes[6]}}</td>
+                  <td>{{value.quantityABP}}</td>
+                </tr>
+                <tr>
+                  <td>{{value.batchIDIndex[7]}}</td>
+                  <td>{{bloodTypes[7]}}</td>
+                  <td>{{value.quantityABN}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="text-justify">Total: {{value.quantityTotal}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" *ngIf="isArchived === false"(click) = "archiveEvent()">Archive</button>
+        <button type="button" class="btn btn-light" *ngIf="isArchived"(click) = "restoreEvent()">Restore</button>
+        <button type="button" class="btn btn-light" (click) = "activeModal.close()">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

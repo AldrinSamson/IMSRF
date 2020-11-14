@@ -16,6 +16,7 @@
               <label for="exampleInputName1">First Name</label>
               <input type="text" class="form-control" formControlName="firstName">
             </div>
+
             <div class="form-group">
               <label for="exampleInputEmail3">Last Name</label>
               <input type="text" class="form-control" formControlName="lastName">
@@ -30,10 +31,12 @@
               <label for="exampleInputPassword4">Institution Name</label>
               <input type="text" class="form-control" formControlName="institutionName">
             </div>
+
             <div class="form-group" *ngIf="isPartnerUser">
               <label for="exampleInputPassword4">partnerID</label>
               <input type="text" class="form-control" formControlName="partnerID">
             </div>
+
         </form>
       </div>
       <div class="modal-footer">

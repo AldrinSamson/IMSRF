@@ -24,12 +24,12 @@ export class AuthService {
     private ngZone: NgZone) { }
 
   async login(email: string, password: string) {
-    // console.log(" user auth "+this.isAuthenticated());
     try {
       this.alert.showToaster('Autheticating ...');
       const result = await this.afAuth.signInWithEmailAndPassword(email, password).then( res => {
         this.userUid = res.user.uid;
-        this.db.collection('user', ref => ref.where('uid', '==', res.user.uid)).valueChanges().forEach( result => {
+        // tslint:disable-next-line: no-shadowed-variable
+        this.db.collection('user', ref => ref.where('uid', '==', res.user.uid)).valueChanges({idField: 'id'}).forEach( result => {
           this.userDetails = result;
           if (result.length !== 0) {
             sessionStorage.setItem('session-alive', 'true');

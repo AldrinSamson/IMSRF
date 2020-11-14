@@ -42,11 +42,11 @@ $colors: (
 
 $theme-colors: (
   primary:         #992F38,
-  secondary:       #9AB9E3,
+  secondary:       #5ba7e0,
   success:         #74c7ba,
-  info:            #5ba7e0,
-  warning:         #fde87b,
-  danger:          #fe7c96,
+  info:            #9AB9E3,
+  warning:         #fe7c96,
+  danger:          rgb(235, 78, 78),
   light:           #f8f9fa,
   dark:            #3e4b5b
 );
@@ -131,7 +131,7 @@ $sidebar-menu-padding-x: 2.25rem;
 $sidebar-submenu-font-size: .8125rem;
 $sidebar-submenu-item-padding: .75rem 2rem .75rem 2rem;
 
-$sidebar-icon-font-size: 1.125rem;
+$sidebar-icon-font-size: 2rem;
 $sidebar-arrow-font-size: .625rem;
 
 $sidebar-profile-bg: transparent;

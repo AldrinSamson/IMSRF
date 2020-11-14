@@ -5,6 +5,9 @@ import { User } from '../model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertService } from './alert.service';
+import * as fb from 'firebase/app';
+import 'firebase/auth';
+
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +39,40 @@ export class UserService {
     return this.firebase.getWithOneFilter(User, 'position', '==', 'Partner')
   }
 
+  updateCurrentUserPassword(value) {
+    const currentUser = fb.auth().currentUser;
+    const userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
+    const credentials = fb.auth.EmailAuthProvider.credential(userDetails.email, value.oldPassword);
+
+    currentUser.reauthenticateWithCredential(credentials).then(
+        success => {
+          if (value.newPassword !== value.newPasswordConfirm){
+           this.alertService.showToaster('You did not confirm your password correctly.' ,
+            { classname: 'bg-success text-warning', delay: 10000 });
+          } else if (value.newPassword.length < 6){
+            this.alertService.showToaster('Your password should be at least 6 characters long' ,
+            { classname: 'bg-success text-warning', delay: 10000 });
+          } else {
+            this.alertService.showToaster('Your password has been updated!' ,
+            { classname: 'bg-success text-warning', delay: 10000 });
+            currentUser.updatePassword(value.newPassword).then(res => {
+              console.log(res);
+              return true
+            }).catch( error => {
+              console.log(error);
+            });
+          }
+        },
+        error => {
+          console.log(error);
+          if(error.code === 'auth/wrong-password'){
+            this.alertService.showToaster('Your old password is invalid.' ,
+            { classname: 'bg-success text-warning', delay: 10000 });
+          }
+        }
+      )
+  }
+
   addOne(values) {
     return new Promise(resolve => {
       this.afAuth.createUserWithEmailAndPassword(values.email, values.password)
@@ -51,16 +88,16 @@ export class UserService {
             position: values.position,
             institutionName: values.institutionName,
             partnerID: values.partnerID,
-            dateCreated: values.dateCreated,
-            dateLastModified: values.dateLastModified,
-            createdBy: values.createdBy,
-            lastModifiedBy: values.lastModifiedBy
+            dateCreated: new Date(),
+            dateLastModified: new Date(),
+            createdBy: this.authService.userName(),
+            lastModifiedBy: this.authService.userName()
           });
           this.alertService.showToaster('User Create Success'  , { classname: 'bg-success text-light', delay: 10000 });
         })
         .catch((_error) => {
-          this.alertService.showToaster('User Create Failed!, ' + _error.message  , { classname: 'bg-warning text-light', delay: 10000 });
-          console.log('Broker Create Failed!', _error);
+          this.alertService.showToaster('User Create Failed' + _error.message  , { classname: 'bg-warning text-light', delay: 10000 });
+          console.log('User Create Failed!', _error);
         });
     });
   }
@@ -75,9 +112,12 @@ export class UserService {
       partnerID: value.partnerID,
       dateLastModified: new Date(),
       lastModifiedBy: this.authService.userName()
-    });
-    this.alertService.showToaster( value.firstName + ' ' + value.lastName+' User Modified',
+    }).catch(error => {
+      throw new Error('Error: Updating document:' + error);
+    }).then( () => {
+      this.alertService.showToaster(value.firstName + ' ' + value.lastName+' User Modified',
     { classname: 'bg-success text-light', delay: 10000 })
+    });
   }
 
   archive(id) {
