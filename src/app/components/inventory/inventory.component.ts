@@ -3,7 +3,6 @@ import { InventoryService, AlertService, ValidationService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { runInThisContext } from 'vm';
 
 @Component({
   // tslint:disable-next-line: component-selector
