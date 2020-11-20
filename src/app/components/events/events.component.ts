@@ -1,9 +1,9 @@
-import { Component, OnInit, Input,  OnDestroy} from '@angular/core';
-import { EventService, AlertService, ValidationService, BloodTypes } from '@shared';
+import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
+import { EventService, PartnerService, AlertService, BloodTypes, Partner } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { Observable, Subscription, Subject, merge } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, filter} from 'rxjs/operators';
+import { NgbActiveModal, NgbModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -13,30 +13,51 @@ import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./events.component.scss'],
 })
 export class InitEventComponent {
-
+  @Input() partnerData;
+  public partner: Partner;
   dateObject: NgbDateStruct;
   date: {year: number, month: number};
-
   initEventForm: any;
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
 
   constructor(
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
-    private readonly eventService: EventService) {
+    private readonly eventService: EventService,
+    private readonly alertService: AlertService) {
     this.initEventForm = this.formBuilder.group({
-      partnerID: ['', Validators.required],
-      institutionName: ['', Validators.required],
+      partnerID: [],
+      institutionName: [],
       dateOfEvent: [ this.dateObject ],
       location: ['', Validators.required]
     });
   }
 
+  formatter = (partner: Partner) => partner.institutionName;
+
+  search = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.partnerData
+        : this.partnerData.filter(partner => new RegExp(term, 'mi').test(partner.institutionName)).slice(0, 10))
+    ));
+  }
+
   initEvent() {
-    if (this.initEventForm.dirty && this.initEventForm.valid) {
+    if (this.initEventForm.dirty && this.initEventForm.valid && this.partner !== undefined) {
+      this.initEventForm.controls.partnerID.setValue(this.partner.partnerID);
+      this.initEventForm.controls.institutionName.setValue(this.partner.institutionName);
       this.initEventForm.controls.dateOfEvent.setValue(new Date(this.initEventForm.value.dateOfEvent.year,
         this.initEventForm.value.dateOfEvent.month - 1, this.initEventForm.value.dateOfEvent.day));
       this.eventService.initPreEvent(this.initEventForm.value);
       this.activeModal.close();
+    } else if (this.partner === undefined) {
+      this.alertService.showToaster('Invalid Institution Name' , { classname: 'bg-success text-warning', delay: 10000 })
     }
   }
 }
@@ -50,33 +71,58 @@ export class InitEventComponent {
 export class UpdatePreEventComponent implements OnInit{
   preEventForm: any;
   @Input() value;
+  @Input() partnerData;
+  public partner: any = {};
   dateObject: NgbDateStruct;
   date: {year: number, month: number};
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
 
   constructor(
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
-    private readonly eventService: EventService) {
+    private readonly eventService: EventService,
+    private readonly alertService: AlertService) {
     }
 
   ngOnInit(): void {
+    const recordDate = new Date(this.value.dateOfEvent.seconds * 1000)
+    this.dateObject = { day: recordDate.getDate(),month:  recordDate.getMonth()+1, year:  recordDate.getFullYear()};
     this.preEventForm = this.formBuilder.group({
-      partnerID: [this.value.partnerID, Validators.required],
-      institutionName: [this.value.institutionName, Validators.required],
-      dateOfEvent: [ this.value.dateOfEvent.toDate() ],
-      newDateOfEvent : [this.dateObject],
+      partnerID: [],
+      institutionName: [],
+      dateOfEvent : [this.dateObject, Validators.required],
       location: [this.value.location, Validators.required]
     });
+    this.partner.partnerID = this.value.partnerID
+    this.partner.institutionName = this.value.institutionName
+  }
+
+  formatter = (partner: Partner) => partner.institutionName;
+
+  search = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.partnerData
+        : this.partnerData.filter(partner => new RegExp(term, 'mi').test(partner.institutionName)).slice(0, 10))
+    ));
   }
 
   preEvent() {
-    if (this.preEventForm.dirty && this.preEventForm.valid) {
-      if (this.preEventForm.value.newDateOfEvent !== null) {
-        this.preEventForm.controls.dateOfEvent.setValue(new Date(this.preEventForm.value.newDateOfEvent.year,
-          this.preEventForm.value.newDateOfEvent.month - 1, this.preEventForm.value.newDateOfEvent.day));
-      }
+    if (this.preEventForm.dirty && this.preEventForm.valid && this.partner !== undefined) {
+      this.preEventForm.controls.partnerID.setValue(this.partner.partnerID);
+      this.preEventForm.controls.institutionName.setValue(this.partner.institutionName);
+        this.preEventForm.controls.dateOfEvent.setValue(new Date(this.preEventForm.value.dateOfEvent.year,
+          this.preEventForm.value.dateOfEvent.month - 1, this.preEventForm.value.dateOfEvent.day));
+
       this.eventService.updatePreEvent(this.value.id ,this.preEventForm.value);
       this.activeModal.close();
+    }else if (this.partner === undefined) {
+      this.alertService.showToaster('Invalid Institution Name' , { classname: 'bg-success text-warning', delay: 10000 })
     }
   }
 
@@ -169,15 +215,18 @@ export class ViewEventComponent {
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })
-export class EventsComponent implements OnInit {
+export class EventsComponent implements OnInit, OnDestroy {
 
   activeEvent$: Observable<any>;
   historicalEvent$: Observable<any>;
   archivedEvent$: Observable<any>;
+  partner$: Subscription;
+  partnerData;
 
   constructor(
     private readonly modalService: NgbModal,
-    private readonly eventService: EventService) { }
+    private readonly eventService: EventService,
+    public partnerService: PartnerService) { }
 
   ngOnInit(): void {
     this.getData();
@@ -187,6 +236,9 @@ export class EventsComponent implements OnInit {
     this.activeEvent$ = this.eventService.getActive();
     this.historicalEvent$ = this.eventService.getHistorical();
     this.archivedEvent$ = this.eventService.getArchived();
+    this.partner$ = this.partnerService.getAll().subscribe( res => {
+      this.partnerData = res
+    });
   }
 
   trackByFn(index) {
@@ -194,16 +246,18 @@ export class EventsComponent implements OnInit {
   }
 
   openInitEvent() {
-    this.modalService.open(InitEventComponent,{centered: true, scrollable: true, backdrop: 'static'});
+    const modalRef = this.modalService.open(InitEventComponent,{centered: true, scrollable: true, backdrop: 'static'});
+    modalRef.componentInstance.partnerData = this.partnerData;
   }
 
   openUpdatePreEvent(value) {
     const modalRef = this.modalService.open(UpdatePreEventComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.value = value;
+    modalRef.componentInstance.partnerData = this.partnerData;
   }
 
   openUpdatePostEvent(value) {
-    const modalRef = this.modalService.open(UpdatePostEventComponent,{centered: true, scrollable: true, backdrop: 'static', size: 'xl'});
+    const modalRef = this.modalService.open(UpdatePostEventComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.value = value;
   }
 
@@ -211,6 +265,12 @@ export class EventsComponent implements OnInit {
     const modalRef = this.modalService.open(ViewEventComponent,{centered: true, scrollable: true, backdrop: 'static', size: 'xl'});
     modalRef.componentInstance.value = value;
     modalRef.componentInstance.isArchived = isArchived;
+  }
+
+  ngOnDestroy() {
+    if (this.partner$ !== null) {
+      this.partner$.unsubscribe();
+    }
   }
 
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { AuthService } from './auth.service';
-import { User } from '../model';
+import { User , Audit} from '../model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertService } from './alert.service';
@@ -37,6 +37,10 @@ export class UserService {
 
   getPartner() {
     return this.firebase.getWithOneFilter(User, 'position', '==', 'Partner')
+  }
+
+  getAllAudit() {
+    return this.firebase.getAllData<Audit>(Audit);
   }
 
   updateCurrentUserPassword(value) {

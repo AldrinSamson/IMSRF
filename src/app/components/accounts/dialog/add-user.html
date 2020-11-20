@@ -50,11 +50,17 @@
             </div>
             <div class="form-group" *ngIf="isPartnerUser">
               <label for="exampleInputPassword4">Institution Name</label>
-              <input type="text" class="form-control" formControlName="institutionName">
-            </div>
-            <div class="form-group" *ngIf="isPartnerUser">
-              <label for="exampleInputPassword4">partnerID</label>
-              <input type="text" class="form-control" formControlName="partnerID">
+              <input type="text" class="form-control"
+                    [(ngModel)]="partner"
+                    [ngModelOptions]="{standalone: true}"
+                    [ngbTypeahead]="search"
+                    [inputFormatter]="formatter"
+                    [resultFormatter]="formatter"
+                    (focus)="focus$.next($any($event).target.value)"
+                    (click)="click$.next($any($event).target.value)"
+                    #instance="ngbTypeahead"
+                    [editable]='false'
+                    />
             </div>
             <div class="form-group">
               <input type="password" class="form-control" placeholder="Password" formControlName="password">

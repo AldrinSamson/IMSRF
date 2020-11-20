@@ -4,6 +4,8 @@ import { AuthService  } from './auth.service';
 import { Inventory } from '../model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertService } from './alert.service';
+import { InitEventComponent } from 'src/app/components/events/events.component';
+import { EMPTY } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +26,12 @@ export class InventoryService {
   getOne(id: string){
     return this.firebase.getOne<Inventory>(Inventory , id);
   }
+  getInventoryOfPartner(partnerID) {
+    return this.firebase.getWithOneFilter(Inventory,  'partnerID', '==', partnerID )
+  }
 
-  advancedSearch(values) {
-
+  getByPTRandBT(partnerID , bloodType) {
+    return this.firebase.getWithTwoFilter(Inventory, 'partnerID', '==', partnerID , 'bloodType', '==', bloodType);
   }
 
   updateOne(id: string, values) {
@@ -45,6 +50,22 @@ export class InventoryService {
       this.alertService.showToaster(values.batchID+' Batch Quantity Modified' ,
       { classname: 'bg-success text-light', delay: 10000 })
     });
+  }
+
+  async getAndSubtract(id , quantity) {
+    const query = await this.db.collection(Inventory.collectionName).doc(id).get();
+    const snapshot = query.toPromise();
+      if (snapshot !== undefined){
+        const oldQuantity = (await snapshot).data().quantity
+        const newQuanity = oldQuantity - quantity
+        if (Math.sign(newQuanity) >= 0 ) {
+          return newQuanity
+        } else {
+          return EMPTY
+        }
+      } else {
+        return EMPTY
+      }
   }
 
   manualExpire(id: string, value) {

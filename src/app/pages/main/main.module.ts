@@ -5,6 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
@@ -15,7 +17,7 @@ import { InventoryComponent, ViewBatchComponent } from '../../components/invento
 import { EventsComponent, InitEventComponent, UpdatePreEventComponent , UpdatePostEventComponent, ViewEventComponent } from '../../components/events/events.component'
 import { PartnersComponent, AddPartnerComponent, ViewPartnerComponent } from '../../components/partners/partners.component';
 import { DonorsComponent } from '../../components/donors/donors.component';
-import { DispatchComponent } from '../../components/dispatch/dispatch.component';
+import { DispatchComponent, AddRequestComponent, ViewRequestComponent, AddOrderComponent , ViewOrderComponent } from '../../components/dispatch/dispatch.component';
 import { AccountsComponent, AddUserComponent, ViewUserComponent } from '../../components/accounts/accounts.component';
 import { ReportsComponent } from '../../components/reports/reports.component';
 import { SummaryComponent } from '../../components/summary/summary.component';
@@ -82,7 +84,11 @@ const routes: Routes = [
     UpdatePreEventComponent ,
     UpdatePostEventComponent,
     ViewEventComponent,
-    ViewBatchComponent
+    ViewBatchComponent,
+    AddRequestComponent,
+    ViewRequestComponent,
+    AddOrderComponent,
+    ViewOrderComponent
   ],
   imports: [
     CommonModule,
@@ -91,6 +97,8 @@ const routes: Routes = [
     ChartsModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
+    Ng2SearchPipeModule,
 
     MaterialFileInputModule,
     MatFormFieldModule

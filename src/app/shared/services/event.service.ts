@@ -27,6 +27,10 @@ export class EventService {
     return this.firebase.getOne<Event>(Event , id);
   }
 
+  getEventsOfPartner(partnerID) {
+    return this.firebase.getWithTwoFilter(Event, 'isSubmitted', '==', false, 'partnerID', '==', partnerID);
+  }
+
   getActive() {
     return this.firebase.getWithTwoFilter(Event, 'isSubmitted', '==', false, 'isArchived', '==', false);
   }
@@ -169,7 +173,7 @@ export class EventService {
               isExpired: false,
               isEmpty: false,
               isArchived: false,
-              searchTags: [val.newID, values.partnerID, values.eventID, values.dateExpiry],
+              searchTags: [val.newID, values.partnerID, values.eventID, values.dateExpiry, bloodTypeValue],
 
               dateCreated: new Date(),
               dateLastModified: new Date(),

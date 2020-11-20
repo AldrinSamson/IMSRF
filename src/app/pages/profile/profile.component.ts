@@ -62,7 +62,7 @@ export class ProfileComponent implements OnInit {
       firstName: [this.userDetails.firstName, [Validators.required]],
       lastName: [this.userDetails.lastName, [Validators.required]],
       fullName: [this.userDetails.fullName],
-      contactNumber: [this.userDetails.contactNumber, [Validators.required, Validators.max(12)]],
+      contactNumber: [this.userDetails.contactNumber, [Validators.required]],
       institutionName: [this.userDetails.institutionName],
       partnerID: [this.userDetails.partnerID],
     });

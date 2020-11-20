@@ -2,33 +2,56 @@ import { NgModule , CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { InventoryComponent } from '../../components/partner-view/inventory/inventory.component';
-import { SummaryComponent } from '../../components/partner-view/summary/summary.component';
-import { DispatchComponent } from '../../components/partner-view/dispatch/dispatch.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ChartsModule, ThemeService } from 'ng2-charts';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
+
+import { InventoryPartnerComponent, ViewBatchPartnerComponent } from '../../components/inventory/inventory-PV.component';
+import { SummaryPartnerComponent } from '../../components/summary/summary-PV.component';
+import { DispatchPartnerComponent, ViewOrderComponent, ValidateOrderComponent } from '../../components/dispatch/dispatch-PV.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'inventory', pathMatch: 'full' },
   {
      path: 'inventory',
-     component: InventoryComponent,
+     component: InventoryPartnerComponent,
   },
   {
      path: 'summary',
-     component: SummaryComponent,
+     component: SummaryPartnerComponent,
   },
   {
      path: 'dispatch',
-     component: DispatchComponent,
+     component: DispatchPartnerComponent,
   }
 ]
 
 @NgModule({
   declarations: [
-    InventoryComponent
+    InventoryPartnerComponent,
+    SummaryPartnerComponent,
+    DispatchPartnerComponent,
+    ViewOrderComponent,
+    ValidateOrderComponent,
+    ViewBatchPartnerComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    NgbModule,
+    ChartsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPaginationModule,
+    Ng2SearchPipeModule,
+
+    MaterialFileInputModule,
+    MatFormFieldModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

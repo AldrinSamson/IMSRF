@@ -22,7 +22,7 @@ export class Inventory {
   createdBy: string;
   lastModifiedBy: string;
 
-  // [BCH , EVT , PTR , DATE of EXPIRY ]
+  // [BCH , EVT , PTR , DATE of EXPIRY, bloodType ]
   // experimental for use in advanced searches using array-contains-any
   searchTags: Array<any>;
 }

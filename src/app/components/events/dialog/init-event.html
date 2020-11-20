@@ -11,22 +11,35 @@
         <form [formGroup]="initEventForm">
           <div class="form-group">
             <label>Institution Name</label>
-            <input type="text" class="form-control" formControlName="institutionName" >
-            <control-messages [control]="initEventForm.get('institutionName')"></control-messages>
+            <input type="text" class="form-control"
+                    [(ngModel)]="partner"
+                    [ngModelOptions]="{standalone: true}"
+                    [ngbTypeahead]="search"
+                    [inputFormatter]="formatter"
+                    [resultFormatter]="formatter"
+                    (focus)="focus$.next($any($event).target.value)"
+                    (click)="click$.next($any($event).target.value)"
+                    #instance="ngbTypeahead"
+                    [editable]='false'
+                    />
           </div>
+          <label for="typeahead-prevent-manual-entry">Search for a state:</label>
           <div class="form-group">
             <label>Date of Event</label>
-            <ngb-datepicker #dp formControlName="dateOfEvent" (navigate)="date = $event.next"></ngb-datepicker>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd"
+                     name="dp" formControlName="dateOfEvent" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+                  <i class="mdi mdi-calendar "></i>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label>Location</label>
             <input type="text" class="form-control" formControlName="location" >
             <control-messages [control]="initEventForm.get('location')"></control-messages>
-          </div>
-          <div class="form-group">
-            <label>Partner ID</label>
-            <input type="text" class="form-control" formControlName="partnerID" >
-            <control-messages [control]="initEventForm.get('partnerID')"></control-messages>
           </div>
         </form>
       </div>

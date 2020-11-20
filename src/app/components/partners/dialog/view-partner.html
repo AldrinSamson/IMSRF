@@ -17,6 +17,8 @@
         </form>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" routerLink="main/partners/summary"
+        [queryParams]="{ id: value.partnerID , partner: value.institutionName}" (click) = "activeModal.close()">Go to Page</button>
         <button type="button" class="btn btn-success" (click)='updatePartner()' [disabled]="!editForm.valid">Edit</button>
         <button type="button" class="btn btn-warning" (click)='deletePartner()'>Delete</button>
         <button type="button" class="btn btn-light" (click) = "activeModal.close()">Cancel</button>

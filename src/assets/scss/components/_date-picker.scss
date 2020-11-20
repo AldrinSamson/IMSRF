@@ -1,8 +1,8 @@
 ngb-datepicker {
   .ngb-dp-header {
-    @extend .bg-success;
+    @extend .bg-secondary;
     ngb-datepicker-navigation {
-      padding: 35px 25px 20px 25px;
+      // padding: 35px 25px 20px 25px;
       .ngb-dp-arrow {
         .ngb-dp-arrow-btn {
           .ngb-dp-navigation-chevron {
@@ -44,7 +44,6 @@ ngb-datepicker {
           display: flex;
           @include justify-content(space-around);
           &:last-child {
-            padding-bottom: 35px;
             margin-bottom: 0;
           }
           .ngb-dp-day {
@@ -78,7 +77,5 @@ ngb-datepicker {
     display: flex;
     justify-content: space-between;
   }
-  .ngb-dp-day {
-    height: 3rem;
-  }
+
 }

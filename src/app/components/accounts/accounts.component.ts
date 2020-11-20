@@ -1,12 +1,11 @@
-import { Component, OnInit, Input,  OnDestroy} from '@angular/core';
-import { UserService, AlertService, ValidationService } from '@shared';
+import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
+import { UserService, AlertService, ValidationService, Partner, PartnerService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AbstractControl } from '@angular/forms';
-import { EMPTY, Subject } from 'rxjs';
-import { catchError, takeUntil } from 'rxjs/operators';
+import { Observable, Subscription, Subject, merge, EMPTY } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, filter, takeUntil, catchError} from 'rxjs/operators';
+import { NgbActiveModal, NgbModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap'
 
 import { AuthService, StorageService, UtilService } from '@shared';
 import { MEDIA_STORAGE_PATH_IMG , DEFAULT_PROFILE_PIC } from '../../storage.config';
@@ -26,9 +25,13 @@ export class AddUserComponent implements OnInit, OnDestroy{
   submitted = false;
   uploadProgress$: Observable<number>;
   @Input() isPartnerUser: boolean;
+  @Input() partnerData;
+  public partner: Partner;
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
 
   constructor(
-    private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly formBuilder: FormBuilder,
     private readonly storageService: StorageService,
@@ -46,7 +49,7 @@ export class AddUserComponent implements OnInit, OnDestroy{
       fullName: [''],
       email: ['', [Validators.required]],
       password: ['', [Validators.required, ValidationService.passwordValidator]],
-      contactNumber: ['', [Validators.required, Validators.max(12)]],
+      contactNumber: ['', [Validators.required]],
       photo: ['', [ this.image.bind(this)]],
       photoUrl: [''],
       position: [''],
@@ -73,6 +76,19 @@ export class AddUserComponent implements OnInit, OnDestroy{
     reader.readAsDataURL(img);
   }
 
+  formatter = (partner: Partner) => partner.institutionName;
+
+  search = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.partnerData
+        : this.partnerData.filter(partner => new RegExp(term, 'mi').test(partner.institutionName)).slice(0, 10))
+    ));
+  }
+
   addUser() {
     this.submitted = true;
     const mediaFolderPath = `${MEDIA_STORAGE_PATH_IMG}`;
@@ -83,6 +99,8 @@ export class AddUserComponent implements OnInit, OnDestroy{
       this.addForm.controls.institutionName.setValue('The Red Bank Foundation');
     } else {
       this.addForm.controls.position.setValue('Partner');
+      this.addForm.controls.partnerID.setValue(this.partner.partnerID);
+      this.addForm.controls.institutionName.setValue(this.partner.institutionName);
     }
 
     if(this.fileToUpload === null) {
@@ -146,6 +164,11 @@ export class ViewUserComponent implements OnInit{
   editForm: any;
   @Input() isPartnerUser: boolean;
   @Input() value;
+  @Input() partnerData;
+  public partner: any = {};
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
 
   constructor(
     private readonly authService: AuthService,
@@ -163,10 +186,25 @@ export class ViewUserComponent implements OnInit{
       firstName: [this.value.firstName, [Validators.required]],
       lastName: [this.value.lastName, [Validators.required]],
       fullName: [this.value.fullName],
-      contactNumber: [this.value.contactNumber, [Validators.required, Validators.max(12)]],
+      contactNumber: [this.value.contactNumber, [Validators.required]],
       institutionName: [this.value.institutionName],
       partnerID: [this.value.partnerID],
     });
+    this.partner.partnerID = this.value.partnerID
+    this.partner.institutionName = this.value.institutionName
+  }
+
+  formatter = (partner: Partner) => partner.institutionName;
+
+  search = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.partnerData
+        : this.partnerData.filter(partner => new RegExp(term, 'mi').test(partner.institutionName)).slice(0, 10))
+    ));
   }
 
   // handleFileChange([img]) {
@@ -178,6 +216,8 @@ export class ViewUserComponent implements OnInit{
 
   editUser() {
     if (this.editForm.dirty && this.editForm.valid) {
+      this.editForm.controls.partnerID.setValue(this.partner.partnerID);
+      this.editForm.controls.institutionName.setValue(this.partner.institutionName);
       this.userService.updateOne(this.value.id , this.editForm.value);
       this.activeModal.close();
     }
@@ -193,10 +233,13 @@ export class AccountsComponent implements OnInit {
 
   partner$: Observable<any>;
   staff$: Observable<any>;
+  partnerData$: Subscription;
+  partnerData;
 
   constructor(
     private readonly modalService: NgbModal,
-    private readonly userService: UserService) { }
+    private readonly userService: UserService,
+    private readonly partnerService: PartnerService) { }
 
   ngOnInit(): void {
     this.getData();
@@ -205,6 +248,9 @@ export class AccountsComponent implements OnInit {
   getData() {
     this.staff$ = this.userService.getStaff();
     this.partner$ = this.userService.getPartner();
+    this.partnerData$ = this.partnerService.getAll().subscribe( res => {
+      this.partnerData = res
+    });
   }
 
   trackByFn(index: any) {
@@ -214,12 +260,14 @@ export class AccountsComponent implements OnInit {
   openAddUser(isPartnerUser: any) {
     const modalRef = this.modalService.open(AddUserComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.isPartnerUser = isPartnerUser;
+    modalRef.componentInstance.partnerData = this.partnerData;
   }
 
-  openViewUser(value: any , isPartnerUser: any) {
+  openViewUser(value: any , isPartnerUser: any ) {
     const modalRef = this.modalService.open(ViewUserComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.isPartnerUser = isPartnerUser;
     modalRef.componentInstance.value = value;
+    modalRef.componentInstance.partnerData = this.partnerData;
   }
 
 }

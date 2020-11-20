@@ -14,6 +14,8 @@ export interface FilesUploadMetadata {
 export class StorageService {
   constructor(private readonly storage: AngularFireStorage) {}
 
+
+
   uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
     const { name } = fileToUpload;
     const filePath = `${mediaFolderPath}/${new Date().getTime()}_${name}`;

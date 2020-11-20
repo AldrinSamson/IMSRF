@@ -11,7 +11,6 @@ export class Event {
   dateOfEventShort: string;
   location: string;
 
-
   // Post-Event
   dateSubmitted: Date;
   donorsRegistered: number;

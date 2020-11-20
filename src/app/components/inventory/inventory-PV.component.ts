@@ -1,5 +1,5 @@
-import { Component, OnInit, Input,  OnDestroy} from '@angular/core';
-import { InventoryService, AlertService, ValidationService } from '@shared';
+import { Component, OnInit, Input} from '@angular/core';
+import { InventoryService,AuthService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -10,9 +10,9 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './dialog/view-batch.html',
   styleUrls: ['./inventory.component.scss'],
 })
-export class ViewBatchComponent implements OnInit{
+export class ViewBatchPartnerComponent implements OnInit{
 
-  isPartner = false;
+  isPartner = true;
   updateInventoryForm: any;
   @Input() value;
 
@@ -30,21 +30,13 @@ export class ViewBatchComponent implements OnInit{
   }
 
   updateInventory() {
-    if (this.updateInventoryForm.dirty && this.updateInventoryForm.valid) {
-      this.inventoryService.updateOne(this.value.id ,this.updateInventoryForm.value);
-      this.activeModal.close();
-    }
   }
 
   // Destory before prod
   manualExpire() {
-    this.inventoryService.manualExpire(this.value.id , this.updateInventoryForm);
-    this.activeModal.close();
   }
 
   archiveBatch() {
-    this.inventoryService.restore(this.value.id);
-    this.activeModal.close();
   }
 }
 
@@ -53,22 +45,23 @@ export class ViewBatchComponent implements OnInit{
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss']
 })
-export class InventoryComponent implements OnInit {
+export class InventoryPartnerComponent implements OnInit {
 
   p;
-  isPartner = false;
+  isPartner = true;
   inventory$: Observable<any>;
 
   constructor(
     private readonly modalService: NgbModal,
-    private readonly inventoryService: InventoryService) { }
+    private readonly inventoryService: InventoryService,
+    private readonly authService: AuthService) { }
 
   ngOnInit(): void {
     this.getData();
   }
 
   getData() {
-    this.inventory$ = this.inventoryService.getAll();
+    this.inventory$ = this.inventoryService.getInventoryOfPartner(this.authService.partnerID());
   }
 
   trackByFn(index) {
@@ -76,9 +69,8 @@ export class InventoryComponent implements OnInit {
   }
 
   openViewBatch(value) {
-    const modalRef = this.modalService.open(ViewBatchComponent,{centered: true, scrollable: true, backdrop: 'static'});
+    const modalRef = this.modalService.open(ViewBatchPartnerComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.value = value;
   }
-
 
 }

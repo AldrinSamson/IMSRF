@@ -13,21 +13,21 @@
               <tr>
                 <th>#</th>
                 <th>Event</th>
-                <th>Institution Name</th>
+                <th *ngIf="!isPartner">Institution Name</th>
                 <th>Blood Type</th>
                 <th>Quantity</th>
                 <th>Date of Expiry</th>
               </tr>
             </thead>
             <tbody>
-              <tr  *ngFor="let batch of inventory$ | async; trackBy: trackByFn" (click)="openViewBatch(batch)">
+              <tr  *ngFor="let batch of inventory$ | async| paginate:{itemsPerPage: 10, currentPage:p}; trackBy: trackByFn" (click)="openViewBatch(batch)">
                 <td>
                   {{batch.batchID}}
                 </td>
                 <td>
                   {{batch.eventID}}
                 </td>
-                <td>
+                <td *ngIf="!isPartner">
                   {{batch.institutionName}}
                 </td>
                 <td>
@@ -42,6 +42,9 @@
               </tr>
             </tbody>
           </table>
+          <div id="pagination">
+						<pagination-controls (pageChange)="p=$event"></pagination-controls>
+					</div>
         </div>
       </div>
     </div>

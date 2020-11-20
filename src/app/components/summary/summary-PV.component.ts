@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { InventoryService, DispatchService, EventService} from '@shared'
+import { InventoryService, DispatchService, EventService, AuthService} from '@shared'
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss']
 })
-export class SummaryComponent implements OnInit, OnDestroy {
+export class SummaryPartnerComponent implements OnInit, OnDestroy {
   p;
   route$: Subscription;
   inventory$: Observable<any>;
@@ -19,7 +19,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
     private readonly inventoryService: InventoryService,
     private readonly dispatchService: DispatchService,
-    private readonly eventService: EventService) { }
+    private readonly eventService: EventService,
+    private readonly authService: AuthService) { }
 
   ngOnInit() {
     this.route$ = this.route.queryParams
@@ -36,9 +37,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
   }
 
   getData() {
-    this.inventory$ = this.inventoryService.getInventoryOfPartner(this.partnerID);
-    this.dispatch$ = this.dispatchService.getOrdersOfPartner(this.partnerID);
-    this.event$ = this.eventService.getEventsOfPartner(this.partnerID);
+    this.inventory$ = this.inventoryService.getInventoryOfPartner(this.authService.partnerID());
+    this.dispatch$ = this.dispatchService.getOrdersOfPartner(this.authService.partnerID());
+    this.event$ = this.eventService.getEventsOfPartner(this.authService.partnerID());
   }
 
   ngOnDestroy() {

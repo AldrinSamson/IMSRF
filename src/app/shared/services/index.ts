@@ -11,4 +11,6 @@ export * from './id-generator.service';
 export * from './storage.service';
 export * from './util.service';
 export * from './event.service';
-export * from './inventory.service'
+export * from './inventory.service';
+export * from './donor.service';
+export * from './dispatch.service';

@@ -126,4 +126,9 @@ export class AuthService {
     const userName = JSON.parse(sessionStorage.getItem('session-user-details'));
     return userName.fullName
   }
+
+  public partnerID() {
+    const userName = JSON.parse(sessionStorage.getItem('session-user-details'));
+    return userName.partnerID
+  }
 }
