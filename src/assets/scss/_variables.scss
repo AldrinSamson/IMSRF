@@ -42,7 +42,7 @@ $colors: (
 
 $theme-colors: (
   primary:         #992F38,
-  secondary:       #5ba7e0,
+  secondary:       #e05555,
   success:         #74c7ba,
   info:            #9AB9E3,
   warning:         #fe7c96,
@@ -52,7 +52,7 @@ $theme-colors: (
 );
 
 $theme-gradient-colors: (
-  primary:         linear-gradient(to right, #1850A3, #9AB9E3),
+  primary:         linear-gradient(to right, #992F38, #EEC6CA),
   secondary:       linear-gradient(to right, #992F38, #EEC6CA),
   success:         linear-gradient(to right, #84d9d2, #84d9d2),
   info:            linear-gradient(to right, #90caf9, #047edf 99%),
@@ -69,8 +69,8 @@ $theme-gradient-colors: (
 $content-bg: #EEC6CA;
 $footer-bg: $content-bg;
 $footer-color: color(dark);
-$border-color: #E0D1D2;
-$border-color-2: #1850A3;
+$border-color: #3e4b5b;
+$border-color-2: #3c3f44;
 
 ////////// COLOR VARIABLES //////////
 
@@ -287,8 +287,8 @@ $breadcrumb-item-bg:                #dbe3e6;
 ////////// MODALS VARIABLES //////////
 
 $modal-inner-padding:               .937rem;
-$modal-dialog-margin:               10px;
-$modal-dialog-margin-y-sm-up:       30px;
+$modal-dialog-margin:               0px;
+$modal-dialog-margin-y-sm-up:       0px;
 $modal-title-line-height:           $line-height-base;
 $modal-content-bg:                  $content-bg;
 $modal-content-box-shadow-xs:       0 3px 9px rgba($black,.5);

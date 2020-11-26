@@ -66,6 +66,7 @@ export class ViewOrderComponent implements OnInit{
   loadInventory = false;
   orderQuantity;
   orderItems = [];
+  isHidden = true;
 
   constructor(
     private readonly formBuilder: FormBuilder,

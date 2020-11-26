@@ -10,8 +10,10 @@
           <span class="text-secondary text-small">{{userDetails.institutionName}}</span>
           <span class="text-secondary text-small">{{userDetails.position}}</span>
           <br>
-          <a routerLink="/profile" routerLinkActive #home="routerLinkActive">
+          <a *ngIf = "isAdmin || isStaff" routerLink="/profile" routerLinkActive #home="routerLinkActive">
             <span class="text-secondary text-small">>> Go to your profile</span></a>
+            <a *ngIf = "isPartner" routerLink="/partner/profile" routerLinkActive #home="routerLinkActive">
+              <span class="text-secondary text-small">>> Go to your profile</span></a>
         </div>
       </a>
     </li>

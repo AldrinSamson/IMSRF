@@ -3,8 +3,7 @@ import { EventService, PartnerService, AlertService, BloodTypes, Partner } from 
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subscription, Subject, merge } from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, filter} from 'rxjs/operators';
-import { NgbActiveModal, NgbModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbTypeahead, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -139,11 +138,16 @@ export class UpdatePostEventComponent implements OnInit {
   @Input() value;
   dateObject: NgbDateStruct;
   date: {year: number, month: number};
+  donorsRegistered: number;
+  donorsDefferTotal : number;
+  donorsBledTotal: number;
+  quantityTotal: number ;
 
   constructor(
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
-    private readonly eventService: EventService) {
+    private readonly eventService: EventService,
+    private readonly alertService: AlertService) {
     }
 
   ngOnInit(): void {
@@ -151,11 +155,11 @@ export class UpdatePostEventComponent implements OnInit {
       eventID: [this.value.eventID],
       partnerID: [this.value.partnerID],
       institutionName: [this.value.institutionName],
-      donorsRegistered: ['', Validators.required],
-      donorsDefferTotal: ['', Validators.required],
+      donorsRegistered: [],
+      donorsDefferTotal: [],
       donorsDefferScreen: ['', Validators.required],
       donorsDefferLow: ['', Validators.required],
-      donorsBledTotal: ['', Validators.required],
+      donorsBledTotal: [],
       donorsBledOk: ['', Validators.required],
       donorsBledFail: ['', Validators.required],
 
@@ -168,15 +172,41 @@ export class UpdatePostEventComponent implements OnInit {
       quantityON: ['', Validators.required],
       quantityABP: ['', Validators.required],
       quantityABN: ['', Validators.required],
-      quantityTotal: ['', Validators.required],
+      quantityTotal: [],
       remarks: ['', Validators.required]
     });
   }
 
   postEvent() {
+
+    // quick maffs
+    this.donorsDefferTotal = this.postEventForm.value.donorsDefferScreen + this.postEventForm.value.donorsDefferLow
+
+    this.donorsBledTotal = this.postEventForm.value.donorsBledOk + this.postEventForm.value.donorsBledFail
+
+    this.donorsRegistered = this.postEventForm.value.donorsBledOk + this.postEventForm.value.donorsBledFail
+    + this.postEventForm.value.donorsDefferScreen
+
+    this.quantityTotal = this.postEventForm.value.quantityAP + this.postEventForm.value.quantityAN + this.postEventForm.value.quantityBP +
+    this.postEventForm.value.quantityBN + this.postEventForm.value.quantityOP + this.postEventForm.value.quantityON +
+    this.postEventForm.value.quantityABP + this.postEventForm.value.quantityABN
+
+    if (this.quantityTotal !== this.postEventForm.value.donorsBledOk) {
+      this.postEventForm.controls.donorsBledOk.setErrors({incorrect: true});
+      this.alertService.showToaster('Invalid Bled Total' ,
+      { classname: 'bg-success text-warning', delay: 10000 })
+    }
+
     if (this.postEventForm.dirty && this.postEventForm.valid) {
+
         this.postEventForm.controls.dateExpiry.setValue(new Date(this.postEventForm.value.dateExpiry.year,
           this.postEventForm.value.dateExpiry.month - 1, this.postEventForm.value.dateExpiry.day));
+
+        this.postEventForm.controls.donorsDefferTotal.setValue(this.donorsDefferTotal);
+        this.postEventForm.controls.donorsBledTotal.setValue(this.donorsBledTotal);
+        this.postEventForm.controls.donorsRegistered.setValue(this.donorsRegistered);
+        this.postEventForm.controls.quantityTotal.setValue(this.quantityTotal);
+
       this.eventService.updateToPostEventAndAddToInvetory(this.value.id ,this.postEventForm.value);
       this.activeModal.close();
     }

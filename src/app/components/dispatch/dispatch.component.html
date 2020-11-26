@@ -3,7 +3,7 @@
     Dispatch
   </h3>
   <p class="page-description">
-    <button type="button" class="btn btn-secondary btn-fw" (click)= 'openAddRequest()'>Add Request</button>
+    <button type="button" class="btn btn-secondary btn-fw" *ngIf="!isPartner" (click)= 'openAddRequest()'>Add Request</button>
   </p>
 </div>
 <ngb-tabset type="pills" class="pills-primary">
@@ -47,7 +47,7 @@
                       <td>
                         {{request.status}}
                       </td>
-                      <td>
+                      <td *ngIf="request.status !== 'Order Created'">
                         <button type="button" class="btn btn-primary btn-sm" (click)= 'openViewRequest(request)'>View Request</button>
                         <button type="button" class="btn btn-primary btn-sm" (click)= 'openAddOrder(request)'>Create Order</button>
                       </td>

@@ -7,6 +7,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertService } from './alert.service';
 import { InventoryService } from './inventory.service';
 import { EMPTY } from 'rxjs';
+import { ParseError } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -38,19 +39,59 @@ export class DispatchService {
   }
 
   getActiveRequests() {
-    return this.firebase.getWithOneFilter(RequestDispatch, 'status', '==', 'Requested');
+    const filters = {
+      value1: 'status',
+      expression1: '==',
+      value2: 'Requested',
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData(RequestDispatch, 1 , filters);
   }
   getActiveOrder() {
-    return this.firebase.getWithOneFilter(OrderDispatch, 'status', 'in', ['Active', 'Delivered']);
+    const filters = {
+      value1: 'status',
+      expression1: 'in',
+      value2: ['Active', 'Delivered'],
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData(OrderDispatch, 1 , filters);
   }
   getClaimed() {
-    return this.firebase.getWithTwoFilter(OrderDispatch, 'status', '==', 'Claimed', 'isArchived', '==', false);
+    const filters = {
+      value1: 'status',
+      expression1: '==',
+      value2: 'Claimed',
+      value3: 'isArchived',
+      expression2: '==',
+      value4: false,
+    };
+    return this.firebase.getAllData(OrderDispatch, 2 , filters);
   }
   getArchivedClaimed() {
-    return this.firebase.getWithTwoFilter(OrderDispatch, 'status', '==', 'Claimed', 'isArchived', '==', true);
+    const filters = {
+      value1: 'status',
+      expression1: '==',
+      value2: 'Claimed',
+      value3: 'isArchived',
+      expression2: '==',
+      value4: true,
+    };
+    return this.firebase.getAllData(OrderDispatch, 2 , filters);
   }
   getOrdersOfPartner(partnerID) {
-    return this.firebase.getWithTwoFilter(OrderDispatch, 'status', 'in', ['Active', 'Delivered'], 'partnerID', '==', partnerID);
+    const filters = {
+      value1: 'status',
+      expression1: 'in',
+      value2: ['Active', 'Delivered'],
+      value3: 'partnerID',
+      expression2: '==',
+      value4: partnerID,
+    };
+    return this.firebase.getAllData(OrderDispatch, 2 , filters);
   }
 
   createRequest(values) {

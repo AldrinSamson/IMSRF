@@ -18,6 +18,8 @@ const routes: Routes = [
   canActivate: [PartnerAuthGuardService]},
   { path: 'profile', component: ProfileComponent ,
   canActivate: [AuthGuardService] },
+  { path: 'partner/profile', component: ProfileComponent ,
+  canActivate: [PartnerAuthGuardService] },
   { path: '500', component: Error500Component },
   { path: '**', component: Error404Component },
 ];

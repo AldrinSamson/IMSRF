@@ -1,1 +1,45 @@
-<p>donors works!</p>
+<div class="page-header">
+  <h3 class="page-title">
+    Donors
+  </h3>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <!-- <h4 class="card-title">Bordered table</h4> -->
+        <p class="card-description">
+          <button type="button" class="btn btn-gradient-primary btn-fw" (click)= 'openAddDonor()'>Add Donor</button>
+        </p>
+        <div class="table-responsive pt-3">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Sex</th>
+                <th>Blood Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr  *ngFor="let donor of donor$ | async; trackBy: trackByFn" (click)="openViewDonor(donor)">
+                <td>
+                  {{donor.fullName}}
+                </td>
+                <td>
+                  {{donor.email}}
+                </td>
+                <td>
+                  {{donor.sex}}
+                </td>
+                <td>
+                  {{donor.bloodType}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

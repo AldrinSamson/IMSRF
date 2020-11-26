@@ -21,7 +21,15 @@ export class PartnerService {
   }
 
   getAll(){
-    return this.firebase.getAllData<Partner>(Partner);
+    const filters = {
+      value1: '',
+      expression1: '',
+      value2: '',
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData<Partner>(Partner, 0, filters, 'partnerID', 'asc');
   }
   getOne(id){
     return this.firebase.getOne<Partner>(Partner , id);

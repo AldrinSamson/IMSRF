@@ -4,7 +4,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add New Partner</h5>
+        <h5 class="modal-title font-weight-bold">Add New User</h5>
       </div>
       <div class="modal-body">
         <form  [formGroup]="addForm" class="post-form">
@@ -36,20 +36,23 @@
               <input type="text" class="form-control" formControlName="lastName">
             </div>
             <div class="form-group">
-              <label for="exampleInputPassword4">Email</label>
+              <label >Email</label>
               <input type="email" class="form-control form-control-lg" formControlName="email">
               <control-messages [control]="addForm.get('email')"></control-messages>
             </div>
             <div class="form-group">
-              <label for="exampleInputPassword4">Contact Number</label>
+              <label >Contact Number</label>
               <input type="text" class="form-control" formControlName="contactNumber">
             </div>
             <div class="form-group" *ngIf="isPartnerUser === false">
-              <label for="exampleInputPassword4">Position</label>
-              <input type="text" class="form-control" formControlName="position">
+              <label >Position</label>
+              <select class="form-control" formControlName="position">
+                <option value="Admin">Admin</option>
+                <option value="Staff">Staff</option>
+              </select>
             </div>
             <div class="form-group" *ngIf="isPartnerUser">
-              <label for="exampleInputPassword4">Institution Name</label>
+              <label >Institution Name</label>
               <input type="text" class="form-control"
                     [(ngModel)]="partner"
                     [ngModelOptions]="{standalone: true}"

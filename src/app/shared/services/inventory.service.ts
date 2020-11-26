@@ -27,11 +27,27 @@ export class InventoryService {
     return this.firebase.getOne<Inventory>(Inventory , id);
   }
   getInventoryOfPartner(partnerID) {
-    return this.firebase.getWithOneFilter(Inventory,  'partnerID', '==', partnerID )
+    const filters = {
+      value1: 'partnerID',
+      expression1: '==',
+      value2: partnerID,
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData(Inventory, 1 , filters);
   }
 
   getByPTRandBT(partnerID , bloodType) {
-    return this.firebase.getWithTwoFilter(Inventory, 'partnerID', '==', partnerID , 'bloodType', '==', bloodType);
+    const filters = {
+      value1: 'partnerID',
+      expression1: '==',
+      value2: partnerID,
+      value3: 'bloodType',
+      expression2: '==',
+      value4: bloodType,
+    };
+    return this.firebase.getAllData(Inventory, 2 , filters);
   }
 
   updateOne(id: string, values) {

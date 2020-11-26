@@ -16,7 +16,7 @@ import { DashboardComponent } from '../../components/dashboard/dashboard.compone
 import { InventoryComponent, ViewBatchComponent } from '../../components/inventory/inventory.component'
 import { EventsComponent, InitEventComponent, UpdatePreEventComponent , UpdatePostEventComponent, ViewEventComponent } from '../../components/events/events.component'
 import { PartnersComponent, AddPartnerComponent, ViewPartnerComponent } from '../../components/partners/partners.component';
-import { DonorsComponent } from '../../components/donors/donors.component';
+import { DonorsComponent, AddDonorComponent, ViewDonorComponent } from '../../components/donors/donors.component';
 import { DispatchComponent, AddRequestComponent, ViewRequestComponent, AddOrderComponent , ViewOrderComponent } from '../../components/dispatch/dispatch.component';
 import { AccountsComponent, AddUserComponent, ViewUserComponent } from '../../components/accounts/accounts.component';
 import { ReportsComponent } from '../../components/reports/reports.component';
@@ -88,7 +88,9 @@ const routes: Routes = [
     AddRequestComponent,
     ViewRequestComponent,
     AddOrderComponent,
-    ViewOrderComponent
+    ViewOrderComponent,
+    AddDonorComponent,
+    ViewDonorComponent
   ],
   imports: [
     CommonModule,

@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{{value.eventID}}</h5>
+        <h5 class="modal-title font-weight-bold">{{value.eventID}}</h5>
         <button type="button" class="close" (click) = "activeModal.close()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -10,23 +10,23 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-4">
-            <p class="text-justify">Institution: {{value.institutionName}}</p>
-            <p class="text-justify">Date of Event: {{value.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
-            <p class="text-justify">Location: {{value.location}}</p>
+            <p class="text-justify font-weight-bold">Institution: {{value.institutionName}}</p>
+            <p class="text-justify font-weight-bold">Date of Event: {{value.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
+            <p class="text-justify font-weight-bold">Location: {{value.location}}</p>
             <br>
-            <p class="text-justify">Date Submitted: {{value.dateSubmitted.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
-            <p class="text-justify">donorsRegistered: {{value.donorsRegistered}}</p>
-            <p class="text-justify">donorsDefferTotal: {{value.donorsDefferTotal}}</p>
-            <p class="text-justify">donorsDefferScreen: {{value.donorsDefferScreen}}</p>
-            <p class="text-justify">donorsDefferLow: {{value.donorsDefferLow}}</p>
-            <p class="text-justify">donorsBledTotal: {{value.donorsBledTotal}}</p>
-            <p class="text-justify">donorsBledOk: {{value.donorsBledOk}}</p>
-            <p class="text-justify">donorsBledFail: {{value.donorsBledFail}}</p>
+            <p class="text-justify font-weight-bold">Date Submitted: {{value.dateSubmitted.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
+            <p class="text-justify">Registered Potential Blood Donors: {{value.donorsRegistered}}</p>
+            <p class="text-justify">Total of Deferred Donors: {{value.donorsDefferTotal}}</p>
+            <p class="text-justify">Donors Screening (Interview): {{value.donorsDefferScreen}}</p>
+            <p class="text-justify">Donors w/ Low Hemoglobin: {{value.donorsDefferLow}}</p>
+            <p class="text-justify">Total of Blood Donors Bled: {{value.donorsBledTotal}}</p>
+            <p class="text-justify">No. of Successful Phlebotomy: {{value.donorsBledOk}}</p>
+            <p class="text-justify">No. of Unsuccessful Phlebotomy: {{value.donorsBledFail}}</p>
             <br>
             <p class="text-justify">Remarks: {{value.remarks}}</p>
           </div>
           <div class="col-8">
-            <p class="text-justify">Expiry Date: {{value.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
+            <p class="text-justify font-weight-bold">Expiry Date: {{value.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}</p>
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -78,7 +78,7 @@
                 </tr>
               </tbody>
             </table>
-            <p class="text-justify">Total: {{value.quantityTotal}}</p>
+            <p class="text-justify font-weight-bold">Total Quantity of All Blood Types: {{value.quantityTotal}}</p>
           </div>
         </div>
       </div>

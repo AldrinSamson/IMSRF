@@ -1,6 +1,6 @@
 import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
 import { DispatchService, PartnerService, AlertService, BloodTypes, InventoryService,
-  Partner, StorageService, UtilService } from '@shared';
+  Partner, StorageService, UtilService, Sexes } from '@shared';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Observable, Subscription, Subject, merge, EMPTY } from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, filter, catchError, takeUntil} from 'rxjs/operators';
@@ -17,6 +17,7 @@ import { FixedScaleAxis } from 'chartist';
 })
 export class AddRequestComponent implements OnInit, OnDestroy{
   addForm: any;
+  sexes = Sexes.sexes;
 
   dateObject: NgbDateStruct;
   date: {year: number, month: number};
@@ -312,6 +313,7 @@ export class ViewOrderComponent implements OnInit{
   loadInventory = false;
   orderQuantity;
   orderItems = [];
+  isHidden = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -334,6 +336,10 @@ export class ViewOrderComponent implements OnInit{
     this.orderItems = this.value.orderItems
     if (this.value.status === 'Delivered'){
       this.isDelivered = true;
+    }
+
+    if (this.isDelivered || this.isClaimed === true) {
+      this.isHidden = true;
     }
   }
 

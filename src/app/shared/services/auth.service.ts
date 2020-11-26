@@ -43,7 +43,7 @@ export class AuthService {
               this.router.navigate(['/main']);
             }
           } else {
-            this.alert.showToaster('You\'re using a BSRE account');
+            this.alert.showToaster('Error');
           }
 
       });
@@ -60,7 +60,7 @@ export class AuthService {
     sessionStorage.removeItem('session-user-uid');
     sessionStorage.removeItem('session-user-details');
     this.token = null;
-    this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+    // this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
     this.router.navigate(['/']);
   }
 

@@ -2,105 +2,109 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" *ngIf="!isPartner">Modify {{value.dispatchID}}</h5>
-        <h5 class="modal-title" *ngIf="isPartner">Claim {{value.dispatchID}}</h5>
+        <h5 class="modal-title font-weight-bold" *ngIf="!isPartner">Modify {{value.dispatchID}}</h5>
+        <h5 class="modal-title font-weight-bold" *ngIf="isPartner">Claim {{value.dispatchID}}</h5>
         <button type="button" class="close" (click) = "activeModal.close()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
           <div class="row">
-            <div>
-              <p>Patient Name: {{value.patientName}} &nbsp;
-              Requester Name: {{value.requesterName}} <br>
-              Blood Type: {{value.bloodType}} &nbsp;
-            </p>
-            <div *ngIf="!isPartner"><p >Claim Code: {{value.claimCode}} </p></div>
-
+            <div class="col-8">
+              <p class="text-justify font-weight-bold">Patient Name: {{value.patientName}} </p>
+              <p class="text-justify font-weight-bold"> Requester Name: {{value.requesterName}}</p>
+              <p class="text-justify font-weight-bold">Blood Type: {{value.bloodType}}</p>
+            </div>
+            <div class="col-4" *ngIf="!isPartner">
+              <h3 class="text-justify font-weight-bold">Claim Code: {{value.claimCode}} </h3>
             </div>
           </div>
           <div class="row" *ngIf="!isPartner">
-                <label>Select Institution:</label>
-                <input type="text"
-                        [(ngModel)]="partner"
-                        [ngModelOptions]="{standalone: true}"
-                        [ngbTypeahead]="search"
-                        [inputFormatter]="formatter"
-                        [resultFormatter]="formatter"
-                        (focus)="focus$.next($any($event).target.value)"
-                        (click)="click$.next($any($event).target.value)"
-                        #instance="ngbTypeahead"
-                        [editable]='false'
-                        />
-            <select [disabled]="!partner" (change)="getInventory($event.target.value)" *ngIf="!isClaimed">
-              <option>Select Blood Type</option>
-              <option *ngFor="let bT of bloodTypes">
-                {{bT}}
-              </option>
-            </select>
-            <div class="table-responsive pt-3" *ngIf="!isClaimed">
-              <table class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Event</th>
-                    <th>Quantity</th>
-                    <th>Date of Expiry</th>
-                    <th>Options</th>
-                  </tr>
-                </thead>
-                <tbody *ngIf="loadInventory">
-                  <tr *ngFor="let batch of inventory$ | async | paginate:{itemsPerPage: 3, currentPage:p}" >
-                    <td>
-                      {{batch.batchID}}
-                    </td>
-                    <td>
-                      {{batch.eventID}}
-                    </td>
-                    <td>
-                      {{batch.quantity}}
-                    </td>
-                    <td>
-                      {{batch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}
-                    </td>
-                    <td>
-                      <div ngbDropdown class="d-inline-block">
-                        <button class="btn btn-outline-primary" ngbDropdownToggle>Select</button>
-                        <div ngbDropdownMenu aria-labelledby="dropdownForm1">
-                          <label>Quantity</label>
-                          <input type="number" [(ngModel)]="orderQuantity" >
-                          <div class="dropdown-divider"></div>
-                          <button ngbDropdownItem (click)="addToOrder(batch)" >Enter</button>
+            <div class="col-12">
+              <h5 class="font-weight-bold">Select Institution:</h5>
+                  <input type="text"
+                          [(ngModel)]="partner"
+                          [ngModelOptions]="{standalone: true}"
+                          [ngbTypeahead]="search"
+                          [inputFormatter]="formatter"
+                          [resultFormatter]="formatter"
+                          (focus)="focus$.next($any($event).target.value)"
+                          (click)="click$.next($any($event).target.value)"
+                          #instance="ngbTypeahead"
+                          [editable]='false'
+                          />
+              <select [disabled]="!partner" (change)="getInventory($event.target.value)" *ngIf="!isHidden">
+                <option>Select Blood Type</option>
+                <option *ngFor="let bT of bloodTypes">
+                  {{bT}}
+                </option>
+              </select>
+              <div class="table-responsive pt-3" *ngIf="!isHidden">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Event</th>
+                      <th>Quantity</th>
+                      <th>Date of Expiry</th>
+                      <th>Options</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="loadInventory">
+                    <tr *ngFor="let batch of inventory$ | async | paginate:{itemsPerPage: 3, currentPage:p}" >
+                      <td>
+                        {{batch.batchID}}
+                      </td>
+                      <td>
+                        {{batch.eventID}}
+                      </td>
+                      <td>
+                        {{batch.quantity}}
+                      </td>
+                      <td>
+                        {{batch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}
+                      </td>
+                      <td>
+                        <div ngbDropdown class="d-inline-block">
+                          <button class="btn btn-outline-primary" ngbDropdownToggle>Select</button>
+                          <div ngbDropdownMenu aria-labelledby="dropdownForm1">
+                            <label>Quantity</label>
+                            <input type="number" [(ngModel)]="orderQuantity" >
+                            <div class="dropdown-divider"></div>
+                            <button ngbDropdownItem (click)="addToOrder(batch)" >Enter</button>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div id="pagination">
-                <pagination-controls (pageChange)="p=$event"></pagination-controls>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p=$event"></pagination-controls>
+                </div>
               </div>
             </div>
           </div>
           <div class="row">
-            Selected Items:
-            <table class="table table-striped table-bordered">
-              <thead>
-                  <tr>
-                      <th>Batch ID</th>
-                      <th>Quantity</th>
-                      <th *ngIf="!isPartner">Options</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr *ngFor="let item of orderItems">
-                      <td>{{item.batchID}}</td>
-                      <td>{{item.quantity}}</td>
-                      <td *ngIf="!isPartner"><button type="button" class="btn btn-warning btn-sm" (click)= 'removefromOrder(item)'><span>&times;</span></button></td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
+            <div class="col-12">
+              <h5 class="font-weight-bold">Selected Items:</h5>
+              <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Batch ID</th>
+                        <th>Quantity</th>
+                        <th *ngIf="!isHidden">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of orderItems">
+                        <td>{{item.batchID}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td *ngIf="!isHidden"><button type="button" class="btn btn-warning btn-sm" (click)= 'removefromOrder(item)' *ngIf="!isHidden"><span>&times;</span></button></td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" *ngIf="!isClaimed && !isArchived && !isPartner" (click)="editOrder()" [disabled]="" >Edit</button>
         <button type="button" class="btn btn-success" *ngIf="!isClaimed && !isArchived && !isDelivered && !isPartner" (click)="deliverOrder()">Deliver</button>

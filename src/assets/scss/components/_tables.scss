@@ -7,7 +7,8 @@
       border-top: 0;
       border-bottom-width: 1px;
       font-family: $type1-medium;
-      font-weight: initial;
+      font-weight: bold;
+      font-size: large;
       i{
         margin-left: 0.325rem;
       }
@@ -25,6 +26,12 @@
     }
     .badge {
       margin-bottom: 0;
+    }
+    .bold {
+      font-weight: bold;
+      &.lg {
+        font-size: large;
+      }
     }
   }
   &.table-borderless{

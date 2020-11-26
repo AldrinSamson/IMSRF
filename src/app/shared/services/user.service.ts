@@ -32,15 +32,39 @@ export class UserService {
   }
 
   getStaff() {
-    return this.firebase.getWithOneFilter(User, 'institutionName', '==', 'The Red Bank Foundation')
+    const filters = {
+      value1: 'institutionName',
+      expression1: '==',
+      value2: 'The Red Bank Foundation',
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData(User, 1 , filters);
   }
 
   getPartner() {
-    return this.firebase.getWithOneFilter(User, 'position', '==', 'Partner')
+    const filters = {
+      value1: 'position',
+      expression1: '==',
+      value2: 'Partner',
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData(User, 1 , filters);
   }
 
   getAllAudit() {
-    return this.firebase.getAllData<Audit>(Audit);
+    const filters = {
+      value1: 'position',
+      expression1: '==',
+      value2: 'Partner',
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData<Audit>(Audit, 0 , filters, 'date');
   }
 
   updateCurrentUserPassword(value) {

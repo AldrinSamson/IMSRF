@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add Request</h5>
+        <h5 class="modal-title font-weight-bold">Add Request</h5>
       </div>
       <div class="modal-body">
         <form  [formGroup]="addForm" class="post-form">
@@ -39,7 +39,12 @@
               </div>
               <div class="form-group">
                 <label>Sex</label>
-                <input type="text" class="form-control" formControlName="sex">
+                <select class="form-control" formControlName="sex">
+                  <option>Select Sex</option>
+                  <option *ngFor="let sex of sexes">
+                    {{sex}}
+                  </option>
+                </select>
               </div>
             </div>
             <div class="col-4">

@@ -69,6 +69,8 @@ export class AddUserComponent implements OnInit, OnDestroy{
       });
   }
 
+  // re optimize img handler
+
   handleFileChange([img]) {
     this.fileToUpload = img;
     const reader = new FileReader();
@@ -221,6 +223,14 @@ export class ViewUserComponent implements OnInit{
       this.userService.updateOne(this.value.id , this.editForm.value);
       this.activeModal.close();
     }
+  }
+
+  // missing google auth deleter
+  deleteUser() {
+
+    this.userService.delete(this.value.id);
+    this.activeModal.close();
+
   }
 }
 

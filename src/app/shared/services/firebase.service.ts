@@ -4,8 +4,6 @@ import { AlertService } from './alert.service';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import 'firebase/auth';
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -13,18 +11,23 @@ export class FirebaseService {
 
   constructor(public db: AngularFirestore , public alertService: AlertService) {}
 
-  getAllData<T>(model: T | any): Observable<T[]> {
-    return this.db.collection<T>(model.collectionName).valueChanges({idField: 'id'});
+  getAllData<T>(model: T | any, filterCount:number = 0, filterValues?: { value1: string ; expression1: any; value2: any;
+    value3: string ; expression2: any; value4: any; }, orderField:string = 'dateCreated', orderDirection: any = 'desc')
+    : Observable<T[]> {
+
+    switch(filterCount) {
+      case 0:
+        return this.db.collection<T>(model.collectionName, ref => ref.orderBy(orderField, orderDirection)).valueChanges({idField: 'id'});
+      case 1:
+        return this.db.collection<T>(model.collectionName, ref => ref.where(filterValues.value1,
+          filterValues.expression1 , filterValues.value2).orderBy(orderField, orderDirection)).valueChanges({idField: 'id'});
+      case 2:
+        return this.db.collection<T>(model.collectionName, ref => ref.where(filterValues.value1 ,filterValues.expression1 ,
+          filterValues.value2).where(filterValues.value3 , filterValues.expression2 ,
+            filterValues.value4).orderBy(orderField, orderDirection)).valueChanges({idField: 'id'});
+    }
   }
 
-  getWithOneFilter<T>(model: T | any , value1 , expression , value2): Observable<T[]> {
-    return this.db.collection<T>(model.collectionName, ref => ref.where(value1 , expression , value2)).valueChanges({idField: 'id'});
-  }
-
-  getWithTwoFilter<T>(model: T | any , value1 , expression1 , value2 , value3 , expression2 , value4): Observable<T[]> {
-    return this.db.collection<T>(model.collectionName, ref => ref.where(value1 , expression1 , value2)
-    .where(value3 , expression2 , value4)).valueChanges({idField: 'id'});
-  }
 
   getOne<T>( model: T | any, id: string) {
     return this.db.collection<T>(model.collectionName).doc(id).valueChanges();
@@ -50,6 +53,7 @@ export class FirebaseService {
       console.log('' + model.collectionName + ' Create Failed!', _error);
     });
   }
+  //
 
   deleteOne<T>(model: T | any, id: string) {
     return this.db.collection(model.collectionName).doc(id).delete()
@@ -81,19 +85,6 @@ export class FirebaseService {
     });
   }
 
-  getUserDetails() {
-    // tslint:disable-next-line: prefer-const
-    let uid: any;
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user != null) {
-        this.uid = user.uid;
-      } else {
-        this.uid = 'Error/Unknown';
-      }
-    });
-    return uid;
-  }
-
   audit(service , action) {
     const userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
     this.db.collection('audit').add({
@@ -107,54 +98,3 @@ export class FirebaseService {
     });
   }
 }
-
-
-  // restoreOne(id, collectionName) {
-  //   return this.db.collection(collectionName).doc(id).update({isArchived: false})
-  //   .then((res) => {
-  //     this.alertService.showToaster('Restore Success');
-  //   })
-  //   .catch((_error) => {
-  //     console.log('' + collectionName + ' Restore Failed!', _error);
-  //   });
-  // }
-
-  // archiveOne(id, collectionName) {
-  //   return this.db.collection(collectionName).doc(id).update({isArchived: true})
-  //   .then((res) => {
-  //     this.alertService.showToaster('Archive Success');
-  //   })
-  //   .catch((_error) => {
-  //     console.log('' + collectionName + ' Archive Failed!', _error);
-  //   });
-  // }
-
-  // deleteOne(id , collectionName) {
-  //   return this.db.collection(collectionName).doc(id).delete()
-  //   .then((res) => {
-  //     this.alertService.showToaster('Delete Success');
-  //   })
-  //   .catch((_error) => {
-  //     console.log('' + collectionName + ' Delete Failed!', _error);
-  //   });
-  // }
-
-  // addOne(value , collectionName) {
-  //   return this.db.collection(collectionName).add(value)
-  //   .then((res) => {
-  //     this.alertService.showToaster('Create Success');
-  //   })
-  //   .catch((_error) => {
-  //     console.log('' + collectionName + ' Create Failed!', _error);
-  //   });
-  // }
-
-  // updateOne(id, value , collectionName) {
-  //   return this.db.collection(collectionName).doc(id).set(value)
-  //   .then((res) => {
-  //     this.alertService.showToaster('Update Success');
-  //   })
-  //   .catch((_error) => {
-  //     console.log('' + collectionName + ' Update Failed!', _error);
-  //   });
-  // }

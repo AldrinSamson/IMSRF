@@ -4,12 +4,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Edit User</h5>
+        <h5 class="modal-title font-weight-bold">Edit User</h5>
       </div>
       <div class="modal-body">
         <form  [formGroup]="editForm" class="post-form">
           <div class="nav-profile-image">
-            <img src={{value.photoUrl}} alt="profile"> <!--change to offline or busy as needed-->
+            <img src={{value.photoUrl}} alt="profile">
           </div>
 
             <div class="form-group">
@@ -23,12 +23,12 @@
             </div>
 
             <div class="form-group">
-              <label for="exampleInputPassword4">Contact Number</label>
+              <label >Contact Number</label>
               <input type="text" class="form-control" formControlName="contactNumber">
             </div>
 
             <div class="form-group" *ngIf="isPartnerUser">
-              <label for="exampleInputPassword4">Institution Name</label>
+              <label >Institution Name</label>
               <input type="text" class="form-control"
                     [(ngModel)]="partner"
                     [ngModelOptions]="{standalone: true}"
@@ -44,7 +44,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="editUser()" [disabled]="editForm.invalid" >Submit</button>
+        <button type="button" class="btn btn-success" (click)="editUser()" [disabled]="editForm.invalid" >Edit</button>
+        <button type="button" class="btn btn-warning" (click)="deleteUser()" >Delete</button>
         <button type="button" class="btn btn-light" (click) = "activeModal.close()" >Cancel</button>
       </div>
     </div>

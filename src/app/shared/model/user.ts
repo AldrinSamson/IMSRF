@@ -21,3 +21,7 @@ export class User {
   createdBy: string;
   lastModifiedBy: string;
 }
+
+export class Sexes {
+  static sexes = ['Male', 'Female', 'Undefined' , 'Alien' , 'Helicopter']
+}

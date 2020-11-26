@@ -28,19 +28,51 @@ export class EventService {
   }
 
   getEventsOfPartner(partnerID) {
-    return this.firebase.getWithTwoFilter(Event, 'isSubmitted', '==', false, 'partnerID', '==', partnerID);
+    const filters = {
+      value1: 'isSubmitted',
+      expression1: '==',
+      value2: false,
+      value3: 'partnerID',
+      expression2: '==',
+      value4: partnerID,
+    };
+    return this.firebase.getAllData(Event, 2, filters);
   }
 
   getActive() {
-    return this.firebase.getWithTwoFilter(Event, 'isSubmitted', '==', false, 'isArchived', '==', false);
+    const filters = {
+      value1: 'isSubmitted',
+      expression1: '==',
+      value2: false,
+      value3: 'isArchived',
+      expression2: '==',
+      value4: false,
+    };
+    return this.firebase.getAllData(Event, 2, filters);
   }
 
   getHistorical() {
-    return this.firebase.getWithTwoFilter(Event, 'isSubmitted', '==', true, 'isArchived', '==', false);
+    const filters = {
+      value1: 'isSubmitted',
+      expression1: '==',
+      value2: true,
+      value3: 'isArchived',
+      expression2: '==',
+      value4: false,
+    };
+    return this.firebase.getAllData(Event, 2 , filters);
   }
 
   getArchived() {
-    return this.firebase.getWithOneFilter(Event, 'isArchived', '==', true);
+    const filters = {
+      value1: 'isArchived',
+      expression1: '==',
+      value2: true,
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData(Event, 1 , filters);
   }
 
   // Pre-Event
