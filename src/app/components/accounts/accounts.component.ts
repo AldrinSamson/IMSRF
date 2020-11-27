@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
-import { UserService, AlertService, ValidationService, Partner, PartnerService } from '@shared';
+import { UserService, AlertService, ValidationService, Partner, PartnerService, Positions } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractControl } from '@angular/forms';
@@ -30,6 +30,7 @@ export class AddUserComponent implements OnInit, OnDestroy{
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
+  positions = Positions.positions
 
   constructor(
     private readonly userService: UserService,

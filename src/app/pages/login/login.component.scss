@@ -4,4 +4,7 @@ body {
 .content-wrapper {
   background-image: url("../../../assets/images/background/Red_Bank_Land_Page_BG.png") !important;
   height: 100vh;
+  background-size:     cover;                      /* <------ */
+  background-repeat:   no-repeat;
+  background-position: center center;
 }

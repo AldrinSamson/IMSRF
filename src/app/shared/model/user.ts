@@ -23,5 +23,9 @@ export class User {
 }
 
 export class Sexes {
-  static sexes = ['Male', 'Female', 'Undefined' , 'Alien' , 'Helicopter']
+  static sexes = ['Male', 'Female']
+}
+
+export class Positions {
+  static positions = ['Admin', 'Staff']
 }

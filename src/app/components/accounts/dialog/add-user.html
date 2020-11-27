@@ -45,10 +45,12 @@
               <input type="text" class="form-control" formControlName="contactNumber">
             </div>
             <div class="form-group" *ngIf="isPartnerUser === false">
-              <label >Position</label>
+              <label>Position</label>
               <select class="form-control" formControlName="position">
-                <option value="Admin">Admin</option>
-                <option value="Staff">Staff</option>
+                <option>Select Position</option>
+                <option *ngFor="let position of positions">
+                  {{position}}
+                </option>
               </select>
             </div>
             <div class="form-group" *ngIf="isPartnerUser">
