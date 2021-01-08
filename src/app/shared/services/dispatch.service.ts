@@ -162,7 +162,7 @@ export class DispatchService {
       throw new Error('Error: Adding document:' + error);
     }).then( () => {
       this.db.collection<RequestDispatch>(RequestDispatch.collectionName).doc(values.id).update({
-        status: 'Order Created',
+        status: 'Dispatch Created',
         isOrdered: true,
         dateLastModified: new Date(),
         lastModifiedBy: this.authService.userName()
@@ -171,7 +171,7 @@ export class DispatchService {
       }).then( () => {
         this.alertService.showToaster(values.requestID+' Modified' , { classname: 'bg-success text-light', delay: 10000 })
       });
-      this.alertService.showToaster(values.requestID+' Order Added' , { classname: 'bg-success text-light', delay: 10000 })
+      this.alertService.showToaster(values.requestID+' Dispatch Added' , { classname: 'bg-success text-light', delay: 10000 })
     })
   }
 

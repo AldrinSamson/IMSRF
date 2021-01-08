@@ -3,7 +3,7 @@
     Events
   </h3>
   <p class="page-description">
-    <button type="button" class="btn btn-secondary btn-fw" (click)= 'openInitEvent()'>Add Event</button>
+    <button type="button" class="btn btn-success btn-fw" (click)= 'openInitEvent()'>Add Event</button>
   </p>
 </div>
 <ngb-tabset type="pills" class="pills-primary">
@@ -40,8 +40,8 @@
                         {{activeEvent.location}}
                       </td>
                       <td>
-                        <button type="button" class="btn btn-primary btn-sm" (click)= 'openUpdatePreEvent(activeEvent)'>Update Event</button>
-                        <button type="button" class="btn btn-primary btn-sm" (click)= 'openUpdatePostEvent(activeEvent)'>Complete Event</button>
+                        <button type="button" class="btn btn-success btn-sm" (click)= 'openUpdatePreEvent(activeEvent)'>Update Event</button>
+                        <button type="button" class="btn btn-success btn-sm" (click)= 'openUpdatePostEvent(activeEvent)'>Complete Event</button>
                       </td>
                     </tr>
                   </tbody>

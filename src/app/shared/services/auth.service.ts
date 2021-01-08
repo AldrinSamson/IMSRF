@@ -6,7 +6,6 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { AlertService } from './alert.service';
 import { FirebaseService } from './firebase.service';
-import { BootController } from '../../../boot-control';
 
 @Injectable()
 export class AuthService {
@@ -20,8 +19,8 @@ export class AuthService {
     private router: Router,
     private db: AngularFirestore,
     private alert: AlertService,
-    public fbs: FirebaseService,
-    private ngZone: NgZone) { }
+    public fbs: FirebaseService
+    ) { }
 
   async login(email: string, password: string) {
     try {
@@ -60,7 +59,6 @@ export class AuthService {
     sessionStorage.removeItem('session-user-uid');
     sessionStorage.removeItem('session-user-details');
     this.token = null;
-    // this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
     this.router.navigate(['/']);
   }
 

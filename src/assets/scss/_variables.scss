@@ -43,17 +43,18 @@ $colors: (
 $theme-colors: (
   primary:         #992F38,
   secondary:       #e05555,
-  success:         #74c7ba,
+  success:         #152238,
   info:            #9AB9E3,
-  warning:         #fe7c96,
-  danger:          rgb(235, 78, 78),
-  light:           #f8f9fa,
-  dark:            #3e4b5b
+  warning:         #783030,
+  danger:          #783030,
+  light:           #a8a8a8,
+  dark:            #3e4b5b,
+  darkBlue:          #783030
 );
 
 $theme-gradient-colors: (
-  primary:         linear-gradient(to right, #992F38, #EEC6CA),
-  secondary:       linear-gradient(to right, #992F38, #EEC6CA),
+  primary:         #992F38,
+  secondary:       #992F38,
   success:         linear-gradient(to right, #84d9d2, #84d9d2),
   info:            linear-gradient(to right, #90caf9, #047edf 99%),
   warning:         linear-gradient(to right, #f6e384, #ffd500),

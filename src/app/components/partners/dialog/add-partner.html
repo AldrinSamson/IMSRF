@@ -14,11 +14,16 @@
             <input type="text" class="form-control" formControlName="institutionName" >
             <control-messages [control]="addForm.get('institutionName')"></control-messages>
           </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" formControlName="location">
+          </div>
         </form>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" (click)='addPartner()' [disabled]="!addForm.valid">Submit</button>
-        <button type="button" class="btn btn-light" (click) = "activeModal.close()">Cancel</button>
+        <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()">Cancel</button>
       </div>
     </div>
   </div>

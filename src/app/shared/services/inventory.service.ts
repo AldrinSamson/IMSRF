@@ -23,6 +23,30 @@ export class InventoryService {
   getAll(){
     return this.firebase.getAllData<Inventory>(Inventory);
   }
+
+  getAllActive(){
+    const filters = {
+      value1: 'isArchived',
+      expression1: '==',
+      value2: false,
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData<Inventory>(Inventory, 1 , filters);
+  }
+
+  getAllArchived(){
+    const filters = {
+      value1: 'isArchived',
+      expression1: '==',
+      value2: true,
+      value3: '',
+      expression2: '',
+      value4: '',
+    };
+    return this.firebase.getAllData<Inventory>(Inventory, 1 , filters);
+  }
   getOne(id: string){
     return this.firebase.getOne<Inventory>(Inventory , id);
   }
@@ -31,9 +55,9 @@ export class InventoryService {
       value1: 'partnerID',
       expression1: '==',
       value2: partnerID,
-      value3: '',
-      expression2: '',
-      value4: '',
+      value3: 'isArchived',
+      expression2: '==',
+      value4: false,
     };
     return this.firebase.getAllData(Inventory, 1 , filters);
   }

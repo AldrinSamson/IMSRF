@@ -13,7 +13,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { InventoryPartnerComponent, ViewBatchPartnerComponent } from '../../components/inventory/inventory-PV.component';
 import { SummaryPartnerComponent } from '../../components/summary/summary-PV.component';
-import { DispatchPartnerComponent, ViewOrderComponent, ValidateOrderComponent } from '../../components/dispatch/dispatch-PV.component';
+import { DispatchPartnerComponent, ViewOrderComponent, ValidateOrderComponent, AddRequestComponent } from '../../components/dispatch/dispatch-PV.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'inventory', pathMatch: 'full' },
@@ -38,7 +38,8 @@ const routes: Routes = [
     DispatchPartnerComponent,
     ViewOrderComponent,
     ValidateOrderComponent,
-    ViewBatchPartnerComponent
+    ViewBatchPartnerComponent,
+    AddRequestComponent
   ],
   imports: [
     CommonModule,

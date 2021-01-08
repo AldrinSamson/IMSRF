@@ -1,6 +1,6 @@
 import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
 import { DispatchService, PartnerService, AlertService, BloodTypes, InventoryService,
-  Partner, StorageService, UtilService, Sexes } from '@shared';
+  Partner, StorageService, UtilService, Sexes, AuthService } from '@shared';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Observable, Subscription, Subject, merge, EMPTY } from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, filter, catchError, takeUntil} from 'rxjs/operators';
@@ -413,6 +413,7 @@ export class ViewOrderComponent implements OnInit{
 })
 export class DispatchComponent implements OnInit, OnDestroy {
 
+  isStaff = false;
   isPartner = false;
   request$: Observable<any>;
   order$: Observable<any>;
@@ -424,10 +425,12 @@ export class DispatchComponent implements OnInit, OnDestroy {
   constructor(
     private readonly modalService: NgbModal,
     private readonly dispatchService: DispatchService,
-    public partnerService: PartnerService) { }
+    public partnerService: PartnerService,
+    private readonly authService: AuthService ) { }
 
   ngOnInit(): void {
     this.getData();
+    this.isStaff = this.authService.isStaff();
   }
 
   getData() {

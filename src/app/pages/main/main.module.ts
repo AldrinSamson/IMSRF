@@ -21,6 +21,7 @@ import { DispatchComponent, AddRequestComponent, ViewRequestComponent, AddOrderC
 import { AccountsComponent, AddUserComponent, ViewUserComponent } from '../../components/accounts/accounts.component';
 import { ReportsComponent } from '../../components/reports/reports.component';
 import { SummaryComponent } from '../../components/summary/summary.component';
+import { RequesterComponent } from '../../components/requester/requester.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'donors',
     component: DonorsComponent,
+  },
+  {
+    path: 'requester',
+    component: RequesterComponent,
   },
   {
     path: 'dispatch',

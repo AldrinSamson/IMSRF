@@ -22,10 +22,11 @@
         <p class="text-justify font-weight-bold">Expiry Date:  {{value.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy' }}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" *ngIf="!isPartner" (click)='updateInventory()' [disabled]="!updateInventoryForm.valid">Edit</button>
-        <button type="button" class="btn btn-warning" *ngIf="!isPartner" (click)='archiveBatch()'>Archive</button>
+        <button type="button" class="btn btn-success" *ngIf="!hideEditButton" (click)='updateInventory()' [disabled]="!updateInventoryForm.valid">Edit</button>
+        <button type="button" class="btn btn-light" *ngIf="!hideArchiveButton" (click)='archiveBatch()'>Archive</button>
+        <button type="button" class="btn btn-warning" *ngIf="!hideRestoreButton" (click)='restoreBatch()'>Restore</button>
         <!-- <button type="button" class="btn btn-danger" *ngIf="!isPartner" (click)='manualExpire()'>Expire Override</button> -->
-        <button type="button" class="btn btn-light" (click) = "activeModal.close()">Cancel</button>
+        <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()">Cancel</button>
       </div>
     </div>
   </div>

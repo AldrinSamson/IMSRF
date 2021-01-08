@@ -76,13 +76,13 @@ export class UserService {
         success => {
           if (value.newPassword !== value.newPasswordConfirm){
            this.alertService.showToaster('You did not confirm your password correctly.' ,
-            { classname: 'bg-success text-warning', delay: 10000 });
+            { classname: 'bg-warning text-white', delay: 10000 });
           } else if (value.newPassword.length < 6){
             this.alertService.showToaster('Your password should be at least 6 characters long' ,
-            { classname: 'bg-success text-warning', delay: 10000 });
+            { classname: 'bg-warning text-white', delay: 10000 });
           } else {
             this.alertService.showToaster('Your password has been updated!' ,
-            { classname: 'bg-success text-warning', delay: 10000 });
+            { classname: 'bg-success text-white', delay: 10000 });
             currentUser.updatePassword(value.newPassword).then(res => {
               console.log(res);
               return true
@@ -95,7 +95,7 @@ export class UserService {
           console.log(error);
           if(error.code === 'auth/wrong-password'){
             this.alertService.showToaster('Your old password is invalid.' ,
-            { classname: 'bg-success text-warning', delay: 10000 });
+            { classname: 'bg-warning text-white', delay: 10000 });
           }
         }
       )

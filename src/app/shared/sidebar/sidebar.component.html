@@ -53,6 +53,12 @@
         <i class="mdi mdi-calendar menu-icon"></i>
       </a>
     </li>
+    <li class="nav-item" [ngClass]="{ 'active': requester.isActive }" *ngIf = "isAdmin || isStaff">
+      <a class="nav-link" routerLink="requester" routerLinkActive #requester="routerLinkActive">
+        <span class="menu-title">Requesters</span>
+        <i class="mdi mdi-account menu-icon"></i>
+      </a>
+    </li>
     <li class="nav-item" [ngClass]="{ 'active': dispatch.isActive }" *ngIf = "isAdmin || isStaff || isPartner">
       <a class="nav-link" routerLink="dispatch" routerLinkActive #dispatch="routerLinkActive">
         <span class="menu-title">Dispatch</span>

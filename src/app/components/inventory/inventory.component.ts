@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,  OnDestroy} from '@angular/core';
-import { InventoryService, AlertService, ValidationService } from '@shared';
+import { InventoryService, AlertService, AuthService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,13 +13,20 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ViewBatchComponent implements OnInit{
 
   isPartner = false;
+  isStaff = false;
   updateInventoryForm: any;
   @Input() value;
+  @Input() isArchived;
+  hideEditButton = false;
+  hideArchiveButton = false;
+  hideRestoreButton = false;
+
 
   constructor(
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
-    private readonly inventoryService: InventoryService) {
+    private readonly inventoryService: InventoryService,
+    private readonly authService : AuthService) {
     }
 
   ngOnInit(): void {
@@ -27,6 +34,18 @@ export class ViewBatchComponent implements OnInit{
       batchID: [this.value.batchID],
       quantity: [this.value.quantity, Validators.required]
     });
+
+    this.isStaff = this.authService.isStaff();
+
+    if (this.isStaff === true || this.isArchived === true) {
+      this.hideEditButton = true
+    }
+    if (this.isStaff === true || this.isArchived === true) {
+      this.hideArchiveButton = true
+    }
+    if (this.isStaff === true || this.isArchived === false) {
+      this.hideRestoreButton = true
+    }
   }
 
   updateInventory() {
@@ -43,6 +62,11 @@ export class ViewBatchComponent implements OnInit{
   }
 
   archiveBatch() {
+    this.inventoryService.archive(this.value.id);
+    this.activeModal.close();
+  }
+
+  restoreBatch() {
     this.inventoryService.restore(this.value.id);
     this.activeModal.close();
   }
@@ -55,9 +79,12 @@ export class ViewBatchComponent implements OnInit{
 })
 export class InventoryComponent implements OnInit {
 
+  activeSearchText;
+  archivedSearchText;
   p;
   isPartner = false;
-  inventory$: Observable<any>;
+  activeInventory$: Observable<any>;
+  archivedInventory$: Observable<any>;
 
   constructor(
     private readonly modalService: NgbModal,
@@ -68,16 +95,18 @@ export class InventoryComponent implements OnInit {
   }
 
   getData() {
-    this.inventory$ = this.inventoryService.getAll();
+    this.activeInventory$ = this.inventoryService.getAllActive();
+    this.archivedInventory$ = this.inventoryService.getAllArchived();
   }
 
   trackByFn(index) {
     return index;
   }
 
-  openViewBatch(value) {
+  openViewBatch(value, isArchived) {
     const modalRef = this.modalService.open(ViewBatchComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.value = value;
+    modalRef.componentInstance.isArchived = isArchived;
   }
 
 

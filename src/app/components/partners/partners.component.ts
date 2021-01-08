@@ -18,7 +18,8 @@ export class AddPartnerComponent {
     public readonly activeModal: NgbActiveModal,
     private readonly partnerService: PartnerService) {
     this.addForm = this.formBuilder.group({
-      institutionName: ['', Validators.required]
+      institutionName: ['', Validators.required],
+      location: ['', Validators.required]
     });
   }
 

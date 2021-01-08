@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserService } from '@shared';
+import { UserService, InventoryService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,10 +12,13 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ReportsComponent implements OnInit {
 
-  p;
+  inventorySearchText: any;
+  p: any;
   audit$: Observable<any>
+  inventory$: Observable<any>
   constructor(
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly inventoryService: InventoryService
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +31,7 @@ export class ReportsComponent implements OnInit {
 
   getData() {
     this.audit$ = this.userService.getAllAudit();
+    this.inventory$ = this.inventoryService.getAll();
   }
 
 }

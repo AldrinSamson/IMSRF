@@ -25,7 +25,7 @@ export class RequestDispatch {
   patientDiagnosisPhotoUrl: string;
 
   dateRequested: Date;
-  status: string; // Requested, Order Created
+  status: string; // Requested, Dispatch Created
 
   isOrdered: boolean;
   isArchived: boolean;

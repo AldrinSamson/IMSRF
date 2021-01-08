@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title font-weight-bold">Order for {{value.requestID}}</h5>
+        <h5 class="modal-title font-weight-bold">Dispatch for {{value.requestID}}</h5>
         <button type="button" class="close" (click) = "activeModal.close()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -103,7 +103,7 @@
           </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" (click)="addOrder()" [disabled]="" >Submit</button>
-        <button type="button" class="btn btn-light" (click) = "activeModal.close()" >Cancel</button>
+        <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
       </div>
     </div>
   </div>

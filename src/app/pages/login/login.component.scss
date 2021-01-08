@@ -2,9 +2,11 @@ body {
   background-image: url("../../../assets/images/background/bg-1.jpeg") !important;
 }
 .content-wrapper {
-  background-image: url("../../../assets/images/background/Red_Bank_Land_Page_BG.png") !important;
+  background-image: url("../../../assets/images/background/landing_bg.svg") !important;
+  background-color: #d8d8d8 ;
   height: 100vh;
   background-size:     cover;                      /* <------ */
   background-repeat:   no-repeat;
   background-position: center center;
 }
+

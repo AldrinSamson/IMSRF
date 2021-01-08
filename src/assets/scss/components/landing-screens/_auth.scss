@@ -7,15 +7,15 @@
 		border-radius: 100%;
 	}
 	.auth-form-light {
-		background: $white;
+		background: rgb(221, 221, 221);
 		select {
-			color: $input-placeholder-color;
+			color: #545454;
 		}
 		.input-group {
 			.form-control {
 				&:focus,
 				&:active {
-					border-color: $border-color;
+					border-color:  #545454;
 				}
 			}
 		}
@@ -23,7 +23,7 @@
 	.brand-logo {
 		margin-bottom: 2rem;
 		img {
-			width: 150px;
+			width: 250px;
 		}
 	}
 	form {

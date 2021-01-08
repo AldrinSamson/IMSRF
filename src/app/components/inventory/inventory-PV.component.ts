@@ -13,13 +13,17 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ViewBatchPartnerComponent implements OnInit{
 
   isPartner = true;
+  isStaff = true;
   updateInventoryForm: any;
   @Input() value;
+  @Input() isArchived;
+  hideEditButton = true;
+  hideArchiveButton = true;
+  hideRestoreButton = true;
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    public readonly activeModal: NgbActiveModal,
-    private readonly inventoryService: InventoryService) {
+    public readonly activeModal: NgbActiveModal) {
     }
 
   ngOnInit(): void {
@@ -38,6 +42,8 @@ export class ViewBatchPartnerComponent implements OnInit{
 
   archiveBatch() {
   }
+
+  restoreBatch() {}
 }
 
 @Component({
@@ -47,9 +53,12 @@ export class ViewBatchPartnerComponent implements OnInit{
 })
 export class InventoryPartnerComponent implements OnInit {
 
+  activeSearchText;
+  archivedSearchText;
   p;
   isPartner = true;
-  inventory$: Observable<any>;
+  activeInventory$: Observable<any>;
+  archivedInventory$: Observable<any>;
 
   constructor(
     private readonly modalService: NgbModal,
@@ -61,16 +70,17 @@ export class InventoryPartnerComponent implements OnInit {
   }
 
   getData() {
-    this.inventory$ = this.inventoryService.getInventoryOfPartner(this.authService.partnerID());
+    this.activeInventory$ = this.inventoryService.getInventoryOfPartner(this.authService.partnerID());
   }
 
   trackByFn(index) {
     return index;
   }
 
-  openViewBatch(value) {
+  openViewBatch(value, isArchived) {
     const modalRef = this.modalService.open(ViewBatchPartnerComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.value = value;
+    modalRef.componentInstance.isArchived = isArchived;
   }
 
 }
