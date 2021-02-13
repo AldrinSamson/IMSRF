@@ -5,6 +5,7 @@ export class Partner {
   partnerID: string;
   institutionName: string;
   num: number;
+  address: string;
 
   // Meta Data
   dateCreated: Date;

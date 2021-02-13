@@ -11,6 +11,8 @@ export class Inventory {
   bloodTypeCode: string;
   quantity: number;
   dateExpiry: Date;
+  dateExtraction: Date; // dateOfEvent
+  locationExtraction: string; // event location
 
   // Meta Data
   isExpired: boolean;

@@ -41,6 +41,7 @@ export class PartnerService {
         partnerID: val.newID,
         num: val.newNum,
         institutionName: values.institutionName,
+        address: values.address,
         dateCreated: new Date(),
         dateLastModified: new Date(),
         createdBy:  this.authService.userName(),
@@ -57,6 +58,7 @@ export class PartnerService {
   updateOne(id, values) {
     this.db.collection<Partner>(Partner.collectionName).doc(id).update({
       institutionName: values.institutionName,
+      address: values.address,
       dateLastModified: new Date(),
       lastModifiedBy:  this.authService.userName()
     }).catch(error => {

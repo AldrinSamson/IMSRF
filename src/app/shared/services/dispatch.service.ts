@@ -9,6 +9,7 @@ import { InventoryService } from './inventory.service';
 import { EMPTY } from 'rxjs';
 import { ParseError } from '@angular/compiler';
 
+// Service for all Orders and Requests including Pending requests from requester
 @Injectable({
   providedIn: 'root'
 })

@@ -14,7 +14,7 @@
         <div class="row">
           <div class="col-md-1 d-flex align-items-center">
             <div class="align-items-center">
-              <div class="font-weight-bold">O+</div> <br> <div class="badge badge-pill badge-primary">2</div>
+              <div class="font-weight-bold">O+</div> <br> <div class="badge badge-pill badge-primary"></div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
@@ -171,33 +171,37 @@
   <div class="col-md-12 grid-margin grid-margin-md-0 stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Active Dispatches</h4>
+        <h4 class="card-title">Active Events</h4>
         <table class="table table-bordered table-hover ">
           <thead>
             <tr>
               <th>Event ID</th>
               <th>Institution Name</th>
               <th>Date of Event</th>
-              <th>Status</th>
+              <th>Location</th>
             </tr>
           </thead>
           <tbody>
-            <tr  *ngFor="let order of order$ | async; trackBy: trackByFn ">
+            <tr *ngIf="(event$ | async).length == 0" > No Active Events</tr>
+            <tr  *ngFor="let event of event$ | async | paginate:{itemsPerPage: 3, currentPage:p}; trackBy: trackByFn ">
               <td>
-                {{order.dispatchID}}
+                {{event.eventID}}
               </td>
               <td>
-                {{order.institutionName}}
+                {{event.institutionName}}
               </td>
               <td>
-                {{order.dateOrderCreated.seconds * 1000 | date:'MM-dd-yyyy'}}
+                {{event.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}
               </td>
               <td>
-                {{order.status}}
+                {{event.location}}
               </td>
             </tr>
           </tbody>
         </table>
+        <div id="pagination">
+          <pagination-controls (pageChange)="p=$event"></pagination-controls>
+        </div>
       </div>
     </div>
   </div>
@@ -206,7 +210,7 @@
   <div class="col-md-12 grid-margin grid-margin-md-0 stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Active Events</h4>
+        <h4 class="card-title">Active Dispatches</h4>
         <table class="table table-bordered table-hover ">
           <thead>
             <tr>
@@ -219,7 +223,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr  *ngFor="let order of order$ | async; trackBy: trackByFn ">
+            <tr *ngIf="(order$ | async).length == 0" > No Active Dispatches</tr>
+            <tr  *ngFor="let order of order$ | async | paginate:{itemsPerPage: 3, currentPage:p}; trackBy: trackByFn ">
               <td>
                 {{order.dispatchID}}
               </td>
@@ -241,6 +246,9 @@
             </tr>
           </tbody>
         </table>
+        <div id="pagination">
+          <pagination-controls (pageChange)="p=$event"></pagination-controls>
+        </div>
       </div>
   </div>
 </div>

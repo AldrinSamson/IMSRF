@@ -1,8 +1,10 @@
-import { Component, OnInit, Input,  OnDestroy} from '@angular/core';
-import { InventoryService, AlertService, AuthService } from '@shared';
+import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
+import { InventoryService, AlertService, AuthService, BloodTypes, Partner, PartnerService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { NgbActiveModal, NgbModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { pipe } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, filter, catchError, takeUntil} from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -13,7 +15,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ViewBatchComponent implements OnInit{
 
   isPartner = false;
-  isStaff = false;
+  isStaff = true;
   updateInventoryForm: any;
   @Input() value;
   @Input() isArchived;
@@ -61,6 +63,11 @@ export class ViewBatchComponent implements OnInit{
     this.activeModal.close();
   }
 
+  deleteBatch() {
+    this.inventoryService.delete(this.value.id);
+    this.activeModal.close();
+  }
+
   archiveBatch() {
     this.inventoryService.archive(this.value.id);
     this.activeModal.close();
@@ -79,24 +86,78 @@ export class ViewBatchComponent implements OnInit{
 })
 export class InventoryComponent implements OnInit {
 
-  activeSearchText;
-  archivedSearchText;
+  searchText;
+  filterBloodType;
   p;
+  bloodTypes = BloodTypes.bloodTypes;
   isPartner = false;
   activeInventory$: Observable<any>;
   archivedInventory$: Observable<any>;
+  filter;
+
+  partner$: Subscription;
+  partnerData;
+  public partner: any = {};
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+
 
   constructor(
     private readonly modalService: NgbModal,
-    private readonly inventoryService: InventoryService) { }
+    private readonly inventoryService: InventoryService,
+    public partnerService: PartnerService) { }
 
   ngOnInit(): void {
+    this.filter = []
     this.getData();
   }
 
   getData() {
-    this.activeInventory$ = this.inventoryService.getAllActive();
+    this.activeInventory$ = this.inventoryService.getAllActive('dateCreated');
     this.archivedInventory$ = this.inventoryService.getAllArchived();
+    this.partner$ = this.partnerService.getAll().subscribe( res => {
+      this.partnerData = res
+    });
+  }
+
+  formatter = (partner: Partner) => partner.institutionName;
+
+  search = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.partnerData
+        : this.partnerData.filter(partner => new RegExp(term, 'mi').test(partner.institutionName)).slice(0, 10))
+    ));
+  }
+
+  orderData(order) {
+    this.activeInventory$ = this.inventoryService.getAllActive(order);
+    this.p = 1;
+  }
+
+  filterData() {
+    this.filter = [];
+    if (this.partner !== undefined || null ) {
+      this.filter.push(this.partner.partnerID);
+    }
+
+    if (this.filterBloodType === 'None') {
+      this.filterBloodType = undefined;
+    }
+
+    if (this.filterBloodType !== undefined) {
+      this.filter.push(this.filterBloodType)
+    }
+    this.activeInventory$ = this.activeInventory$.pipe(
+      map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+      filter(items => items && items.length > 0)
+    );
+
+    this.p = 1;
   }
 
   trackByFn(index) {

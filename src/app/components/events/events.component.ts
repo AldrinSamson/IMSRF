@@ -155,6 +155,8 @@ export class UpdatePostEventComponent implements OnInit {
       eventID: [this.value.eventID],
       partnerID: [this.value.partnerID],
       institutionName: [this.value.institutionName],
+      location: [this.value.location, ],
+      dateOfEvent : [this.value.dateOfEvent],
       donorsRegistered: [],
       donorsDefferTotal: [],
       donorsDefferScreen: ['', Validators.required],
@@ -177,8 +179,19 @@ export class UpdatePostEventComponent implements OnInit {
     });
   }
 
-  postEvent() {
+  divideBy3() {
+    // temp out ratio 1:3
+    this.postEventForm.controls.quantityAP.setValue(Math.round(this.postEventForm.value.quantityAP / 3));
+    this.postEventForm.controls.quantityAN.setValue(Math.round(this.postEventForm.value.quantityAN / 3));
+    this.postEventForm.controls.quantityBP.setValue(Math.round(this.postEventForm.value.quantityBP / 3));
+    this.postEventForm.controls.quantityBN.setValue(Math.round(this.postEventForm.value.quantityBN / 3));
+    this.postEventForm.controls.quantityOP.setValue(Math.round(this.postEventForm.value.quantityOP / 3));
+    this.postEventForm.controls.quantityON.setValue(Math.round(this.postEventForm.value.quantityON / 3));
+    this.postEventForm.controls.quantityABP.setValue(Math.round(this.postEventForm.value.quantityABP / 3));
+    this.postEventForm.controls.quantityABN.setValue(Math.round(this.postEventForm.value.quantityABN / 3));
+  }
 
+  postEvent() {
     // quick maffs
     this.donorsDefferTotal = this.postEventForm.value.donorsDefferScreen + this.postEventForm.value.donorsDefferLow
 
@@ -191,16 +204,17 @@ export class UpdatePostEventComponent implements OnInit {
     this.postEventForm.value.quantityBN + this.postEventForm.value.quantityOP + this.postEventForm.value.quantityON +
     this.postEventForm.value.quantityABP + this.postEventForm.value.quantityABN
 
-    if (this.quantityTotal !== this.postEventForm.value.donorsBledOk) {
-      this.postEventForm.controls.donorsBledOk.setErrors({incorrect: true});
-      this.alertService.showToaster('Invalid Bled Total' ,
-      { classname: 'bg-success text-warning', delay: 10000 })
-    }
+    // if (this.quantityTotal !== this.postEventForm.value.donorsBledOk) {
+    //   this.postEventForm.controls.donorsBledOk.setErrors({incorrect: true});
+    //   this.alertService.showToaster('Invalid Bled Total' ,
+    //   { classname: 'bg-success text-warning', delay: 10000 })
+    // }
 
     if (this.postEventForm.dirty && this.postEventForm.valid) {
 
-        this.postEventForm.controls.dateExpiry.setValue(new Date(this.postEventForm.value.dateExpiry.year,
-          this.postEventForm.value.dateExpiry.month - 1, this.postEventForm.value.dateExpiry.day));
+        const dateExpiry = new Date(this.postEventForm.value.dateExpiry.year, this.postEventForm.value.dateExpiry.month - 1,
+          this.postEventForm.value.dateExpiry.day)
+        this.postEventForm.controls.dateExpiry.setValue(new Date(dateExpiry.setHours(13)));
 
         this.postEventForm.controls.donorsDefferTotal.setValue(this.donorsDefferTotal);
         this.postEventForm.controls.donorsBledTotal.setValue(this.donorsBledTotal);

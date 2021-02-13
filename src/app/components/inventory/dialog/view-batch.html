@@ -11,6 +11,7 @@
         <p class="text-justify font-weight-bold" *ngIf="!isPartner" >Institution: {{value.institutionName}}</p>
         <p class="text-justify">Event ID: {{value.eventID}}
         <p class="text-justify font-weight-bold">Blood Type: {{value.bloodType}}</p>
+        <p class="text-justify font-weight-bold">Location Extraction: {{value.locationExtraction}}</p>
         <form [formGroup]="updateInventoryForm">
           <div class="form-group">
             <label>Quantity</label>
@@ -19,13 +20,15 @@
             <p class="text-justify" *ngIf="isPartner" >{{value.quantity}}</p>
           </div>
         </form>
+        <p class="text-justify font-weight-bold">Extraction Date:  {{value.dateExtraction.seconds * 1000 | date:'MM-dd-yyyy' }}</p>
         <p class="text-justify font-weight-bold">Expiry Date:  {{value.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy' }}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" *ngIf="!hideEditButton" (click)='updateInventory()' [disabled]="!updateInventoryForm.valid">Edit</button>
         <button type="button" class="btn btn-light" *ngIf="!hideArchiveButton" (click)='archiveBatch()'>Archive</button>
         <button type="button" class="btn btn-warning" *ngIf="!hideRestoreButton" (click)='restoreBatch()'>Restore</button>
-        <!-- <button type="button" class="btn btn-danger" *ngIf="!isPartner" (click)='manualExpire()'>Expire Override</button> -->
+        <button type="button" class="btn btn-danger" *ngIf="!isStaff" (click)='manualExpire()'>Expire Override --Dev</button>
+        <button type="button" class="btn btn-danger" *ngIf="!isStaff" (click)='deleteBatch()'>Delete Override --Dev</button>
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()">Cancel</button>
       </div>
     </div>

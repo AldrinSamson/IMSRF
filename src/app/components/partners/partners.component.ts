@@ -19,7 +19,7 @@ export class AddPartnerComponent {
     private readonly partnerService: PartnerService) {
     this.addForm = this.formBuilder.group({
       institutionName: ['', Validators.required],
-      location: ['', Validators.required]
+      address: ['', Validators.required]
     });
   }
 
@@ -52,7 +52,8 @@ export class ViewPartnerComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       partnerID: [this.value.partnerID,Validators.required],
       num: [this.value.num],
-      institutionName: [this.value.institutionName]
+      institutionName: [this.value.institutionName],
+      address: [this.value.address]
     });
   }
 

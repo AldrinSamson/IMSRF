@@ -24,7 +24,11 @@ export class InventoryService {
     return this.firebase.getAllData<Inventory>(Inventory);
   }
 
-  getAllActive(){
+  getAllFiltered(filter){
+    return this.firebase.getAllData<Inventory>(Inventory);
+  }
+
+  getAllActive(orderField){
     const filters = {
       value1: 'isArchived',
       expression1: '==',
@@ -33,7 +37,7 @@ export class InventoryService {
       expression2: '',
       value4: '',
     };
-    return this.firebase.getAllData<Inventory>(Inventory, 1 , filters);
+    return this.firebase.getAllData<Inventory>(Inventory, 1 , filters, orderField);
   }
 
   getAllArchived(){

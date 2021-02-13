@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DispatchService } from '@shared'
+import { DispatchService, EventService } from '@shared'
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,10 +10,14 @@ import { Observable } from 'rxjs';
 })
 export class DashboardComponent implements OnInit {
 
+  p;
   order$: Observable<any>;
+  event$: Observable<any>;
+  activeRequest$: Observable<any>;
 
   constructor(
-    private readonly dispatchService: DispatchService
+    private readonly dispatchService: DispatchService,
+    private readonly eventService: EventService
     ) { }
 
   ngOnInit(): void {
@@ -21,6 +26,21 @@ export class DashboardComponent implements OnInit {
 
   getData() {
     this.order$ = this.dispatchService.getActiveOrder();
+    this.event$ = this.eventService.getActive();
+    this.activeRequest$ = this.dispatchService.getActiveRequests();
+  }
+
+  filterAndSumAR(item) {
+    // let sum = 0;
+    // const filtered = this.activeRequest$.pipe(
+    //   map(items => items.filter( item => item.searchTags.indexOf(item) > -1)),
+    //   filter(items => items && items.length > 0)
+    // );
+
+    // filtered.forEach(obj => {
+    //       sum += obj.quantity;
+    // })
+    // return sum;
   }
 
   trackByFn(index) {

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage'
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
+import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -61,6 +62,7 @@ import { RequesterComponent } from './components/requester/requester.component';
     AngularFireAuthModule,
     MaterialFileInputModule,
     MatFormFieldModule,
+    HttpClientModule
 
   ],
   providers: [
@@ -73,7 +75,7 @@ import { RequesterComponent } from './components/requester/requester.component';
     BrowserAnimationsModule,
     BrowserModule,
     PartnerAuthGuardService,
-    MainAuthGuardService,
+    MainAuthGuardService
   ],
   bootstrap: [AppComponent]
 })

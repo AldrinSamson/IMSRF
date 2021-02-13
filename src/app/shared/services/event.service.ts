@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { Event , Inventory , BloodTypes } from '../model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertService } from './alert.service';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class EventService {
     public db: AngularFirestore,
     public authService: AuthService,
     public genService: IdGeneratorService,
-    public alertService: AlertService) {
+    public alertService: AlertService,
+    public utilService: UtilService) {
 
   }
 
@@ -121,6 +123,9 @@ export class EventService {
     })}).catch(error => {
       throw new Error('Error: Adding document:' + error);
     }).then( () => {
+
+      this.utilService.sendBroadcastEmail(values.partnerID , 'New Event Added!' , 'Hi! A new event has been added to your Institution('
+      + values.institutionName+') at '+ values.location + ' on ' + values.dateOfEvent);
       this.alertService.showToaster(values.institutionName+' Event Added' , { classname: 'bg-success text-light', delay: 10000 })
     })
   }
@@ -200,6 +205,8 @@ export class EventService {
               bloodTypeCode: bloodTypeCodeValue,
               quantity: quantityValue,
               dateExpiry: values.dateExpiry,
+              dateExtraction: values.dateOfEvent,
+              locationExtraction: values.location,
 
               // Meta Data
               isExpired: false,

@@ -1,8 +1,11 @@
-import { Component, OnInit, Input} from '@angular/core';
-import { InventoryService,AuthService } from '@shared';
+import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
+import { InventoryService, AlertService, AuthService, BloodTypes, Partner, PartnerService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { NgbActiveModal, NgbModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { pipe } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, filter, catchError, takeUntil} from 'rxjs/operators';
+
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -44,6 +47,8 @@ export class ViewBatchPartnerComponent implements OnInit{
   }
 
   restoreBatch() {}
+
+  deleteBatch() {}
 }
 
 @Component({
@@ -53,24 +58,78 @@ export class ViewBatchPartnerComponent implements OnInit{
 })
 export class InventoryPartnerComponent implements OnInit {
 
-  activeSearchText;
-  archivedSearchText;
+  searchText;
+  filterBloodType;
   p;
-  isPartner = true;
+  bloodTypes = BloodTypes.bloodTypes;
+  isPartner = false;
   activeInventory$: Observable<any>;
   archivedInventory$: Observable<any>;
+  filter;
+
+  partner$: Subscription;
+  partnerData;
+  public partner: any = {};
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+
 
   constructor(
     private readonly modalService: NgbModal,
     private readonly inventoryService: InventoryService,
-    private readonly authService: AuthService) { }
+    public partnerService: PartnerService) { }
 
   ngOnInit(): void {
+    this.filter = []
     this.getData();
   }
 
   getData() {
-    this.activeInventory$ = this.inventoryService.getInventoryOfPartner(this.authService.partnerID());
+    this.activeInventory$ = this.inventoryService.getAllActive('dateCreated');
+    this.archivedInventory$ = this.inventoryService.getAllArchived();
+    this.partner$ = this.partnerService.getAll().subscribe( res => {
+      this.partnerData = res
+    });
+  }
+
+  formatter = (partner: Partner) => partner.institutionName;
+
+  search = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.partnerData
+        : this.partnerData.filter(partner => new RegExp(term, 'mi').test(partner.institutionName)).slice(0, 10))
+    ));
+  }
+
+  orderData(order) {
+    this.activeInventory$ = this.inventoryService.getAllActive(order);
+    this.p = 1;
+  }
+
+  filterData() {
+    this.filter = [];
+    if (this.partner.partnerID !== undefined || null ) {
+      this.filter.push(this.partner.partnerID);
+    }
+
+    if (this.filterBloodType === 'None') {
+      this.filterBloodType = undefined;
+    }
+
+    if (this.filterBloodType !== undefined) {
+      this.filter.push(this.filterBloodType)
+    }
+    this.activeInventory$ = this.activeInventory$.pipe(
+      map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+      filter(items => items && items.length > 0)
+    );
+
+    this.p = 1;
   }
 
   trackByFn(index) {
