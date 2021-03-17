@@ -16,6 +16,7 @@ import {debounceTime, distinctUntilChanged, map, filter, catchError, takeUntil} 
 export class ViewBatchPartnerComponent implements OnInit{
 
   isPartner = true;
+  isAdmin = false;
   isStaff = true;
   updateInventoryForm: any;
   @Input() value;
@@ -23,6 +24,7 @@ export class ViewBatchPartnerComponent implements OnInit{
   hideEditButton = true;
   hideArchiveButton = true;
   hideRestoreButton = true;
+  isEventManager = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -58,18 +60,24 @@ export class ViewBatchPartnerComponent implements OnInit{
 })
 export class InventoryPartnerComponent implements OnInit {
 
-  searchText;
+  searchText1;
+  searchText2;
+  searchText3;
   filterBloodType;
-  p;
+  p1;
+  p2;
+  p3
   bloodTypes = BloodTypes.bloodTypes;
-  isPartner = false;
+  isPartner = true;
   activeInventory$: Observable<any>;
+  expiredInventory$: Observable<any>;
   archivedInventory$: Observable<any>;
   filter;
+  orderValue = "dateCreated";
 
   partner$: Subscription;
   partnerData;
-  public partner: any = {};
+  public partner: any;
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -78,7 +86,8 @@ export class InventoryPartnerComponent implements OnInit {
   constructor(
     private readonly modalService: NgbModal,
     private readonly inventoryService: InventoryService,
-    public partnerService: PartnerService) { }
+    public partnerService: PartnerService,
+    private readonly authService: AuthService) { }
 
   ngOnInit(): void {
     this.filter = []
@@ -86,11 +95,8 @@ export class InventoryPartnerComponent implements OnInit {
   }
 
   getData() {
-    this.activeInventory$ = this.inventoryService.getAllActive('dateCreated');
-    this.archivedInventory$ = this.inventoryService.getAllArchived();
-    this.partner$ = this.partnerService.getAll().subscribe( res => {
-      this.partnerData = res
-    });
+    this.activeInventory$ = this.inventoryService.getInventoryOfPartner(this.authService.partnerID());
+    this.expiredInventory$ = this.inventoryService.getInventoryOfPartnerExpired(this.authService.partnerID());
   }
 
   formatter = (partner: Partner) => partner.institutionName;
@@ -108,12 +114,16 @@ export class InventoryPartnerComponent implements OnInit {
 
   orderData(order) {
     this.activeInventory$ = this.inventoryService.getAllActive(order);
-    this.p = 1;
+    this.expiredInventory$ = this.inventoryService.getAllExpired(order);
+    this.archivedInventory$ = this.inventoryService.getAllArchived(order);
+    this.p1 = 1;
+    this.p2 = 1;
+    this.p3 = 1;
   }
 
   filterData() {
     this.filter = [];
-    if (this.partner.partnerID !== undefined || null ) {
+    if ( this.partner !== undefined) {
       this.filter.push(this.partner.partnerID);
     }
 
@@ -124,22 +134,50 @@ export class InventoryPartnerComponent implements OnInit {
     if (this.filterBloodType !== undefined) {
       this.filter.push(this.filterBloodType)
     }
-    this.activeInventory$ = this.activeInventory$.pipe(
-      map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
-      filter(items => items && items.length > 0)
-    );
 
-    this.p = 1;
+    if (this.filterBloodType === undefined &&  this.partner === undefined) {
+
+    } else {
+      this.activeInventory$ = this.activeInventory$.pipe(
+        map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+        filter(items => items && items.length > 0)
+      );
+      this.expiredInventory$ = this.expiredInventory$.pipe(
+        map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+        filter(items => items && items.length > 0)
+      );
+      this.archivedInventory$ = this.archivedInventory$.pipe(
+        map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+        filter(items => items && items.length > 0)
+      );
+    }
+
+
+    this.p1 = 1;
+    this.p2 = 1;
+    this.p3 = 1;
+
+  }
+
+  clearFilter() {
+    this.filterBloodType = undefined;
+    this.partner = undefined;
+    this.getData();
+    this.orderValue = "dateCreated";
+    this.p1 = 1;
+    this.p2 = 1;
+    this.p3 = 1;
   }
 
   trackByFn(index) {
     return index;
   }
 
-  openViewBatch(value, isArchived) {
+  openViewBatch(value, isArchived , isExpired) {
     const modalRef = this.modalService.open(ViewBatchPartnerComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.value = value;
     modalRef.componentInstance.isArchived = isArchived;
+    modalRef.componentInstance.isExpired = isExpired;
   }
 
 }

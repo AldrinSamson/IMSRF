@@ -14,3 +14,5 @@ export * from './event.service';
 export * from './inventory.service';
 export * from './donor.service';
 export * from './dispatch.service';
+export * from './requester.service';
+export * from './audit.service';

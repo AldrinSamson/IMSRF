@@ -13,7 +13,10 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { InventoryPartnerComponent, ViewBatchPartnerComponent } from '../../components/inventory/inventory-PV.component';
 import { SummaryPartnerComponent } from '../../components/summary/summary-PV.component';
-import { DispatchPartnerComponent, ViewOrderComponent, ValidateOrderComponent, AddRequestComponent } from '../../components/dispatch/dispatch-PV.component';
+import { RequestsPartnerComponent, PartnerAddPartnerRequestComponent, PartnerAddRequestComponent,
+  PartnerViewPartnerRequestComponent, PartnerViewRequestComponent } from '../../components/requests/requests-PV.component';
+import { ReportsPartnerComponent , ViewFeedbackComponent } from '../../components/reports/reports-PV.component';
+import { DispatchPartnerComponent, ViewOrderComponent, ValidateOrderComponent } from '../../components/dispatch/dispatch-PV.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'inventory', pathMatch: 'full' },
@@ -28,6 +31,14 @@ const routes: Routes = [
   {
      path: 'dispatch',
      component: DispatchPartnerComponent,
+  },
+  {
+    path: 'requests',
+    component: RequestsPartnerComponent,
+  },
+  {
+    path: 'reports',
+    component: ReportsPartnerComponent,
   }
 ]
 
@@ -36,10 +47,16 @@ const routes: Routes = [
     InventoryPartnerComponent,
     SummaryPartnerComponent,
     DispatchPartnerComponent,
+    RequestsPartnerComponent,
+    ReportsPartnerComponent,
     ViewOrderComponent,
     ValidateOrderComponent,
     ViewBatchPartnerComponent,
-    AddRequestComponent
+    ViewFeedbackComponent,
+    PartnerAddPartnerRequestComponent,
+    PartnerAddRequestComponent,
+    PartnerViewPartnerRequestComponent,
+    PartnerViewRequestComponent
   ],
   imports: [
     CommonModule,

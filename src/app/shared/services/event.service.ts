@@ -120,10 +120,11 @@ export class EventService {
       dateLastModified: new Date(),
       createdBy: this.authService.userName(),
       lastModifiedBy: this.authService.userName()
-    })}).catch(error => {
+    })
+      this.firebase.audit('Event' , 'Initialized Event for ' + values.institutionName + ' at ' + values.location, val.newID);
+    }).catch(error => {
       throw new Error('Error: Adding document:' + error);
     }).then( () => {
-
       this.utilService.sendBroadcastEmail(values.partnerID , 'New Event Added!' , 'Hi! A new event has been added to your Institution('
       + values.institutionName+') at '+ values.location + ' on ' + values.dateOfEvent);
       this.alertService.showToaster(values.institutionName+' Event Added' , { classname: 'bg-success text-light', delay: 10000 })
@@ -145,6 +146,7 @@ export class EventService {
       }).catch(error => {
         throw new Error('Error: Updating document:' + error);
       }).then( () => {
+        this.firebase.audit('Event' , 'Modified Event for ' + values.institutionName + ' at ' + values.location, val.newID);
         this.alertService.showToaster(values.institutionName+' Event Update' , { classname: 'bg-success text-light', delay: 10000 })
       });
     });
@@ -182,6 +184,7 @@ export class EventService {
     }).catch(error => {
       throw new Error('Error: Updating document:' + error);
     }).then( () => {
+      this.firebase.audit('Event' , 'Completed Event for ' + values.institutionName + ' at ' + values.location, values.eventID);
 
       // Add Blood Batch loop
       const bloodQuantity = [values.quantityAP, values.quantityAN, values.quantityBP, values.quantityBN,
@@ -221,6 +224,7 @@ export class EventService {
             });
           }
           batchIDCollection.push(val.newID);
+          this.firebase.audit('Inventory' , 'Created Blood Batch ' + val.newID, val.newID);
         }).catch(error => {
           throw new Error('Error: Creating document:' + error);
         }).then( () => {
@@ -244,13 +248,16 @@ export class EventService {
     });
   }
 
-  archive(id) {
+  archive(id , values) {
+    this.firebase.audit('Event' , 'Archived Event ' + values.eventID, values.eventID);
     return this.firebase.archiveOne(Event, id);
   }
-  restore(id){
+  restore(id, values){
+    this.firebase.audit('Event' , 'Restored Event ' + values.eventID, values.eventID);
     return this.firebase.restoreOne(Event, id);
   }
-  delete(id) {
+  delete(id, values) {
+    this.firebase.audit('Event' , 'Deleted Event ' + values.eventID, values.eventID);
     return this.firebase.deleteOne(Event, id);
   }
 }

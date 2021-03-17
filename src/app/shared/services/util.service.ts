@@ -51,8 +51,8 @@ export class UtilService {
   }
 
   sendBroadcastEmail(partnerID: any , subject: any , message: any ) {
-    const url = 'https://us-central1-imsrf-dev.cloudfunctions.net/sendBroadcastEmail';
-    // const url = 'http://localhost:5000/imsrf-dev/us-central1/sendBroadcastMail';
+    const url = 'https://us-central1-imsrf-dev.cloudfunctions.net/broadcastEmail';
+    // const url = 'http://localhost:5000/imsrf-dev/us-central1/broadcastEmail';
     const body: any = {
       // tslint:disable-next-line: object-literal-key-quotes
       'institution' : partnerID,

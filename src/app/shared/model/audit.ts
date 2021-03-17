@@ -7,4 +7,6 @@ export class Audit {
   level: string;
   name: string;
   type: string;
+  associatedID : string;
+  uid: string;
 }

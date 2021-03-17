@@ -15,8 +15,7 @@
         <form [formGroup]="updateInventoryForm">
           <div class="form-group">
             <label>Quantity</label>
-            <input type="number" class="form-control" formControlName="quantity" *ngIf="!isPartner" >
-            <control-messages [control]="updateInventoryForm.get('quantity')" *ngIf="!isPartner" ></control-messages>
+            <input type="number" class="form-control" formControlName="quantity" *ngIf="!isPartner">
             <p class="text-justify" *ngIf="isPartner" >{{value.quantity}}</p>
           </div>
         </form>
@@ -27,8 +26,8 @@
         <button type="button" class="btn btn-success" *ngIf="!hideEditButton" (click)='updateInventory()' [disabled]="!updateInventoryForm.valid">Edit</button>
         <button type="button" class="btn btn-light" *ngIf="!hideArchiveButton" (click)='archiveBatch()'>Archive</button>
         <button type="button" class="btn btn-warning" *ngIf="!hideRestoreButton" (click)='restoreBatch()'>Restore</button>
-        <button type="button" class="btn btn-danger" *ngIf="!isStaff" (click)='manualExpire()'>Expire Override --Dev</button>
-        <button type="button" class="btn btn-danger" *ngIf="!isStaff" (click)='deleteBatch()'>Delete Override --Dev</button>
+        <button type="button" class="btn btn-danger" *ngIf="isAdmin || isEventManager" (click)='manualExpire()'>Expire Override</button>
+        <button type="button" class="btn btn-danger" *ngIf="isAdmin" (click)='deleteBatch()'>Delete Override</button>
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()">Cancel</button>
       </div>
     </div>

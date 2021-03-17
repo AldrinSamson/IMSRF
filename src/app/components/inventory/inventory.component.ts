@@ -16,12 +16,15 @@ export class ViewBatchComponent implements OnInit{
 
   isPartner = false;
   isStaff = true;
+  isAdmin = false;
   updateInventoryForm: any;
   @Input() value;
   @Input() isArchived;
+  @Input() isExpired;
   hideEditButton = false;
   hideArchiveButton = false;
   hideRestoreButton = false;
+  isEventManager = false;
 
 
   constructor(
@@ -37,15 +40,23 @@ export class ViewBatchComponent implements OnInit{
       quantity: [this.value.quantity, Validators.required]
     });
 
-    this.isStaff = this.authService.isStaff();
+    this.isAdmin = this.authService.isAdmin();
+    this.isEventManager = this.authService.isEventManager();
 
-    if (this.isStaff === true || this.isArchived === true) {
+    if (this.isEventManager === true || this.isArchived === true || this.isExpired === true) {
+      this.hideEditButton = true
+      this.updateInventoryForm.controls.quantity.disable()
+    } else if ( this.isAdmin === true && this.isArchived === true || this.isExpired === true) {
       this.hideEditButton = true
     }
-    if (this.isStaff === true || this.isArchived === true) {
+    if (this.isArchived === true) {
+      this.hideArchiveButton = true
+    } else if ( this.isAdmin === true && this.isArchived === true ) {
       this.hideArchiveButton = true
     }
-    if (this.isStaff === true || this.isArchived === false) {
+    if (this.isArchived === false) {
+      this.hideRestoreButton = true
+    } else if ( this.isAdmin === true && this.isArchived === false ) {
       this.hideRestoreButton = true
     }
   }
@@ -59,22 +70,22 @@ export class ViewBatchComponent implements OnInit{
 
   // Destory before prod
   manualExpire() {
-    this.inventoryService.manualExpire(this.value.id , this.updateInventoryForm);
+    this.inventoryService.manualExpire(this.value.id , this.updateInventoryForm.value);
     this.activeModal.close();
   }
 
   deleteBatch() {
-    this.inventoryService.delete(this.value.id);
+    this.inventoryService.delete(this.value.id, this.updateInventoryForm.value);
     this.activeModal.close();
   }
 
   archiveBatch() {
-    this.inventoryService.archive(this.value.id);
+    this.inventoryService.archive(this.value.id, this.updateInventoryForm.value);
     this.activeModal.close();
   }
 
   restoreBatch() {
-    this.inventoryService.restore(this.value.id);
+    this.inventoryService.restore(this.value.id, this.updateInventoryForm.value);
     this.activeModal.close();
   }
 }
@@ -86,18 +97,24 @@ export class ViewBatchComponent implements OnInit{
 })
 export class InventoryComponent implements OnInit {
 
-  searchText;
+  searchText1;
+  searchText2;
+  searchText3;
   filterBloodType;
-  p;
+  p1;
+  p2;
+  p3;
   bloodTypes = BloodTypes.bloodTypes;
   isPartner = false;
   activeInventory$: Observable<any>;
+  expiredInventory$: Observable<any>;
   archivedInventory$: Observable<any>;
   filter;
+  orderValue = 'dateCreated';
 
   partner$: Subscription;
   partnerData;
-  public partner: any = {};
+  public partner: any;
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -115,7 +132,8 @@ export class InventoryComponent implements OnInit {
 
   getData() {
     this.activeInventory$ = this.inventoryService.getAllActive('dateCreated');
-    this.archivedInventory$ = this.inventoryService.getAllArchived();
+    this.expiredInventory$ = this.inventoryService.getAllExpired('dateCreated');
+    this.archivedInventory$ = this.inventoryService.getAllArchived('dateCreated');
     this.partner$ = this.partnerService.getAll().subscribe( res => {
       this.partnerData = res
     });
@@ -136,12 +154,16 @@ export class InventoryComponent implements OnInit {
 
   orderData(order) {
     this.activeInventory$ = this.inventoryService.getAllActive(order);
-    this.p = 1;
+    this.expiredInventory$ = this.inventoryService.getAllExpired(order);
+    this.archivedInventory$ = this.inventoryService.getAllArchived(order);
+    this.p1 = 1;
+    this.p2 = 1;
+    this.p3 = 1;
   }
 
   filterData() {
     this.filter = [];
-    if (this.partner !== undefined || null ) {
+    if ( this.partner !== undefined) {
       this.filter.push(this.partner.partnerID);
     }
 
@@ -152,22 +174,50 @@ export class InventoryComponent implements OnInit {
     if (this.filterBloodType !== undefined) {
       this.filter.push(this.filterBloodType)
     }
-    this.activeInventory$ = this.activeInventory$.pipe(
-      map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
-      filter(items => items && items.length > 0)
-    );
 
-    this.p = 1;
+    if (this.filterBloodType === undefined &&  this.partner === undefined) {
+
+    } else {
+      this.activeInventory$ = this.activeInventory$.pipe(
+        map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+        filter(items => items && items.length > 0)
+      );
+      this.expiredInventory$ = this.expiredInventory$.pipe(
+        map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+        filter(items => items && items.length > 0)
+      );
+      this.archivedInventory$ = this.archivedInventory$.pipe(
+        map(items => items.filter( item => this.filter.every(val => item.searchTags.indexOf(val) > -1))),
+        filter(items => items && items.length > 0)
+      );
+    }
+
+
+    this.p1 = 1;
+    this.p2 = 1;
+    this.p3 = 1;
+
+  }
+
+  clearFilter() {
+    this.filterBloodType = undefined;
+    this.partner = undefined;
+    this.getData();
+    this.orderValue = 'dateCreated';
+    this.p1 = 1;
+    this.p2 = 1;
+    this.p3 = 1;
   }
 
   trackByFn(index) {
     return index;
   }
 
-  openViewBatch(value, isArchived) {
+  openViewBatch(value, isArchived , isExpired) {
     const modalRef = this.modalService.open(ViewBatchComponent,{centered: true, scrollable: true, backdrop: 'static'});
     modalRef.componentInstance.value = value;
     modalRef.componentInstance.isArchived = isArchived;
+    modalRef.componentInstance.isExpired = isExpired;
   }
 
 

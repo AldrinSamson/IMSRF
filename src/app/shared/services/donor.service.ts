@@ -57,6 +57,7 @@ export class DonorService {
     }).catch(error => {
       throw new Error('Error: Updating document:' + error);
     }).then( () => {
+      this.firebase.audit('Donor' , 'Created Donor ' + value.firstName + ' ' + value.lastName, 'N/A');
       this.alertService.showToaster(value.firstName + ' ' + value.lastName+' User Modified',
     { classname: 'bg-success text-light', delay: 10000 })
     });
@@ -78,6 +79,7 @@ export class DonorService {
     }).catch(error => {
       throw new Error('Error: Updating document:' + error);
     }).then( () => {
+      this.firebase.audit('Donor' , 'Modified Donor ' + value.firstName + ' ' + value.lastName, 'N/A');
       this.alertService.showToaster(value.firstName + ' ' + value.lastName+' User Modified',
     { classname: 'bg-success text-light', delay: 10000 })
     });
@@ -89,7 +91,8 @@ export class DonorService {
   restore(id){
     return this.firebase.restoreOne(Donor, id);
   }
-  delete(id) {
+  delete(id, value) {
+    this.firebase.audit('Dispatch' , 'Deleted Donor ' + value.firstName + ' ' + value.lastName, 'N/A');
     return this.firebase.deleteOne(Donor, id);
   }
 

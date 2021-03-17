@@ -4,13 +4,13 @@
   </h3>
 </div>
 <ngb-tabset type="pills" class="pills-primary">
-  <ngb-tab title="Logs">
+  <ngb-tab title="Authentication" *ngIf="!isPartner">
     <ng-template ngbTabContent>
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to PDF</button>
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -18,32 +18,32 @@
                       <th>Date</th>
                       <th>Position</th>
                       <th>Name</th>
-                      <th>Type</th>
                       <th>Action</th>
+                      <th>TID</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of audit$ | async| paginate:{itemsPerPage: 10, currentPage:p}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audits of authenticationLog$ | async| paginate:{itemsPerPage: 10, currentPage:p6}; trackBy: trackByFn ">
                       <td>
-                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy'}}
+                        {{audits.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
                       <td>
-                        {{audit.level}}
+                        {{audits.level}}
                       </td>
                       <td>
-                        {{audit.name}}
+                        {{audits.name}}
                       </td>
                       <td>
-                        {{audit.type}}
+                        {{audits.action}}
                       </td>
                       <td>
-                        {{audit.action}}
+                        {{audits.associatedID}}
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <div id="pagination">
-                  <pagination-controls (pageChange)="p=$event"></pagination-controls>
+                  <pagination-controls (pageChange)="p6=$event"></pagination-controls>
                 </div>
               </div>
             </div>
@@ -52,7 +52,199 @@
       </div>
     </ng-template>
   </ngb-tab>
-  <ngb-tab title="Inventory">
+  <ngb-tab title="Event Logs" *ngIf="!isPartner">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Position</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                      <th>TID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let audit of eventLog$ | async| paginate:{itemsPerPage: 10, currentPage:p5}; trackBy: trackByFn ">
+                      <td>
+                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{audit.level}}
+                      </td>
+                      <td>
+                        {{audit.name}}
+                      </td>
+                      <td>
+                        {{audit.action}}
+                      </td>
+                      <td>
+                        {{audit.associatedID}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p5=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Request Logs" *ngIf="!isPartner">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Position</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                      <th>TID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let audit of requestLog$ | async| paginate:{itemsPerPage: 10, currentPage:p4}; trackBy: trackByFn ">
+                      <td>
+                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{audit.level}}
+                      </td>
+                      <td>
+                        {{audit.name}}
+                      </td>
+                      <td>
+                        {{audit.action}}
+                      </td>
+                      <td>
+                        {{audit.associatedID}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p4=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Dispatch Logs">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Position</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                      <th>TID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let audit of dispatchLog$ | async| paginate:{itemsPerPage: 10, currentPage:p3}; trackBy: trackByFn ">
+                      <td>
+                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{audit.level}}
+                      </td>
+                      <td>
+                        {{audit.name}}
+                      </td>
+                      <td>
+                        {{audit.action}}
+                      </td>
+                      <td>
+                        {{audit.associatedID}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p3=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Inventory Logs">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Position</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                      <th>TID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let audit of inventoryLog$ | async| paginate:{itemsPerPage: 10, currentPage:p2}; trackBy: trackByFn ">
+                      <td>
+                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{audit.level}}
+                      </td>
+                      <td>
+                        {{audit.name}}
+                      </td>
+                      <td>
+                        {{audit.action}}
+                      </td>
+                      <td>
+                        {{audit.associatedID}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p2=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Inventory Manifest">
     <ng-template ngbTabContent>
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
@@ -74,7 +266,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let batch of inventory$ | async| paginate:{itemsPerPage: 10, currentPage:p} | filter:inventorySearchText ; trackBy: trackByFn">
+                    <tr  *ngFor="let batch of inventoryManifest$ | async| paginate:{itemsPerPage: 10, currentPage:p1} | filter:inventorySearchText ; trackBy: trackByFn">
                       <td>
                         {{batch.batchID}}
                       </td>
@@ -91,13 +283,208 @@
                         {{batch.quantity}}
                       </td>
                       <td>
-                        {{batch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}
+                        {{batch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <div id="pagination">
-                  <pagination-controls (pageChange)="p=$event"></pagination-controls>
+                  <pagination-controls (pageChange)="p1=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Donor Logs" *ngIf="!isPartner">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Position</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                      <th>TID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let audit of donorLog$ | async| paginate:{itemsPerPage: 10, currentPage:p7}; trackBy: trackByFn ">
+                      <td>
+                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{audit.level}}
+                      </td>
+                      <td>
+                        {{audit.name}}
+                      </td>
+                      <td>
+                        {{audit.action}}
+                      </td>
+                      <td>
+                        {{audit.associatedID}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p7=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Requester Logs" *ngIf="!isPartner">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Position</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                      <th>TID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let audit of requesterLog$ | async| paginate:{itemsPerPage: 10, currentPage:p8}; trackBy: trackByFn ">
+                      <td>
+                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{audit.level}}
+                      </td>
+                      <td>
+                        {{audit.name}}
+                      </td>
+                      <td>
+                        {{audit.action}}
+                      </td>
+                      <td>
+                        {{audit.associatedID}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p8=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Account Logs" *ngIf="!isPartner">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Position</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                      <th>TID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let audit of accountLog$ | async| paginate:{itemsPerPage: 10, currentPage:p9}; trackBy: trackByFn ">
+                      <td>
+                        {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{audit.level}}
+                      </td>
+                      <td>
+                        {{audit.name}}
+                      </td>
+                      <td>
+                        {{audit.action}}
+                      </td>
+                      <td>
+                        {{audit.associatedID}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p9=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Feedback Reports">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Dispatch ID</th>
+                      <th>Request ID</th>
+                      <th>Institution Name</th>
+                      <th>Patient Name</th>
+                      <th>Date Created</th>
+                      <th>Date Claimed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let dispatch of feedbackReport$ | async| paginate: {itemsPerPage: 10, currentPage:p10}; trackBy: trackByFn "  (click)= 'openViewFeedback(dispatch)'>
+                      <td>
+                        {{dispatch.dispatchID}}
+                      </td>
+                      <td>
+                        {{dispatch.requestID}}
+                      </td>
+                      <td>
+                        {{dispatch.institutionName}}
+                      </td>
+                      <td>
+                        {{dispatch.patientName}}
+                      </td>
+                      <td>
+                        {{dispatch.dateOrderCreated.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                      <td>
+                        {{dispatch.dateClaimed.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p10=$event"></pagination-controls>
                 </div>
               </div>
             </div>

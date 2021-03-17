@@ -34,15 +34,21 @@ export class AuthService {
             sessionStorage.setItem('session-alive', 'true');
             sessionStorage.setItem('session-user-uid', this.userUid);
             sessionStorage.setItem('session-user-details', JSON.stringify(this.userDetails[0]));
-            this.fbs.audit('Authentication' , 'Logged In');
+            this.fbs.audit('Authentication' , 'Logged In', email);
             this.alert.showToaster('Logged In!');
             if (this.userDetails[0].position === 'Partner') {
               this.router.navigate(['/partner']);
-            }else {
+            } else if (this.userDetails[0].position === 'Event Manager') {
+              this.router.navigate(['/main/inventory']);
+            }else if (this.userDetails[0].position === 'Blood Donor Manager') {
+              this.router.navigate(['/main/donors']);
+            } else if (this.userDetails[0].position === 'Dispatch & Request Manager') {
+              this.router.navigate(['/main/requester']);
+            } else {
               this.router.navigate(['/main']);
             }
           } else {
-            this.alert.showToaster('Error');
+            this.alert.showToaster('Invalid Account type');
           }
 
       });
@@ -54,7 +60,8 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.fbs.audit('Authentication' , 'Logged Out');
+    this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
+    this.fbs.audit('Authentication' , 'Logged Out' , this.userPosition.email);
     sessionStorage.removeItem('session-alive');
     sessionStorage.removeItem('session-user-uid');
     sessionStorage.removeItem('session-user-details');
@@ -72,7 +79,8 @@ export class AuthService {
 
   public isAuthenticated(): string {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (this.userPosition.position === 'Admin' || this.userPosition.position === 'Staff') {
+    if (this.userPosition.position === 'Admin' || this.userPosition.position === 'Event Manager'
+    || this.userPosition.position === 'Blood Donor Manager' || this.userPosition.position === 'Dispatch & Request Manager') {
       return sessionStorage.getItem('session-alive');
     }
     return 'false'
@@ -98,11 +106,33 @@ export class AuthService {
     }
   }
 
-  public isStaff() {
+  public isEventManager() {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
     if (!this.isAuthenticated()) {
       return false;
-    } else if (this.userPosition.position === 'Staff') {
+    } else if (this.userPosition.position === 'Event Manager') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public isBloodDonorManager() {
+    this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
+    if (!this.isAuthenticated()) {
+      return false;
+    } else if (this.userPosition.position === 'Blood Donor Manager') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public isDispatchRequestManager() {
+    this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
+    if (!this.isAuthenticated()) {
+      return false;
+    } else if (this.userPosition.position === 'Dispatch & Request Manager') {
       return true;
     } else {
       return false;

@@ -17,11 +17,13 @@ import { InventoryComponent, ViewBatchComponent } from '../../components/invento
 import { EventsComponent, InitEventComponent, UpdatePreEventComponent , UpdatePostEventComponent, ViewEventComponent } from '../../components/events/events.component'
 import { PartnersComponent, AddPartnerComponent, ViewPartnerComponent } from '../../components/partners/partners.component';
 import { DonorsComponent, AddDonorComponent, ViewDonorComponent } from '../../components/donors/donors.component';
-import { DispatchComponent, AddRequestComponent, ViewRequestComponent, AddOrderComponent , ViewOrderComponent } from '../../components/dispatch/dispatch.component';
+import { DispatchComponent, ViewOrderComponent } from '../../components/dispatch/dispatch.component';
 import { AccountsComponent, AddUserComponent, ViewUserComponent } from '../../components/accounts/accounts.component';
-import { ReportsComponent } from '../../components/reports/reports.component';
+import { ReportsComponent, ViewFeedbackComponent } from '../../components/reports/reports.component';
 import { SummaryComponent } from '../../components/summary/summary.component';
-import { RequesterComponent } from '../../components/requester/requester.component';
+import { RequesterComponent, AddRequesterComponent, ViewRequesterComponent } from '../../components/requester/requester.component';
+import { RequestsComponent, AddRequestComponent, ViewRequestComponent, AddOrderComponent,
+  AddPartnerRequestComponent, ViewPartnerRequestComponent } from '../../components/requests/requests.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -54,6 +56,10 @@ const routes: Routes = [
     component: RequesterComponent,
   },
   {
+    path: 'requests',
+    component: RequestsComponent,
+  },
+  {
     path: 'dispatch',
     component: DispatchComponent,
   },
@@ -79,6 +85,8 @@ const routes: Routes = [
     AccountsComponent,
     ReportsComponent,
     SummaryComponent,
+    RequesterComponent,
+    RequestsComponent,
 
     // Dialogs
     AddPartnerComponent,
@@ -95,7 +103,12 @@ const routes: Routes = [
     AddOrderComponent,
     ViewOrderComponent,
     AddDonorComponent,
-    ViewDonorComponent
+    ViewDonorComponent,
+    AddRequesterComponent,
+    ViewRequesterComponent,
+    ViewFeedbackComponent,
+    AddPartnerRequestComponent,
+    ViewPartnerRequestComponent
   ],
   imports: [
     CommonModule,

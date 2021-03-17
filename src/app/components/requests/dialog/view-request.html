@@ -1,0 +1,68 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bold">{{value.requestID}}</h5>
+      </div>
+      <div class="modal-body">
+        <form  [formGroup]="editForm" class="post-form">
+          <div class="form-group">
+            <label>Requester Name</label>
+            <input type="text" class="form-control"
+                    [(ngModel)]="requester"
+                    [ngModelOptions]="{standalone: true}"
+                    [ngbTypeahead]="search"
+                    [inputFormatter]="formatter"
+                    [resultFormatter]="formatter"
+                    (focus)="focus$.next($any($event).target.value)"
+                    (click)="click$.next($any($event).target.value)"
+                    #instance="ngbTypeahead"
+                    [editable]='false'
+                    />
+          </div>
+          <div class="form-group">
+            <label>Patient Name</label>
+            <input type="text" class="form-control" formControlName="patientName">
+          </div>
+          <div class="form-group">
+            <label>Hospital Name</label>
+            <input type="text" class="form-control" formControlName="hospitalName">
+          </div>
+          <div class="form-group">
+            <label>Diagnosis</label>
+            <input type="text" class="form-control" formControlName="patientDiagnosis">
+          </div>
+          <div class="form-group">
+            <label>Blood Type</label>
+            <input type="text" class="form-control" formControlName="patientBloodType">
+          </div>
+          <div class="form-group">
+            <label>Blood Component</label>
+            <input type="text" class="form-control" formControlName="patientBloodComponent">
+          </div>
+          <div class="form-group">
+            <label>Units</label>
+            <input type="text" class="form-control" formControlName="patientBloodUnits">
+          </div>
+
+          <label>Diagnosis Photo</label>
+              <img
+              [src]="value.patientDiagnosisPhotoUrl"
+              alt="patientDiagnosisPhoto"
+              class="preview-image"
+              />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="editRequest()" *ngIf="value.status !== 'Dispatch Created' && !isDispatchRequestManager " [disabled]="editForm.invalid" >Modify</button>
+        <button type="button" class="btn btn-danger" *ngIf="value.status === 'For Approval' || !value.isApproved" (click)="approveRequest()" >Approve</button>
+        <button type="button" class="btn btn-danger" *ngIf="value.status === 'For Approval' || value.isApproved" (click)="denyRequest()" >Deny</button>
+        <button type="button" class="btn btn-danger" *ngIf="!value.isArchived && !isDispatchRequestManager" (click)="archiveRequest()" >Archive</button>
+        <button type="button" class="btn btn-danger" *ngIf="value.isArchived && !isDispatchRequestManager"(click)="restoreRequest()" >Restore</button>
+        <button type="button" class="btn btn-danger" *ngIf="!isDispatchRequestManager"(click)="deleteRequest()" >Delete</button>
+        <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+

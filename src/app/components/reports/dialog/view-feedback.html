@@ -1,0 +1,33 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bold">Feedback for {{value.dispatchID}}</h5>
+        <button type="button" class="close" (click) = "activeModal.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="col-8">
+              <p class="text-justify font-weight-bold">Requester Name: {{value.requesterName}} </p>
+              <p class="text-justify font-weight-bold">Patient Name: {{value.patientName}} </p>
+              <p class="text-justify font-weight-bold">Institution Name: {{value.institutionName}}</p>
+            </div>
+          </div>
+          <div class="row">
+
+              <label class="text-justify" style="padding-left: 20px">Feedback</label>
+              <textarea class="form-control" rows="4" cols="50" disabled>
+                {{value.feedback}}
+              </textarea>
+
+          </div>
+      <div class="modal-footer">
+        <button type="button" class="btn  btn-outline-dark" >Export</button>
+        <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { InventoryService, AuditService } from '@shared';
+import { InventoryService, AuditService, AuthService } from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,9 +28,9 @@ export class ViewFeedbackComponent implements OnInit{
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss']
 })
-export class ReportsComponent implements OnInit {
+export class ReportsPartnerComponent implements OnInit {
 
-  isPartner = false;
+  isPartner = true;
   inventorySearchText: any;
   p1: any;
   p2: any;
@@ -56,6 +56,7 @@ export class ReportsComponent implements OnInit {
     private readonly inventoryService: InventoryService,
     private readonly auditService: AuditService,
     private readonly modalService: NgbModal,
+    private readonly authService: AuthService,
   ) { }
 
   ngOnInit(): void {
@@ -67,16 +68,10 @@ export class ReportsComponent implements OnInit {
   }
 
   getData() {
-    this.inventoryLog$ = this.auditService.getInventoryLogs();
-    this.eventLog$ = this.auditService.getEventLogs();
-    this.requestLog$ = this.auditService.getRequestLogs();
-    this.dispatchLog$ = this.auditService.getDispatchLogs();
-    this.authenticationLog$ = this.auditService.getAuthenticationLogs();
-    this.inventoryManifest$ = this.inventoryService.getAll();
-    this.donorLog$ = this.auditService.getDonorLogs();
-    this.requesterLog$ = this.auditService.getRequesterLogs();
-    this.accountLog$ = this.auditService.getAccountLogs();
-    this.feedbackReport$ = this.auditService.getFeedbackReport();
+    this.inventoryLog$ = this.auditService.getInventoryLogsPartner(this.authService.partnerID());
+    this.dispatchLog$ = this.auditService.getDispatchLogsPartner(this.authService.partnerID());
+    this.inventoryManifest$ = this.inventoryService.getInventoryOfPartnerAll(this.authService.partnerID());
+    this.feedbackReport$ = this.auditService.getFeedbackReportPartner(this.authService.partnerID());
   }
 
   openViewFeedback(value) {

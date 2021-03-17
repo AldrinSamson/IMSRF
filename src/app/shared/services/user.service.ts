@@ -84,6 +84,7 @@ export class UserService {
             this.alertService.showToaster('Your password has been updated!' ,
             { classname: 'bg-success text-white', delay: 10000 });
             currentUser.updatePassword(value.newPassword).then(res => {
+              this.firebase.audit('Account' , 'Changed Password ' + userDetails.fullName, userDetails.email);
               console.log(res);
               return true
             }).catch( error => {
@@ -122,6 +123,7 @@ export class UserService {
             lastModifiedBy: this.authService.userName()
           });
           this.alertService.showToaster('User Create Success'  , { classname: 'bg-success text-light', delay: 10000 });
+          this.firebase.audit('Account' , 'Created New Account: ' + values.fullName + ' for ' + values.institutionName, values.email);
         })
         .catch((_error) => {
           this.alertService.showToaster('User Create Failed' + _error.message  , { classname: 'bg-warning text-light', delay: 10000 });
@@ -143,6 +145,7 @@ export class UserService {
     }).catch(error => {
       throw new Error('Error: Updating document:' + error);
     }).then( () => {
+      this.firebase.audit('Account' , 'Modified Account: ' + value.fullName, value.institutionName);
       this.alertService.showToaster(value.firstName + ' ' + value.lastName+' User Modified',
     { classname: 'bg-success text-light', delay: 10000 })
     });
@@ -154,7 +157,8 @@ export class UserService {
   restore(id){
     return this.firebase.restoreOne(User, id);
   }
-  delete(id) {
+  delete(id, values) {
+    this.firebase.audit('Account' , 'Deleted Account: ' + values.fullName, values.institutionName);
     return this.firebase.deleteOne(User, id);
   }
 }

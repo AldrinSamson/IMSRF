@@ -1,0 +1,81 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bold">Add Requester</h5>
+      </div>
+      <div class="modal-body">
+        <form  [formGroup]="addForm" class="post-form">
+          <img
+          *ngIf="requesterPhoto"
+          [src]="requesterPhoto"
+          alt="requesterPhoto"
+          class="preview-image"
+          />
+          <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+            <label>Requester Photo</label>
+            <ngx-mat-file-input formControlName="requesterPhoto" ngDefaultControl placeholder="Basic outline placeholder">
+            </ngx-mat-file-input>
+            <mat-error *ngIf="addForm.controls['requesterPhoto'].hasError('image')">
+              That doesn't look like a Image to me
+            </mat-error>
+          </mat-form-field>
+          <ngb-progressbar type="success" *ngIf="submitted" [value]="uploadProgress1$ | async"></ngb-progressbar>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" formControlName="email">
+          </div>
+          <div class="form-group">
+            <label>Contact Number</label>
+            <input type="text" class="form-control" formControlName="contactNumber">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" formControlName="password">
+          </div>
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" formControlName="firstName">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" class="form-control" formControlName="lastName">
+          </div>
+          <div class="form-group">
+            <label>Mailing Address</label>
+            <input type="text" class="form-control" formControlName="mailingAddress">
+          </div>
+
+          <div class="form-group">
+            <label>Birthday</label>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd"
+                     name="dp" formControlName="birthday" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+                  <i class="mdi mdi-calendar "></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Sex</label>
+            <select class="form-control" formControlName="sex">
+              <option>Select Sex</option>
+              <option *ngFor="let sex of sexes">
+                {{sex}}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="addRequester()" [disabled]="addForm.invalid || submitted" >Submit</button>
+        <button type="button" class="btn  " (click) = "activeModal.close()" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+

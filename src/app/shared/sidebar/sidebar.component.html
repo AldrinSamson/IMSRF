@@ -10,14 +10,14 @@
           <span class="text-secondary text-small">{{userDetails.institutionName}}</span>
           <span class="text-secondary text-small">{{userDetails.position}}</span>
           <br>
-          <a *ngIf = "isAdmin || isStaff" routerLink="/profile" routerLinkActive #home="routerLinkActive">
+          <a *ngIf = "isAdmin || isEventManager || isBloodDonorManager || isDispatchRequestManager" routerLink="/profile" routerLinkActive #home="routerLinkActive">
             <span class="text-secondary text-small">>> Go to your profile</span></a>
             <a *ngIf = "isPartner" routerLink="/partner/profile" routerLinkActive #home="routerLinkActive">
               <span class="text-secondary text-small">>> Go to your profile</span></a>
         </div>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }" *ngIf = "isAdmin || isStaff">
+    <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }" *ngIf = "isAdmin">
       <a class="nav-link" routerLink="dashboard" routerLinkActive #dashboard="routerLinkActive">
         <span class="menu-title">Dashboard</span>
         <i class="mdi mdi-home menu-icon"></i>
@@ -29,49 +29,55 @@
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': inventory.isActive }" *ngIf = "isAdmin || isStaff || isPartner">
+    <li class="nav-item" [ngClass]="{ 'active': inventory.isActive }" *ngIf = "isAdmin || isEventManager">
       <a class="nav-link" routerLink="inventory" routerLinkActive #inventory="routerLinkActive">
         <span class="menu-title">Inventory</span>
         <i class="mdi mdi-table-large menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': partners.isActive }" *ngIf = "isAdmin || isStaff">
+    <li class="nav-item" [ngClass]="{ 'active': partners.isActive }" *ngIf = "isAdmin">
       <a class="nav-link" routerLink="partners" routerLinkActive #partners="routerLinkActive">
         <span class="menu-title">Partners</span>
         <i class="mdi mdi-account-group menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': donors.isActive }" *ngIf = "isAdmin || isStaff">
+    <li class="nav-item" [ngClass]="{ 'active': donors.isActive }" *ngIf = "isAdmin || isBloodDonorManager">
       <a class="nav-link" routerLink="donors" routerLinkActive #donors="routerLinkActive">
         <span class="menu-title">Donor</span>
         <i class="mdi mdi-cup-water menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': events.isActive }" *ngIf = "isAdmin || isStaff">
+    <li class="nav-item" [ngClass]="{ 'active': events.isActive }" *ngIf = "isAdmin || isEventManager">
       <a class="nav-link" routerLink="events" routerLinkActive #events="routerLinkActive">
         <span class="menu-title">Events</span>
         <i class="mdi mdi-calendar menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': requester.isActive }" *ngIf = "isAdmin || isStaff">
+    <li class="nav-item" [ngClass]="{ 'active': requester.isActive }" *ngIf = "isAdmin || isDispatchRequestManager">
       <a class="nav-link" routerLink="requester" routerLinkActive #requester="routerLinkActive">
         <span class="menu-title">Requesters</span>
         <i class="mdi mdi-account menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': dispatch.isActive }" *ngIf = "isAdmin || isStaff || isPartner">
+    <li class="nav-item" [ngClass]="{ 'active': requests.isActive }" *ngIf = "isAdmin || isDispatchRequestManager || isPartner">
+      <a class="nav-link" routerLink="requests" routerLinkActive #requests="routerLinkActive">
+        <span class="menu-title">Requests</span>
+        <i class="mdi mdi-receipt menu-icon"></i>
+      </a>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active': dispatch.isActive }" *ngIf = "isAdmin || isDispatchRequestManager || isPartner">
       <a class="nav-link" routerLink="dispatch" routerLinkActive #dispatch="routerLinkActive">
         <span class="menu-title">Dispatch</span>
         <i class="mdi mdi-truck menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': accounts.isActive }" *ngIf = "isAdmin || isStaff">
+    <li class="nav-item" [ngClass]="{ 'active': accounts.isActive }" *ngIf = "isAdmin">
       <a class="nav-link" routerLink="accounts" routerLinkActive #accounts="routerLinkActive">
         <span class="menu-title">Accounts</span>
         <i class="mdi mdi-account-settings menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': reports.isActive }" *ngIf = "isAdmin || isStaff">
+    <li class="nav-item" [ngClass]="{ 'active': reports.isActive }" *ngIf = "isAdmin || isPartner">
       <a class="nav-link" routerLink="reports" routerLinkActive #reports="routerLinkActive">
         <span class="menu-title">Reports</span>
         <i class="mdi mdi-file-chart menu-icon"></i>

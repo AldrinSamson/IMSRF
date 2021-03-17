@@ -7,8 +7,7 @@ export class Request {
 
   // requester details
   requesterID: string;
-  contactNumber: string;
-  validationCode: string;
+  fullName: string;
 
   // requests details
   patientName: string;
@@ -20,9 +19,10 @@ export class Request {
   patientDiagnosisPhotoUrl: string;
 
   dateRequested: Date;
-  status: string; // Requested, Dispatch Created
+  status: string; // Dispatch Created, Approved, Denied, For Approval
 
   isOrdered: boolean;
+  isApproved: boolean;
   isArchived: boolean;
   num: number;
 
@@ -30,4 +30,34 @@ export class Request {
   dateLastModified: Date;
   createdBy: string;
   lastModifiedBy: string;
+}
+
+export class PartnerRequest {
+  static modelName = 'requestPartner'
+  static collectionName = 'requestPartner';
+  static prefix = 'RQP';
+
+  // order details
+  partnerRequestID: string;
+  partnerID: string;
+  institutionName: string;
+
+  // selected items [{batchID , quantity}]
+  orderItems: JSON;
+  status: string; // Active, Denied, Released
+
+  dateOrderCreated: Date;
+
+  // Meta Data
+  isCompleted: boolean;
+  isArchived: boolean;
+
+  dateCreated: Date;
+  dateLastModified: Date;
+  createdBy: string;
+  lastModifiedBy: string;
+
+  // [RQP , PTR  ]
+  // experimental for use in advanced searches using array-contains-any
+  searchTags: Array<any>;
 }

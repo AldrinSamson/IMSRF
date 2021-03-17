@@ -7,3 +7,10 @@
     border-radius: 100%;
   }
 }
+
+.preview-image {
+  width: 100%;
+  max-width: 45vw;
+  max-height: 250px;
+  object-fit: cover;
+}

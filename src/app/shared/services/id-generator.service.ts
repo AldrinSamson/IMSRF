@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -9,11 +10,12 @@ import { map } from 'rxjs/operators';
 export class IdGeneratorService {
 
 
-  constructor(public db: AngularFirestore) { }
+  constructor(public db: AngularFirestore,  public http: HttpClient) { }
 
   async generateID(model , option?) {
 
-    if( model.modelName === 'partner' ||  model.modelName === 'requestBlood' && option === undefined) {  // Singled Numbered
+    if( model.modelName === 'partner' ||  model.modelName === 'request' ||  model.modelName === 'requester' ||  model.modelName === 'requestPartner'
+    && option === undefined) {  // Singled Numbered
       let lastNum: any;
       let newNum: any;
       let newID: any;
@@ -36,7 +38,7 @@ export class IdGeneratorService {
       const newID = model.prefix + '-' + idNum + '-' + dateCode
       return {newID , dateCode}
 
-    } else if ( model.modelName === 'dispatchBlood') { // Double with other ID
+    } else if ( model.modelName === 'dispatch') { // Double with other ID
 
       const idNum = option.requestID.substring(4);
       const idNum2 = option.partnerID.substring(4);
@@ -86,6 +88,3 @@ export class IdGeneratorService {
       }
   }
 }
-
-
-

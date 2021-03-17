@@ -6,18 +6,14 @@
 <div class="row">
   <div class="col-2">
     <label class="font-weight-bold">Order By:</label>
-    <select class="form-control" (change)="orderData($event.target.value)" >
+    <select [(ngModel)]="orderValue" class="form-control" (change)="orderData($event.target.value)" >
       <option value ="dateCreated">Date Created</option>
       <option value ="quantity">Quantity</option>
       <option value ="dateExtraction">Date Extraction</option>
       <option value ="dateExpiry">Date Expiry</option>
     </select>
   </div>
-  <div class="col-4">
-    <label class="font-weight-bold">Search:</label>
-    <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Type Here">
-  </div>
-  <div class="col-2">
+  <div class="col-3">
     <label class="font-weight-bold">Filter by Institution:</label>
     <input type="text"
             class="form-control"
@@ -32,7 +28,7 @@
             [editable]='false'
             />
   </div>
-  <div class="col-2">
+  <div class="col-3">
     <label class="font-weight-bold">Filter by Blood Type:</label>
     <select class="form-control" [(ngModel)]="filterBloodType">
       <option value = "None">None</option>
@@ -45,6 +41,10 @@
     <br>
     <button type="button" class="btn btn-success" (click)="filterData()">Filter</button>
   </div>
+  <div class="col-2">
+    <br>
+    <button type="button" class="btn btn-success" (click)="clearFilter()">Clear</button>
+  </div>
 </div>
 <br>
 <ngb-tabset type="pills" class="pills-primary">
@@ -53,6 +53,10 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText1" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
@@ -68,7 +72,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let activeBatch of activeInventory$ | async| paginate:{itemsPerPage: 10, currentPage:p} | filter:searchText ; trackBy: trackByFn" (click)="openViewBatch(activeBatch, false)">
+                    <tr  *ngFor="let activeBatch of activeInventory$ | async| paginate:{itemsPerPage: 10, currentPage:p1} | filter:searchText1 ; trackBy: trackByFn" (click)="openViewBatch(activeBatch, false, false)">
                       <td>
                         {{activeBatch.batchID}}
                       </td>
@@ -94,7 +98,7 @@
                   </tbody>
                 </table>
                 <div id="pagination">
-                  <pagination-controls (pageChange)="p=$event"></pagination-controls>
+                  <pagination-controls (pageChange)="p1=$event"></pagination-controls>
                 </div>
               </div>
             </div>
@@ -103,11 +107,15 @@
       </div>
     </ng-template>
   </ngb-tab>
-  <ngb-tab title="Expired" *ngIf="!isPartner">
+  <ngb-tab title="Expired">
     <ng-template ngbTabContent>
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText2" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
@@ -123,33 +131,33 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let archivedBatch of archivedInventory$ | async| paginate:{itemsPerPage: 10, currentPage:p} | filter:searchText; trackBy: trackByFn" (click)="openViewBatch(archivedBatch, true)">
+                    <tr  *ngFor="let expiredBatch of expiredInventory$ | async| paginate:{itemsPerPage: 10, currentPage:p2} | filter:searchText2; trackBy: trackByFn" (click)="openViewBatch(expiredBatch, false , true)">
                       <td>
-                        {{archivedBatch.batchID}}
+                        {{expiredBatch.batchID}}
                       </td>
                       <td>
-                        {{archivedBatch.eventID}}
+                        {{expiredBatch.eventID}}
                       </td>
                       <td>
-                        {{archivedBatch.institutionName}}
+                        {{expiredBatch.institutionName}}
                       </td>
                       <td>
-                        {{archivedBatch.bloodType}}
+                        {{expiredBatch.bloodType}}
                       </td>
                       <td>
-                        {{archivedBatch.quantity}}
+                        {{expiredBatch.quantity}}
                       </td>
                       <td>
-                        {{archivedBatch.dateExtraction.seconds * 1000 | date:'MM-dd-yyyy'}}
+                        {{expiredBatch.dateExtraction.seconds * 1000 | date:'MM-dd-yyyy'}}
                       </td>
                       <td>
-                        {{archivedBatch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}
+                        {{expiredBatch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <div id="pagination">
-                  <pagination-controls (pageChange)="p=$event"></pagination-controls>
+                  <pagination-controls (pageChange)="p2=$event"></pagination-controls>
                 </div>
               </div>
             </div>
@@ -163,6 +171,10 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText3" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
@@ -178,7 +190,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let archivedBatch of archivedInventory$ | async| paginate:{itemsPerPage: 10, currentPage:p} | filter:searchText; trackBy: trackByFn" (click)="openViewBatch(archivedBatch, true)">
+                    <tr  *ngFor="let archivedBatch of archivedInventory$ | async| paginate:{itemsPerPage: 10, currentPage:p3} | filter:searchText3; trackBy: trackByFn" (click)="openViewBatch(archivedBatch, true  , false)">
                       <td>
                         {{archivedBatch.batchID}}
                       </td>
@@ -204,7 +216,7 @@
                   </tbody>
                 </table>
                 <div id="pagination">
-                  <pagination-controls (pageChange)="p=$event"></pagination-controls>
+                  <pagination-controls (pageChange)="p3=$event"></pagination-controls>
                 </div>
               </div>
             </div>

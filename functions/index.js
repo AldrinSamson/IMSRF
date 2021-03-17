@@ -1,3 +1,4 @@
+/* eslint-disable no-cond-assign */
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -32,6 +33,37 @@ let transporter = nodemailer.createTransport({
     }
 });
 
+function sendEmail(mailOptions , htmlRes) {
+  if (htmlRes) {
+    transporter.sendMail(mailOptions, (erro, info) => {
+      if(erro){
+          return res.send(erro.toString());
+      }
+          return res.send(String('Succesfully Sent to '+mailOptions.to));
+    });
+  } else {
+    transporter.sendMail(mailOptions, (erro, info) => {
+      if(erro){
+        console.log(erro.toString());
+      }
+        console.log(String('Succesfully Sent to '+ mailOptions.to));
+    });
+  }
+}
+
+function userFilter(users, institution, withAdmin) {
+  if (withAdmin) {
+    return users.filter((x) => {
+      return x.partnerID === institution || x.position === 'Admin';
+    });
+  } else {
+    return users.filter((x) => {
+      return x.partnerID === institution;
+    });
+  }
+
+}
+
 // TODO: Upgrade to use 0AUTH2
 exports.sendMail = functions.https.onRequest((req, res) => {
     console.log(req.body);
@@ -55,26 +87,23 @@ exports.sendMail = functions.https.onRequest((req, res) => {
             html: req.body.message
         };
 
-        return transporter.sendMail(mailOptions, (erro, info) => {
-            if(erro){
-                return res.send(erro.toString());
-            }
-                return res.send(String('Succesfully Sent to '+req.body.email));
-        });
+        return sendEmail(mailOptions, true)
     });
 });
 
-exports.sendBroadcastMail = functions.https.onRequest(async (req, res) => {
+exports.broadcastEmail = functions.https.onRequest((req, res) => {
 
-  await db.collection('user').get().then(querySnapshot => {
-    users = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
-  });
+  cors(req, res,async () => {
+    await db.collection('user').get().then(querySnapshot => {
+      if (querySnapshot.empty) {
+        return res.send("No Users")
+      } else {
+        return users = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+      }
+    });
 
-
-
-  cors(req, res, () => {
-    const recipients = users.filter(function (x) {
-      return x.partnerID == req.body.institution || x.position === 'Admin';
+    const recipients = users.filter((x) => {
+      return x.partnerID === req.body.institution || x.position === 'Admin';
     });
 
       if (!req.body.subject || !req.body.message) {
@@ -93,15 +122,7 @@ exports.sendBroadcastMail = functions.https.onRequest(async (req, res) => {
           subject: req.body.subject,
           html: req.body.message
         };
-
-        // console.log(recipient);
-
-        transporter.sendMail(mailOptions, (erro, info) => {
-            if(erro){
-              console.log(erro.toString());
-            }
-              console.log(String('Succesfully Sent to '+recipient.email));
-        });
+        sendEmail(mailOptions, false)
       }
       return res.send("More Work?");
   });
@@ -136,7 +157,7 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
     // get UTC +8 timezone
     const date = new Date();
-    const utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+    const utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()-1,
       date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
     const dateToday = new Date(utc + 28800000);
     // set to midnight
@@ -155,6 +176,8 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
     fortnightAwayStart.setDate(fortnightAwayStart.getDate() + 14);
     fortnightAwayEnd.setDate(fortnightAwayEnd.getDate() + 15);
 
+    console.log(dateToday)
+
     // Query Data
     let expireTodayEmpty = false;
     let expireWeekAwayEmpty = false;
@@ -168,29 +191,33 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
     await db.collection('inventory').where('dateExpiry', '>', dateTodayStart).where('dateExpiry', '<', dateTodayEnd).get()
     .then(querySnapshot => {
       if (querySnapshot.empty) {
-        expireTodayEmpty = true;
+        return expireTodayEmpty = true;
       } else {
-        expireToday = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+        return expireToday = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
       }
     });
     await db.collection('inventory').where('dateExpiry', '>', weekAwayStart).where('dateExpiry', '<', weekAwayEnd).get()
     .then(querySnapshot => {
       if (querySnapshot.empty) {
-        expireWeekAwayEmpty = true;
+        return expireWeekAwayEmpty = true;
       } else {
-        expireWeekAway = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+        return expireWeekAway = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
       }
     });
     await db.collection('inventory').where('dateExpiry', '>', fortnightAwayStart).where('dateExpiry', '<', fortnightAwayEnd).get()
     .then(querySnapshot => {
       if (querySnapshot.empty) {
-        expireFortnightAwayEmpty = true;
+        return expireFortnightAwayEmpty = true;
       } else {
-        expireFortnightAway = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+        return expireFortnightAway = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
       }
     });
     await db.collection('user').get().then(querySnapshot => {
-          users = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+      if (querySnapshot.empty) {
+        return res.send("No Users")
+      } else {
+        return users = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+      }
     });
 
 
@@ -204,36 +231,40 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
       if (!(institutionID in lookup)) {
         lookup[institutionID] = 1;
-        if ( institutionID != exempt) {
+        if ( institutionID !== exempt) {
           institutions.push(institutionID);
         }
       }
     }
 
-    // start email sending loop by partner
-    for (var institution, i = 0; institution = institutions[i++];) {
-
-       //create recipient list
-      const recipients = users.filter(function (x) {
-        return x.partnerID == institution || x.position === 'Admin';
+    function inventoryFilter(inventory, institution) {
+      return inventory.filter((x) => {
+        return x.partnerID === institution;
       });
+    }
+
+
+    // start email sending loop by partner
+    for (var institution, i2 = 0; institution = institutions[i2++];) {
+      console.log(institution)
+       //create recipient list
+      const recipients = userFilter(users, institution, true);
 
       // expired today
       if (expireTodayEmpty === false) {
-        const instituteExpireToday = expireToday.filter(function (x) {
-          return x.partnerID === institution;
-        });
+        const instituteExpireToday = inventoryFilter(expireToday, institution);
+
         if (Object.keys(instituteExpireToday).length > 0) {
 
           let message = "Blood Bags Expiring Today: ";
 
-          for (var batch, i = 0; batch = instituteExpireToday[i++];) {
-            var item = batch.batchID + " | " + batch.bloodType + " | " +batch.quantity + " | " + batch.dateExtraction.toDate() + " | " + batch.dateExpiry.toDate();
-            message = message.concat(item);
+          for (var batch, i3 = 0; batch = instituteExpireToday[i3++];) {
+            var messageItem = batch.batchID + " | " + batch.bloodType + " | " +batch.quantity + " | " + batch.dateExtraction.toDate() + " | " + batch.dateExpiry.toDate();
+            message = message.concat(messageItem);
           }
 
           // Send to recipients
-          for (var recipient, i = 0; recipient = recipients[i++];) {
+          for (var recipient, i4 = 0; recipient = recipients[i4++];) {
             console.log(recipient)
 
 
@@ -244,17 +275,21 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
               html: message
             };
 
-            transporter.sendMail(mailOptions, (erro, info) => {
-                if(erro){
-                  console.log(erro.toString());
-                }
-                  console.log(String('Succesfully Sent to '+ recipient.email));
-            });
+            sendEmail(mailOptions, false)
           }
 
           // Update inventory
-          for (var batch, i = 0; batch = instituteExpireToday[i++];) {
-            db.collection("inventory").doc(batch.id).update({isExpired: true});
+          for (var batch2, i5 = 0; batch2 = instituteExpireToday[i5++];) {
+            db.collection("inventory").doc(batch2.id).update({isExpired: true});
+            db.collection("audit").add({
+              date: new Date(),
+              level: 'Admin',
+              name: 'Automated',
+              uid: 'N/A',
+              type: 'Inventory',
+              action: 'Expired',
+              associatedID: batch2.batchID
+            });
           }
         }
 
@@ -264,75 +299,202 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
       // expiring weekaway
       if (expireWeekAwayEmpty === false) {
-        const instituteExpireWeekAway = expireWeekAway.filter(function (x) {
-          return x.partnerID === institution;
-        });
+        const instituteExpireWeekAway = inventoryFilter(expireWeekAway, institution);
         if (Object.keys(instituteExpireWeekAway).length > 0) {
 
           let message = "Blood Bags Expiring A Week from now: ";
 
-          for (var batch, i = 0; batch = instituteExpireWeekAway[i++];) {
-            var item = batch.batchID + " | " + batch.bloodType + " | " +batch.quantity + " | " + batch.dateExtraction.toDate() + " | " + batch.dateExpiry.toDate();
-            message = message.concat(item);
+          for (var batch3, i6 = 0; batch3 = instituteExpireWeekAway[i6++];) {
+            var messageItem2 = batch3.batchID + " | " + batch3.bloodType + " | " +batch3.quantity + " | " + batch3.dateExtraction.toDate() + " | " + batch3.dateExpiry.toDate();
+            message = message.concat(messageItem2);
           }
 
           // Send to recipients
-          for (var recipient, i = 0; recipient = recipients[i++];) {
+          for (var recipient2, i7 = 0; recipient2 = recipients[i7++];) {
 
 
             const mailOptions = {
               from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
-              to: recipient.email,
+              to: recipient2.email,
               subject: 'Blood Bags Expiring A Week from now',
               html: message
             };
 
-            transporter.sendMail(mailOptions, (erro, info) => {
-                if(erro){
-                  console.log(erro.toString());
-                }
-                  console.log(String('Succesfully Sent to '+ recipient.email));
-            });
+            sendEmail(mailOptions, false)
           }
         }
       }
 
       // expired fortnightaway
       if (expireFortnightAwayEmpty === false) {
-        const instituteExpireFortnightAway = expireFortnightAway.filter(function (x) {
-          return x.partnerID === institution;
-        });
+        const instituteExpireFortnightAway = inventoryFilter(expireFortnightAway, institution);
         if (Object.keys(instituteExpireFortnightAway).length > 0) {
 
           let message = 'Blood Bags Expiring Fortnight from now: ';
 
-          for (var batch, i = 0; batch = instituteExpireFortnightAway[i++];) {
-            var item = batch.batchID + " | " + batch.bloodType + " | " +batch.quantity + " | " + batch.dateExtraction.toDate() + " | " + batch.dateExpiry.toDate();
-            message = message.concat(item);
+          for (var batch4, i8 = 0; batch4 = instituteExpireFortnightAway[i8++];) {
+            var messageItem3 = batch4.batchID + " | " + batch4.bloodType + " | " +batch4.quantity + " | " + batch4.dateExtraction.toDate() + " | " + batch4.dateExpiry.toDate();
+            message = message.concat(messageItem3);
           }
 
           // Send to recipients
-          for (var recipient, i = 0; recipient = recipients[i++];) {
+          for (var recipient3, i9 = 0; recipient3 = recipients[i9++];) {
 
             const mailOptions = {
               from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
-              to: recipient.email,
+              to: recipient3.email,
               subject: 'Blood Bags Expiring Fortnight from now',
               html: message
             };
 
-            transporter.sendMail(mailOptions, (erro, info) => {
-                if(erro){
-                  console.log(erro.toString());
-                }
-                  console.log(String('Succesfully Sent to '+ recipient.email));
-            });
+            sendEmail(mailOptions, false)
           }
         }
       }
     }
 
     return res.send("More Work?");
+});
+
+
+
+exports.quantityChecker = functions.https.onRequest( async(req, res) => {
+
+  // Query Data
+  let users;
+  let inventory;
+
+  await db.collection('inventory').where('isExpired', '==', false).where('isArchived', '==', false).where('isEmpty', '==', false).get()
+  .then(querySnapshot => {
+    if (querySnapshot.empty) {
+      return res.send("Error No Items")
+    } else {
+      return inventory = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+    }
+  });
+  await db.collection('user').get().then(querySnapshot => {
+    if (querySnapshot.empty) {
+      return res.send("Error No Users")
+    } else {
+      return users = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+    }
+  });
+
+
+  // get active instituion list
+  var lookup = {};
+  var institutions = [];
+  const exempt = "N/A"
+
+  // eslint-disable-next-line no-cond-assign
+  for (var item, i = 0; item = users[i++];) {
+    var institutionID = item.partnerID;
+
+    if (!(institutionID in lookup)) {
+      lookup[institutionID] = 1;
+      if ( institutionID !== exempt) {
+        institutions.push(institutionID);
+      }
+    }
+  }
+
+  function inventoryFilter(bloodTypes, institution, i) {
+    return  inventory.filter((x) => {
+      return x.bloodType === bloodTypes[i] && x.partnerID === institution;
+    });
+  }
+
+  let bloodTypes = ['A+' , 'A-' , 'B+' , 'B-' , 'O+' , 'O-' , 'AB+' , 'AB-'];
+
+  // start email sending loop by partner
+  // eslint-disable-next-line no-cond-assign
+  for (var institution, i2 = 0; institution = institutions[i2++];) {
+
+     //create recipient list
+    const recipients = userFilter(users, institution, true);
+
+
+    let lowQuantity = [];
+
+    for (var i5 = 0; i5 < bloodTypes.length; i5++) {
+      const bloodTypeInventory = inventoryFilter(bloodTypes, institution, i5)
+
+      console.log(bloodTypes[i5])
+      var sumOfBloodType = 0;
+
+      // eslint-disable-next-line no-cond-assign
+      for (var batch, i6 = 0; batch = bloodTypeInventory[i6++];) {
+        console.log(batch.bloodType)
+        console.log(batch.quantity)
+        sumOfBloodType = Number(sumOfBloodType) + Number(batch.quantity);
+        console.log(sumOfBloodType)
+      }
+
+
+      if(sumOfBloodType < 5) {
+        lowQuantity.push({ 'bloodType': bloodTypes[i5] , 'quantity' : sumOfBloodType})
+      }
+      console.log(lowQuantity)
+    }
+
+    console.log(lowQuantity)
+
+    if(lowQuantity.length > 0){
+
+      const recipientsData = userFilter(users, institution, false);
+
+      let message = "Partner "+recipientsData[0].institutionName+" Low Quantity Blood: ";
+
+      // eslint-disable-next-line no-cond-assign
+      for (var batch2, i3 = 0; batch2 = lowQuantity[i3++];) {
+        var messageItem = batch2.bloodType + " | " +batch2.quantity + " ";
+        message = message.concat(messageItem);
+      }
+
+      // Send to recipients
+      // eslint-disable-next-line no-cond-assign
+      for (var recipient, i4 = 0; recipient = recipients[i4++];) {
+        console.log(recipient)
+
+
+        const mailOptions = {
+          from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
+          to: recipient.email,
+          subject: 'Low Quantity Blood',
+          html: message
+        };
+
+        sendEmail(mailOptions, false);
+      }
+
+
+    }
+  }
+
+  return res.send("More Work?");
+});
+
+exports.validateCode = functions.https.onRequest((req, res) => {
+  console.log(req.body);
+  cors(req, res, async () => {
+
+      if (!req.body.code || !req.body.id) {
+          return res.status(422).send({
+            error: {
+              code: 422,
+              message: "Missing arguments"
+            }
+          });
+      }
+
+      return await db.collection('dispatch').where('dispatchID', '==', req.body.id).where('claimCode', '=', req.body.code).get().then(querySnapshot => {
+        if (querySnapshot.empty) {
+          return res.send(false)
+        } else {
+          return res.send(true);
+        }
+      });
+  });
 });
 
 // exports.computeRating = functions.https.onRequest( async (req, res) => {

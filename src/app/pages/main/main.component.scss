@@ -1,0 +1,15 @@
+.preview-image {
+  width: 100%;
+  max-width: 45vw;
+  max-height: 250px;
+  object-fit: cover;
+}
+.nav-profile-image {
+  width: 100px;
+  height: 100px;
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+  }
+}

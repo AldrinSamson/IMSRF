@@ -4,6 +4,7 @@ import { AlertService } from './alert.service';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import 'firebase/auth';
+import { Audit } from '../model';
 @Injectable({
   providedIn: 'root'
 })
@@ -85,16 +86,36 @@ export class FirebaseService {
     });
   }
 
-  audit(service , action) {
+  deactivateOne(model, id) {
+    return this.db.collection(model.collectionName).doc(id).update({isActive: false})
+    .then((res) => {
+      this.alertService.showToaster('Deactivate Success', { classname: 'bg-success text-light', delay: 10000 });
+    })
+    .catch((_error) => {
+      console.log('' + model.collectionName + ' Archive Failed!', _error);
+    });
+  }
+
+  activateOne(model, id) {
+    return this.db.collection(model.collectionName).doc(id).update({isActive: true})
+    .then((res) => {
+      this.alertService.showToaster('Activate Success', { classname: 'bg-success text-light', delay: 10000 });
+    })
+    .catch((_error) => {
+      console.log('' + model.collectionName + ' Restore Failed!', _error);
+    });
+  }
+
+  audit(service , action, associatedID) {
     const userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
-    this.db.collection('audit').add({
+    this.db.collection<Audit>('audit').add({
       date: new Date(),
       level: userDetails.position,
       name: userDetails.fullName,
       uid: userDetails.uid,
       type: service,
-      // tslint:disable-next-line: object-literal-shorthand
-      action: action
+      action,
+      associatedID
     });
   }
 }

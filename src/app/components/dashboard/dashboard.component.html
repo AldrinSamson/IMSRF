@@ -11,48 +11,6 @@
             <h4 class="font-weight-normal mb-3">Active Requests
             </h4>
             <h2 class="mb-5">20</h2>
-        <div class="row">
-          <div class="col-md-1 d-flex align-items-center">
-            <div class="align-items-center">
-              <div class="font-weight-bold">O+</div> <br> <div class="badge badge-pill badge-primary"></div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">O-</div> <br> <div class="badge badge-pill badge-primary">70</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">A+</div> <br> <div class="badge badge-pill badge-primary">43</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">A-</div> <br> <div class="badge badge-pill badge-primary">742</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">B+</div> <br> <div class="badge badge-pill badge-primary">43</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">B-</div> <br> <div class="badge badge-pill badge-primary">85</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class="align-items-center">
-              <div class="font-weight-bold">AB+</div> <br> <div class="badge badge-pill badge-primary">15</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class="align-items-center">
-              <div class="font-weight-bold">AB-</div> <br> <div class="badge badge-pill badge-primary">63</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -63,48 +21,6 @@
             <h4 class="font-weight-normal mb-3">Pending Requests
             </h4>
             <h2 class="mb-5">70</h2>
-        <div class="row">
-          <div class="col-md-1 d-flex align-items-center">
-            <div class="align-items-center">
-              <div class="font-weight-bold">O+</div> <br> <div class="badge badge-pill badge-primary">2</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">O-</div> <br> <div class="badge badge-pill badge-primary">70</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">A+</div> <br> <div class="badge badge-pill badge-primary">43</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">A-</div> <br> <div class="badge badge-pill badge-primary">742</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">B+</div> <br> <div class="badge badge-pill badge-primary">43</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class=" align-items-center">
-              <div class="font-weight-bold">B-</div> <br> <div class="badge badge-pill badge-primary">85</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class="align-items-center">
-              <div class="font-weight-bold">AB+</div> <br> <div class="badge badge-pill badge-primary">15</div>
-            </div>
-          </div>
-          <div class="col-md-1 d-flex align-items-center">
-            <div class="align-items-center">
-              <div class="font-weight-bold">AB-</div> <br> <div class="badge badge-pill badge-primary">63</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -182,8 +98,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngIf="(event$ | async).length == 0" > No Active Events</tr>
-            <tr  *ngFor="let event of event$ | async | paginate:{itemsPerPage: 3, currentPage:p}; trackBy: trackByFn ">
+            <!-- <tr *ngIf="(event$ | async).length == 0" > No Active Events</tr> -->
+            <tr  *ngFor="let event of event$ | async | paginate:{itemsPerPage: 3, currentPage:p1}; trackBy: trackByFn ">
               <td>
                 {{event.eventID}}
               </td>
@@ -200,7 +116,7 @@
           </tbody>
         </table>
         <div id="pagination">
-          <pagination-controls (pageChange)="p=$event"></pagination-controls>
+          <pagination-controls (pageChange)="p1=$event"></pagination-controls>
         </div>
       </div>
     </div>
@@ -223,8 +139,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngIf="(order$ | async).length == 0" > No Active Dispatches</tr>
-            <tr  *ngFor="let order of order$ | async | paginate:{itemsPerPage: 3, currentPage:p}; trackBy: trackByFn ">
+            <!-- <tr *ngIf="(order$ | async).length == 0" > No Active Dispatches</tr> -->
+            <tr  *ngFor="let order of order$ | async | paginate:{itemsPerPage: 3, currentPage:p2}; trackBy: trackByFn ">
               <td>
                 {{order.dispatchID}}
               </td>
@@ -247,7 +163,7 @@
           </tbody>
         </table>
         <div id="pagination">
-          <pagination-controls (pageChange)="p=$event"></pagination-controls>
+          <pagination-controls (pageChange)="p2=$event"></pagination-controls>
         </div>
       </div>
   </div>

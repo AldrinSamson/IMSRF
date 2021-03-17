@@ -33,14 +33,26 @@ export class InventoryService {
       value1: 'isArchived',
       expression1: '==',
       value2: false,
-      value3: '',
-      expression2: '',
-      value4: '',
+      value3: 'isExpired',
+      expression2: '==',
+      value4: false,
     };
-    return this.firebase.getAllData<Inventory>(Inventory, 1 , filters, orderField);
+    return this.firebase.getAllData<Inventory>(Inventory, 2 , filters, orderField);
   }
 
-  getAllArchived(){
+  getAllExpired(orderField){
+    const filters = {
+      value1: 'isArchived',
+      expression1: '==',
+      value2: false,
+      value3: 'isExpired',
+      expression2: '==',
+      value4: true,
+    };
+    return this.firebase.getAllData<Inventory>(Inventory, 2 , filters, orderField);
+  }
+
+  getAllArchived(orderField){
     const filters = {
       value1: 'isArchived',
       expression1: '==',
@@ -49,7 +61,7 @@ export class InventoryService {
       expression2: '',
       value4: '',
     };
-    return this.firebase.getAllData<Inventory>(Inventory, 1 , filters);
+    return this.firebase.getAllData<Inventory>(Inventory, 1 , filters, orderField);
   }
   getOne(id: string){
     return this.firebase.getOne<Inventory>(Inventory , id);
@@ -59,9 +71,33 @@ export class InventoryService {
       value1: 'partnerID',
       expression1: '==',
       value2: partnerID,
-      value3: 'isArchived',
+      value3: 'isExpired',
       expression2: '==',
       value4: false,
+    };
+    return this.firebase.getAllData(Inventory, 2 , filters);
+  }
+
+  getInventoryOfPartnerExpired(partnerID) {
+    const filters = {
+      value1: 'partnerID',
+      expression1: '==',
+      value2: partnerID,
+      value3: 'isExpired',
+      expression2: '==',
+      value4: true,
+    };
+    return this.firebase.getAllData(Inventory, 2 , filters);
+  }
+
+  getInventoryOfPartnerAll(partnerID) {
+    const filters = {
+      value1: 'partnerID',
+      expression1: '==',
+      value2: partnerID,
+      value3: '',
+      expression2: '',
+      value4: '',
     };
     return this.firebase.getAllData(Inventory, 1 , filters);
   }
@@ -75,7 +111,11 @@ export class InventoryService {
       expression2: '==',
       value4: bloodType,
     };
-    return this.firebase.getAllData(Inventory, 2 , filters);
+    this.firebase.getAllData(Inventory, 2 , filters);
+    return this.db.collection<Inventory>(Inventory.collectionName, ref => ref.where('partnerID' ,'==',
+    partnerID).where('bloodType' , '==' , bloodType).where('isEmpty' , '==' , false)
+    .where('isArchived' , '==' , false).where('isExpired' , '==' , false)
+    .orderBy('dateCreated', 'desc')).valueChanges({idField: 'id'});
   }
 
   updateOne(id: string, values) {
@@ -91,6 +131,7 @@ export class InventoryService {
     }).catch(error => {
       throw new Error('Error: Updating document:' + error);
     }).then( () => {
+      this.firebase.audit('Inventory' , 'Modified Batch ' + values.batchID, values.batchID);
       this.alertService.showToaster(values.batchID+' Batch Quantity Modified' ,
       { classname: 'bg-success text-light', delay: 10000 })
     });
@@ -125,13 +166,16 @@ export class InventoryService {
     });
   }
 
-  archive(id: string) {
+  archive(id: string, values) {
+    this.firebase.audit('Inventory' , 'Archived Batch ' + values.batchID, values.batchID);
     return this.firebase.archiveOne(Inventory, id);
   }
-  restore(id: string){
+  restore(id: string, values){
+    this.firebase.audit('Inventory' , 'Restored Batch ' + values.batchID, values.batchID);
     return this.firebase.restoreOne(Inventory, id);
   }
-  delete(id: string) {
+  delete(id: string, values) {
+    this.firebase.audit('Inventory' , 'Deletes Batch ' + values.batchID, values.batchID);
     return this.firebase.deleteOne(Inventory, id);
   }
 }

@@ -12,12 +12,16 @@ export class SidebarComponent implements OnInit {
   userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
   isPartner;
   isAdmin;
-  isStaff;
+  isEventManager;
+  isBloodDonorManager;
+  isDispatchRequestManager;
 
   constructor( private readonly authService: AuthService ) {
      this.isPartner = this.authService.isPartner();
      this.isAdmin = this.authService.isAdmin();
-     this.isStaff = this.authService.isStaff();
+     this.isEventManager = this.authService.isEventManager();
+     this.isBloodDonorManager = this.authService.isBloodDonorManager();
+     this.isDispatchRequestManager = this.authService.isDispatchRequestManager();
   }
 
   ngOnInit() {

@@ -148,7 +148,7 @@ export class ViewDonorComponent implements OnInit {
   }
 
   deleteDonor() {
-    this.donorService.delete(this.value.id);
+    this.donorService.delete(this.value.id , this.editForm.values);
     this.activeModal.close();
   }
 

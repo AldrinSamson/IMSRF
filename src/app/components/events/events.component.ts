@@ -244,12 +244,12 @@ export class ViewEventComponent {
   }
 
   archiveEvent() {
-    this.eventService.archive(this.value.id);
+    this.eventService.archive(this.value.id , this.value);
     this.activeModal.close();
   }
 
   restoreEvent() {
-    this.eventService.restore(this.value.id);
+    this.eventService.restore(this.value.id, this.value);
     this.activeModal.close();
   }
 }

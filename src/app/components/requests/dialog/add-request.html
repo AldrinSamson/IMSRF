@@ -1,0 +1,77 @@
+<div class="modal demo-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bold">Add Request</h5>
+      </div>
+      <div class="modal-body">
+        <form  [formGroup]="addForm" class="post-form">
+
+          <div class="form-group">
+            <label>Requester Name</label>
+            <input type="text" class="form-control"
+                    [(ngModel)]="requester"
+                    [ngModelOptions]="{standalone: true}"
+                    [ngbTypeahead]="search"
+                    [inputFormatter]="formatter"
+                    [resultFormatter]="formatter"
+                    (focus)="focus$.next($any($event).target.value)"
+                    (click)="click$.next($any($event).target.value)"
+                    #instance="ngbTypeahead"
+                    [editable]='false'
+                    />
+          </div>
+          <div class="form-group">
+            <label>Patient Name</label>
+            <input type="text" class="form-control" formControlName="patientName">
+          </div>
+          <div class="form-group">
+            <label>Hospital Name</label>
+            <input type="text" class="form-control" formControlName="hospitalName">
+          </div>
+          <div class="form-group">
+            <label>Diagnosis</label>
+            <input type="text" class="form-control" formControlName="patientDiagnosis">
+          </div>
+          <div class="form-group">
+            <label>Blood Type</label>
+            <input type="text" class="form-control" formControlName="patientBloodType">
+          </div>
+          <div class="form-group">
+            <label>Blood Component</label>
+            <input type="text" class="form-control" formControlName="patientBloodComponent">
+          </div>
+          <div class="form-group">
+            <label>Units</label>
+            <input type="text" class="form-control" formControlName="patientBloodUnits">
+          </div>
+
+
+          <img
+          *ngIf="patientDiagnosisPhoto"
+          [src]="patientDiagnosisPhoto"
+          alt="patientDiagnosisPhoto"
+          class="preview-image"
+          />
+
+          <mat-form-field appearance="outline" class="full-width" floatLabel="always">
+            <label>Diagnosis Photo</label>
+            <ngx-mat-file-input formControlName="patientDiagnosisPhoto" ngDefaultControl placeholder="Basic outline placeholder">
+            </ngx-mat-file-input>
+            <mat-error *ngIf="addForm.controls['patientDiagnosisPhoto'].hasError('image')">
+              That doesn't look like a Image to me
+            </mat-error>
+          </mat-form-field>
+
+          <ngb-progressbar type="success" *ngIf="submitted" [value]="uploadProgress1$ | async"></ngb-progressbar>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="addRequest()" [disabled]="addForm.invalid || submitted" >Submit</button>
+        <button type="button" class="btn  " (click) = "activeModal.close()" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+

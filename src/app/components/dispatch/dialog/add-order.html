@@ -28,6 +28,7 @@
                         (click)="click$.next($any($event).target.value)"
                         #instance="ngbTypeahead"
                         [editable]='false'
+                        [disabled]="hasPartner"
                         />
               <select [disabled]="!partner" (change)="getInventory($event.target.value)">
                 <option>Select Blood Type</option>

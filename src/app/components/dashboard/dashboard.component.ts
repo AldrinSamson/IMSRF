@@ -10,7 +10,8 @@ import { filter, map } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
 
-  p;
+  p1;
+  p2;
   order$: Observable<any>;
   event$: Observable<any>;
   activeRequest$: Observable<any>;
@@ -27,7 +28,7 @@ export class DashboardComponent implements OnInit {
   getData() {
     this.order$ = this.dispatchService.getActiveOrder();
     this.event$ = this.eventService.getActive();
-    this.activeRequest$ = this.dispatchService.getActiveRequests();
+    this.activeRequest$ = this.dispatchService.getApprovedRequests();
   }
 
   filterAndSumAR(item) {

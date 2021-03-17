@@ -229,7 +229,7 @@ export class ViewUserComponent implements OnInit{
   // missing google auth deleter
   deleteUser() {
 
-    this.userService.delete(this.value.id);
+    this.userService.delete(this.value.id,this.editForm.value );
     this.activeModal.close();
 
   }
