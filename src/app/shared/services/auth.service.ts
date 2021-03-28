@@ -24,13 +24,14 @@ export class AuthService {
 
   async login(email: string, password: string) {
     try {
-      this.alert.showToaster('Autheticating ...');
+      this.alert.showToaster('Authenticating ...');
       const result = await this.afAuth.signInWithEmailAndPassword(email, password).then( res => {
         this.userUid = res.user.uid;
         // tslint:disable-next-line: no-shadowed-variable
-        this.db.collection('user', ref => ref.where('uid', '==', res.user.uid)).valueChanges({idField: 'id'}).forEach( result => {
-          this.userDetails = result;
-          if (result.length !== 0) {
+        const auth = this.db.collection('user', ref => ref.where('uid', '==', res.user.uid)).valueChanges({idField: 'id'})
+        .forEach( result2 => {
+          this.userDetails = result2;
+          if (result2.length !== 0) {
             sessionStorage.setItem('session-alive', 'true');
             sessionStorage.setItem('session-user-uid', this.userUid);
             sessionStorage.setItem('session-user-details', JSON.stringify(this.userDetails[0]));
@@ -38,19 +39,12 @@ export class AuthService {
             this.alert.showToaster('Logged In!');
             if (this.userDetails[0].position === 'Partner') {
               this.router.navigate(['/partner']);
-            } else if (this.userDetails[0].position === 'Event Manager') {
-              this.router.navigate(['/main/inventory']);
-            }else if (this.userDetails[0].position === 'Blood Donor Manager') {
-              this.router.navigate(['/main/donors']);
-            } else if (this.userDetails[0].position === 'Dispatch & Request Manager') {
-              this.router.navigate(['/main/requester']);
             } else {
               this.router.navigate(['/main']);
             }
           } else {
             this.alert.showToaster('Invalid Account type');
           }
-
       });
       });
     } catch (err) {
@@ -79,7 +73,7 @@ export class AuthService {
 
   public isAuthenticated(): string {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (this.userPosition.position === 'Admin' || this.userPosition.position === 'Event Manager'
+    if (this.userPosition.position === 'System Admin' || this.userPosition.position === 'Event Manager'
     || this.userPosition.position === 'Blood Donor Manager' || this.userPosition.position === 'Dispatch & Request Manager') {
       return sessionStorage.getItem('session-alive');
     }
@@ -99,7 +93,7 @@ export class AuthService {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
     if (!this.isAuthenticated()) {
       return false;
-    } else if (this.userPosition.position === 'Admin') {
+    } else if (this.userPosition.position === 'System Admin') {
       return true;
     } else {
       return false;

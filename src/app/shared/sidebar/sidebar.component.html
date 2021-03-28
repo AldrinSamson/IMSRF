@@ -29,7 +29,7 @@
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': inventory.isActive }" *ngIf = "isAdmin || isEventManager">
+    <li class="nav-item" [ngClass]="{ 'active': inventory.isActive }" *ngIf = "isAdmin || isEventManager || isPartner">
       <a class="nav-link" routerLink="inventory" routerLinkActive #inventory="routerLinkActive">
         <span class="menu-title">Inventory</span>
         <i class="mdi mdi-table-large menu-icon"></i>

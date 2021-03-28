@@ -55,11 +55,7 @@ export class AddUserComponent implements OnInit, OnDestroy{
       photoUrl: [''],
       position: [''],
       institutionName: [''],
-      partnerID: [''],
-      dateCreated: [new Date()],
-      dateLastModified:[new Date()],
-      createdBy: ['admin'],
-      lastModifiedBy: ['admin']
+      partnerID: ['']
     });
 
     this.addForm

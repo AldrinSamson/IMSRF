@@ -603,6 +603,10 @@ export class RequestsComponent implements OnInit, OnDestroy {
     if (this.partner$ !== null) {
       this.partner$.unsubscribe();
     }
+
+    if (this.requester$ !== null) {
+      this.requester$.unsubscribe();
+    }
   }
 
 }

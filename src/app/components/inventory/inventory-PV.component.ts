@@ -73,7 +73,7 @@ export class InventoryPartnerComponent implements OnInit {
   expiredInventory$: Observable<any>;
   archivedInventory$: Observable<any>;
   filter;
-  orderValue = "dateCreated";
+  orderValue = 'dateCreated';
 
   partner$: Subscription;
   partnerData;
@@ -163,7 +163,7 @@ export class InventoryPartnerComponent implements OnInit {
     this.filterBloodType = undefined;
     this.partner = undefined;
     this.getData();
-    this.orderValue = "dateCreated";
+    this.orderValue = 'dateCreated';
     this.p1 = 1;
     this.p2 = 1;
     this.p3 = 1;

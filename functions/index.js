@@ -1,12 +1,3 @@
-/* eslint-disable no-cond-assign */
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-
 const functions = require('firebase-functions')
 const nodemailer = require('nodemailer')
 const admin = require('firebase-admin');
@@ -54,7 +45,7 @@ function sendEmail(mailOptions , htmlRes) {
 function userFilter(users, institution, withAdmin) {
   if (withAdmin) {
     return users.filter((x) => {
-      return x.partnerID === institution || x.position === 'Admin';
+      return x.partnerID === institution || x.position === 'System Admin';
     });
   } else {
     return users.filter((x) => {
@@ -103,7 +94,7 @@ exports.broadcastEmail = functions.https.onRequest((req, res) => {
     });
 
     const recipients = users.filter((x) => {
-      return x.partnerID === req.body.institution || x.position === 'Admin';
+      return x.partnerID === req.body.institution || x.position === 'System Admin';
     });
 
       if (!req.body.subject || !req.body.message) {
@@ -115,6 +106,7 @@ exports.broadcastEmail = functions.https.onRequest((req, res) => {
           });
       }
 
+      // eslint-disable-next-line no-cond-assign
       for (var recipient, i = 0; recipient = recipients[i++];) {
         const mailOptions = {
           from: 'The RedBank Foundation  <imsrf.dev@gmail.com>',
@@ -226,6 +218,7 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
     var institutions = [];
     const exempt = "N/A"
 
+    // eslint-disable-next-line no-cond-assign
     for (var item, i = 0; item = users[i++];) {
       var institutionID = item.partnerID;
 
@@ -245,6 +238,7 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
 
     // start email sending loop by partner
+    // eslint-disable-next-line no-cond-assign
     for (var institution, i2 = 0; institution = institutions[i2++];) {
       console.log(institution)
        //create recipient list
@@ -258,12 +252,14 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
           let message = "Blood Bags Expiring Today: ";
 
+          // eslint-disable-next-line no-cond-assign
           for (var batch, i3 = 0; batch = instituteExpireToday[i3++];) {
             var messageItem = batch.batchID + " | " + batch.bloodType + " | " +batch.quantity + " | " + batch.dateExtraction.toDate() + " | " + batch.dateExpiry.toDate();
             message = message.concat(messageItem);
           }
 
           // Send to recipients
+          // eslint-disable-next-line no-cond-assign
           for (var recipient, i4 = 0; recipient = recipients[i4++];) {
             console.log(recipient)
 
@@ -279,11 +275,12 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
           }
 
           // Update inventory
+          // eslint-disable-next-line no-cond-assign
           for (var batch2, i5 = 0; batch2 = instituteExpireToday[i5++];) {
             db.collection("inventory").doc(batch2.id).update({isExpired: true});
             db.collection("audit").add({
               date: new Date(),
-              level: 'Admin',
+              level: 'System Admin',
               name: 'Automated',
               uid: 'N/A',
               type: 'Inventory',
@@ -304,12 +301,14 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
           let message = "Blood Bags Expiring A Week from now: ";
 
+          // eslint-disable-next-line no-cond-assign
           for (var batch3, i6 = 0; batch3 = instituteExpireWeekAway[i6++];) {
             var messageItem2 = batch3.batchID + " | " + batch3.bloodType + " | " +batch3.quantity + " | " + batch3.dateExtraction.toDate() + " | " + batch3.dateExpiry.toDate();
             message = message.concat(messageItem2);
           }
 
           // Send to recipients
+          // eslint-disable-next-line no-cond-assign
           for (var recipient2, i7 = 0; recipient2 = recipients[i7++];) {
 
 
@@ -332,12 +331,14 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
           let message = 'Blood Bags Expiring Fortnight from now: ';
 
+          // eslint-disable-next-line no-cond-assign
           for (var batch4, i8 = 0; batch4 = instituteExpireFortnightAway[i8++];) {
             var messageItem3 = batch4.batchID + " | " + batch4.bloodType + " | " +batch4.quantity + " | " + batch4.dateExtraction.toDate() + " | " + batch4.dateExpiry.toDate();
             message = message.concat(messageItem3);
           }
 
           // Send to recipients
+          // eslint-disable-next-line no-cond-assign
           for (var recipient3, i9 = 0; recipient3 = recipients[i9++];) {
 
             const mailOptions = {

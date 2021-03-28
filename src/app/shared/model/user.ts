@@ -27,5 +27,5 @@ export class Sexes {
 }
 
 export class Positions {
-  static positions = ['Admin', 'Event Manager', 'Blood Donor Manager', 'Dispatch & Request Manager']
+  static positions = ['System Admin', 'Event Manager', 'Blood Donor Manager', 'Dispatch & Request Manager']
 }
