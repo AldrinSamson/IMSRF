@@ -75,7 +75,7 @@ export class InventoryService {
       expression2: '==',
       value4: false,
     };
-    return this.firebase.getAllData(Inventory, 2 , filters);
+    return this.firebase.getAllData(Inventory, 2 , filters, 'dateExpiry');
   }
 
   getInventoryOfPartnerExpired(partnerID) {
@@ -87,7 +87,7 @@ export class InventoryService {
       expression2: '==',
       value4: true,
     };
-    return this.firebase.getAllData(Inventory, 2 , filters);
+    return this.firebase.getAllData(Inventory, 2 , filters , 'dateExpiry');
   }
 
   getInventoryOfPartnerAll(partnerID) {
@@ -99,7 +99,7 @@ export class InventoryService {
       expression2: '',
       value4: '',
     };
-    return this.firebase.getAllData(Inventory, 1 , filters);
+    return this.firebase.getAllData(Inventory, 1 , filters , 'dateExpiry');
   }
 
   getByPTRandBT(partnerID , bloodType) {
@@ -111,11 +111,11 @@ export class InventoryService {
       expression2: '==',
       value4: bloodType,
     };
-    this.firebase.getAllData(Inventory, 2 , filters);
+    // this.firebase.getAllData(Inventory, 2 , filters , 'dateExpiry');
     return this.db.collection<Inventory>(Inventory.collectionName, ref => ref.where('partnerID' ,'==',
     partnerID).where('bloodType' , '==' , bloodType).where('isEmpty' , '==' , false)
     .where('isArchived' , '==' , false).where('isExpired' , '==' , false)
-    .orderBy('dateCreated', 'desc')).valueChanges({idField: 'id'});
+    .orderBy('dateExpiry', 'desc')).valueChanges({idField: 'id'});
   }
 
   updateOne(id: string, values) {

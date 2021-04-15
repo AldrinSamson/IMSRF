@@ -1,8 +1,10 @@
 const functions = require('firebase-functions')
 const nodemailer = require('nodemailer')
+const handlebars = require('handlebars');
+const fs = require('fs')
+const rxjs = require('rxjs')
+const path = require('path');
 const admin = require('firebase-admin');
-const firebase = require('firebase');
-const moment = require('moment');
 const cors = require('cors')({origin: true});
 admin.initializeApp({
     credential: admin.credential.applicationDefault(), //FOR PROD
@@ -16,6 +18,17 @@ admin.initializeApp({
 
 const db = admin.firestore()
 
+// var readHTMLFile = function(path, callback) {
+//   fs.readFile(path, {encoding: 'utf-8'}, (err, html) => {
+//       if (err) {
+//           throw err;
+//       }
+//       else {
+//           return callback(null, html);
+//       }
+//   });
+// };
+
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -24,22 +37,27 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-function sendEmail(mailOptions , htmlRes) {
-  if (htmlRes) {
-    transporter.sendMail(mailOptions, (erro, info) => {
-      if(erro){
-          return res.send(erro.toString());
-      }
-          return res.send(String('Succesfully Sent to '+mailOptions.to));
-    });
-  } else {
+async function sendEmail(mailOptions , templateDIR, replacements ) {
+
+  var directory = '/views/' + templateDIR + '.handlebars'
+  const filePath = path.join(__dirname, directory);
+  const source = fs.readFileSync(filePath, 'utf-8').toString();
+  const template = handlebars.compile(source);
+  const htmlToSend = template(replacements);
+  mailOptions.html = htmlToSend
+
+  return new Promise((resolve,reject)=>{
     transporter.sendMail(mailOptions, (erro, info) => {
       if(erro){
         console.log(erro.toString());
+        resolve(400);
       }
         console.log(String('Succesfully Sent to '+ mailOptions.to));
+        resolve(String('Succesfully Sent to '+ mailOptions.to));
     });
-  }
+  })
+    
+    
 }
 
 function userFilter(users, institution, withAdmin) {
@@ -58,9 +76,9 @@ function userFilter(users, institution, withAdmin) {
 // TODO: Upgrade to use 0AUTH2
 exports.sendMail = functions.https.onRequest((req, res) => {
     console.log(req.body);
-    cors(req, res, () => {
+    cors(req, res, async () => {
 
-        if (!req.body.subject || !req.body.message) {
+        if (!req.body.subject || !req.body.template || !req.body.replacements) {
             return res.status(422).send({
               error: {
                 code: 422,
@@ -74,15 +92,56 @@ exports.sendMail = functions.https.onRequest((req, res) => {
         const mailOptions = {
             from: 'The RedBank Foundation  <imsrf.dev@gmail.com>',
             to: req.body.email,
-            subject: req.body.subject,
-            html: req.body.message
+            subject: req.body.subject
         };
 
-        return sendEmail(mailOptions, true)
+        let resp= await sendEmail(mailOptions, req.body.template, req.body.replacements)
+        return res.send(resp)
+       
     });
+    console.log('done')
 });
 
-exports.broadcastEmail = functions.https.onRequest((req, res) => {
+// depreciated
+// exports.broadcastEmail = functions.https.onRequest((req, res) => {
+
+//   cors(req, res,async () => {
+//     await db.collection('user').get().then(querySnapshot => {
+//       if (querySnapshot.empty) {
+//         return res.send("No Users")
+//       } else {
+//         return users = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+//       }
+//     });
+
+//     const recipients = users.filter((x) => {
+//       return x.partnerID === req.body.institution || x.position === 'System Admin';
+//     });
+
+//       if (!req.body.subject || !req.body.message) {
+//           return res.status(422).send({
+//             error: {
+//               code: 422,
+//               message: "Missing arguments"
+//             }
+//           });
+//       }
+
+//       // eslint-disable-next-line no-cond-assign
+//       for (var recipient, i = 0; recipient = recipients[i++];) {
+//         const mailOptions = {
+//           from: 'The RedBank Foundation  <imsrf.dev@gmail.com>',
+//           to: req.body.email,
+//           subject: req.body.subject
+//         };
+
+//         sendEmail(mailOptions, req.body.template, req.body.replacements)
+//       }
+//       return res.send("More Work?");
+//   });
+// });
+
+exports.broadcastToPositionEmail = functions.https.onRequest((req, res) => {
 
   cors(req, res,async () => {
     await db.collection('user').get().then(querySnapshot => {
@@ -93,32 +152,79 @@ exports.broadcastEmail = functions.https.onRequest((req, res) => {
       }
     });
 
-    const recipients = users.filter((x) => {
-      return x.partnerID === req.body.institution || x.position === 'System Admin';
-    });
+    if (!req.body.subject || !req.body.template || !req.body.replacements || !req.body.position) {
+      return res.status(422).send({
+        error: {
+          code: 422,
+          message: "Missing arguments"
+        }
+      });
+    }
 
-      if (!req.body.subject || !req.body.message) {
-          return res.status(422).send({
-            error: {
-              code: 422,
-              message: "Missing arguments"
-            }
-          });
-      }
+    const recipients = users.filter((x) => {
+      return x.position === req.body.position;
+    });
 
       // eslint-disable-next-line no-cond-assign
       for (var recipient, i = 0; recipient = recipients[i++];) {
         const mailOptions = {
           from: 'The RedBank Foundation  <imsrf.dev@gmail.com>',
           to: recipient.email,
-          subject: req.body.subject,
-          html: req.body.message
+          subject: req.body.subject
         };
-        sendEmail(mailOptions, false)
+
+        var replacements = req.body.replacements
+        replacements.username = recipient.fullName
+        replacements.institutionName = recipient.institutionName
+
+        sendEmail(mailOptions, req.body.template, replacements)
       }
       return res.send("More Work?");
   });
 });
+
+exports.broadcastToPartnerEmail = functions.https.onRequest((req, res) => {
+
+  cors(req, res,async () => {
+    await db.collection('user').get().then(querySnapshot => {
+      if (querySnapshot.empty) {
+        return res.send("No Users")
+      } else {
+        return users = querySnapshot.docs.map(doc => Object.assign(doc.data(), {id: doc.id}));
+      }
+    });
+
+    if (!req.body.subject || !req.body.template || !req.body.replacements || !req.body.partnerID) {
+      return res.status(422).send({
+        error: {
+          code: 422,
+          message: "Missing arguments"
+        }
+      });
+    }
+
+    const recipients = users.filter((x) => {
+      return x.parnterID === req.body.parnterID;
+    });
+
+      // eslint-disable-next-line no-cond-assign
+      for (var recipient, i = 0; recipient = recipients[i++];) {
+        const mailOptions = {
+          from: 'The RedBank Foundation  <imsrf.dev@gmail.com>',
+          to: recipient.email,
+          subject: req.body.subject
+        };
+
+        var replacements = req.body.replacements
+        replacements.username = recipient.fullName
+        replacements.institutionName = recipient.institutionName
+
+        sendEmail(mailOptions, req.body.template, replacements)
+      }
+      return res.send("More Work?");
+  });
+});
+
 
 exports.terminateUser = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
@@ -216,11 +322,14 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
     // get active instituion list
     var lookup = {};
     var institutions = [];
+    var institutionsNameRef = [];
     const exempt = "N/A"
+    const exempt2 = "The Redbank Foundation"
 
     // eslint-disable-next-line no-cond-assign
     for (var item, i = 0; item = users[i++];) {
       var institutionID = item.partnerID;
+      var institutionName = item.institutionName;
 
       if (!(institutionID in lookup)) {
         lookup[institutionID] = 1;
@@ -228,6 +337,14 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
           institutions.push(institutionID);
         }
       }
+
+      if (!(institutionName in lookup)) {
+        lookup[institutionName] = 1;
+        if ( institutionName !== exempt2) {
+          institutionsNameRef.push(institutionName);
+        }
+      }
+      
     }
 
     function inventoryFilter(inventory, institution) {
@@ -250,28 +367,38 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
         if (Object.keys(instituteExpireToday).length > 0) {
 
-          let message = "Blood Bags Expiring Today: ";
+          let payload1 = [];
 
           // eslint-disable-next-line no-cond-assign
           for (var batch, i3 = 0; batch = instituteExpireToday[i3++];) {
-            var messageItem = batch.batchID + " | " + batch.bloodType + " | " +batch.quantity + " | " + batch.dateExtraction.toDate() + " | " + batch.dateExpiry.toDate();
-            message = message.concat(messageItem);
+            var processedData1 = {
+              batchID: batch.batchID,
+              bloodType: batch.bloodType,
+              quantity: batch.quantity,
+              dateExpiry: batch.dateExpiry.toDate()
+            }
+            payload1.push(processedData1);
           }
 
           // Send to recipients
           // eslint-disable-next-line no-cond-assign
           for (var recipient, i4 = 0; recipient = recipients[i4++];) {
             console.log(recipient)
-
-
+    
+            const replacements = {
+              expiring: payload1,
+              username: recipient.fullName,
+              institutionName: institutionsNameRef[i2],
+              date: 'Today'
+            }
+    
             const mailOptions = {
               from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
               to: recipient.email,
               subject: 'Blood Bags Expiring Today',
-              html: message
             };
-
-            sendEmail(mailOptions, false)
+    
+            sendEmail(mailOptions, 'expiry', replacements)
           }
 
           // Update inventory
@@ -299,27 +426,37 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
         const instituteExpireWeekAway = inventoryFilter(expireWeekAway, institution);
         if (Object.keys(instituteExpireWeekAway).length > 0) {
 
-          let message = "Blood Bags Expiring A Week from now: ";
+          let payload2 = [];
 
           // eslint-disable-next-line no-cond-assign
           for (var batch3, i6 = 0; batch3 = instituteExpireWeekAway[i6++];) {
-            var messageItem2 = batch3.batchID + " | " + batch3.bloodType + " | " +batch3.quantity + " | " + batch3.dateExtraction.toDate() + " | " + batch3.dateExpiry.toDate();
-            message = message.concat(messageItem2);
+            var processedData2 = {
+              batchID: batch3.batchID,
+              bloodType: batch3.bloodType,
+              quantity: batch3.quantity,
+              dateExpiry: batch3.dateExpiry.toDate('MM/dd/yyyy')
+            }
+            payload2.push(processedData2);
           }
 
           // Send to recipients
           // eslint-disable-next-line no-cond-assign
           for (var recipient2, i7 = 0; recipient2 = recipients[i7++];) {
-
-
+    
+            const replacements = {
+              expiring: payload2,
+              username: recipient2.fullName,
+              institutionName: institutionsNameRef[i2],
+              date: 'A Week from Now'
+            }
+    
             const mailOptions = {
               from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
               to: recipient2.email,
-              subject: 'Blood Bags Expiring A Week from now',
-              html: message
+              subject: 'Blood Bags Expiring A Week from Now',
             };
-
-            sendEmail(mailOptions, false)
+    
+            sendEmail(mailOptions, 'expiry', replacements)
           }
         }
       }
@@ -329,26 +466,37 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
         const instituteExpireFortnightAway = inventoryFilter(expireFortnightAway, institution);
         if (Object.keys(instituteExpireFortnightAway).length > 0) {
 
-          let message = 'Blood Bags Expiring Fortnight from now: ';
+          let payload3 = [];
 
           // eslint-disable-next-line no-cond-assign
           for (var batch4, i8 = 0; batch4 = instituteExpireFortnightAway[i8++];) {
-            var messageItem3 = batch4.batchID + " | " + batch4.bloodType + " | " +batch4.quantity + " | " + batch4.dateExtraction.toDate() + " | " + batch4.dateExpiry.toDate();
-            message = message.concat(messageItem3);
+            var processedData3 = {
+              batchID: batch4.batchID,
+              bloodType: batch4.bloodType,
+              quantity: batch4.quantity,
+              dateExpiry: batch4.dateExpiry.toDate()
+            }
+            payload3.push(processedData3);
           }
 
           // Send to recipients
           // eslint-disable-next-line no-cond-assign
           for (var recipient3, i9 = 0; recipient3 = recipients[i9++];) {
 
+            const replacements = {
+              expiring: payload3,
+              username: recipient3.fullName,
+              institutionName: institutionsNameRef[i2],
+              date: 'Fortnight from Now'
+            }
+    
             const mailOptions = {
               from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
               to: recipient3.email,
-              subject: 'Blood Bags Expiring Fortnight from now',
-              html: message
+              subject: 'Blood Bags Expiring Fortnight from Now',
             };
-
-            sendEmail(mailOptions, false)
+    
+            sendEmail(mailOptions, 'expiry', replacements)
           }
         }
       }
@@ -356,8 +504,6 @@ exports.expiryChecker = functions.https.onRequest( async(req, res) => {
 
     return res.send("More Work?");
 });
-
-
 
 exports.quantityChecker = functions.https.onRequest( async(req, res) => {
 
@@ -382,22 +528,33 @@ exports.quantityChecker = functions.https.onRequest( async(req, res) => {
   });
 
 
-  // get active instituion list
-  var lookup = {};
-  var institutions = [];
-  const exempt = "N/A"
+   // get active instituion list
+   var lookup = {};
+   var institutions = [];
+   var institutionsNameRef = [];
+   const exempt = "N/A"
+   const exempt2 = "The Redbank Foundation"
 
-  // eslint-disable-next-line no-cond-assign
-  for (var item, i = 0; item = users[i++];) {
-    var institutionID = item.partnerID;
+   // eslint-disable-next-line no-cond-assign
+   for (var item, i = 0; item = users[i++];) {
+     var institutionID = item.partnerID;
+     var institutionName = item.institutionName;
 
-    if (!(institutionID in lookup)) {
-      lookup[institutionID] = 1;
-      if ( institutionID !== exempt) {
-        institutions.push(institutionID);
-      }
-    }
-  }
+     if (!(institutionID in lookup)) {
+       lookup[institutionID] = 1;
+       if ( institutionID !== exempt) {
+         institutions.push(institutionID);
+       }
+     }
+
+     if (!(institutionName in lookup)) {
+       lookup[institutionName] = 1;
+       if ( institutionName !== exempt2) {
+         institutionsNameRef.push(institutionName);
+       }
+     }
+     
+   }
 
   function inventoryFilter(bloodTypes, institution, i) {
     return  inventory.filter((x) => {
@@ -444,28 +601,25 @@ exports.quantityChecker = functions.https.onRequest( async(req, res) => {
 
       const recipientsData = userFilter(users, institution, false);
 
-      let message = "Partner "+recipientsData[0].institutionName+" Low Quantity Blood: ";
-
-      // eslint-disable-next-line no-cond-assign
-      for (var batch2, i3 = 0; batch2 = lowQuantity[i3++];) {
-        var messageItem = batch2.bloodType + " | " +batch2.quantity + " ";
-        message = message.concat(messageItem);
-      }
-
       // Send to recipients
       // eslint-disable-next-line no-cond-assign
       for (var recipient, i4 = 0; recipient = recipients[i4++];) {
         console.log(recipient)
 
+        const replacements = {
+          lowQuantity: lowQuantity,
+          username: recipient.fullName,
+          institutionName: institutionsNameRef[i2]
+        }
 
         const mailOptions = {
           from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
           to: recipient.email,
-          subject: 'Low Quantity Blood',
-          html: message
+          subject: 'Low Quantity Blood'
         };
 
-        sendEmail(mailOptions, false);
+        sendEmail(mailOptions, 'lowQuantity', replacements)
+       
       }
 
 

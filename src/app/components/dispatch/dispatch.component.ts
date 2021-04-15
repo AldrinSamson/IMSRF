@@ -322,7 +322,8 @@ export class ViewOrderComponent implements OnInit{
     public readonly activeModal: NgbActiveModal,
     private readonly dispatchService: DispatchService,
     private readonly inventoryService: InventoryService,
-    private readonly authService: AuthService ) {
+    private readonly authService: AuthService,
+    private readonly alertService: AlertService  ) {
   }
 
   ngOnInit() {
@@ -376,11 +377,13 @@ export class ViewOrderComponent implements OnInit{
       batchID: batchValues.batchID,
       quantity: this.orderQuantity
     }
-
-    this.orderItems.push(orderItem);
-    this.orderQuantity = 0;
-    if (this.orderItems.length === 0) {
-      this.hasPartner = true
+    if(batchValues.quantity >= this.orderQuantity && this.orderQuantity > 0 ) {
+      this.orderItems.push(orderItem);
+      if (this.orderItems.length === 0) {
+        this.hasPartner = true
+      }
+    } else {
+      this.alertService.showToaster("Invalid Value");
     }
   }
 

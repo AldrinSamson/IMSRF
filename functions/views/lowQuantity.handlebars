@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Red Bank IS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    table, td, th {
+    border: 1px solid black;
+    }
+
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+    </style>
+ 
+</head>
+<body>
+    
+    <h3>Hello, {{username}}</h3> 
+    <p>We noticed that these blood types from the <b>{{institutionName}}</b> are running low:</p> <br>
+    <table>
+        <th>
+            Blood Type
+        </th>
+        <th>
+            Quantity Left
+        </th>
+        {{#each lowQuantity}}
+    <tr>
+        <td>
+            {{bloodType}} 
+        </td>
+        <td>
+             {{quantity}} 
+        </td>
+    </tr>
+    {{/each}}
+    </table>
+    
+</body>
+</html>

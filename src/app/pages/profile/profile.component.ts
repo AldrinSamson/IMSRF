@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { UserService } from '@shared';
+import { UserService , ValidationService} from '@shared';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -8,7 +8,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   selector: 'change-password-dialog',
   templateUrl: './dialog/change-password.html',
   styleUrls: ['./profile.component.scss'],
-})
+})  
 export class ChangePasswordComponent {
   passwordForm: any;
 
@@ -17,9 +17,9 @@ export class ChangePasswordComponent {
     public readonly activeModal: NgbActiveModal,
     private readonly userService: UserService) {
     this.passwordForm = this.formBuilder.group({
-      oldPassword: ['' , Validators.required],
-      newPassword: ['', Validators.required],
-      newPasswordConfirm: ['', Validators.required]
+      oldPassword: ['' , [Validators.required,ValidationService.passwordValidator]],
+      newPassword: ['', [Validators.required,ValidationService.passwordValidator]],
+      newPasswordConfirm: ['', [Validators.required,ValidationService.passwordValidator]]
     });
   }
 

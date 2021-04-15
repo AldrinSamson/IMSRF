@@ -25,7 +25,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ContentAnimateDirective } from './shared/directives/content-animate.directive';
 
-import { LoginComponent } from './pages/login/login.component';
+import { LoginComponent, PasswordResetDialogComponent } from './pages/login/login.component';
 import { MainComponent } from './pages/main/main.component';
 import { ToasterComponent } from './shared/toaster/toaster.component';
 import { ControlMessagesComponent } from './shared/control-messages/control-messages.component';
@@ -47,6 +47,7 @@ import { ProfileComponent, ChangePasswordComponent } from './pages/profile/profi
     PartnerComponent,
     ProfileComponent,
     ChangePasswordComponent,
+    PasswordResetDialogComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseKeys),

@@ -5,7 +5,7 @@
 </div>
 <div class="row">
   <div class="col-2">
-    <label class="font-weight-bold">Order By:</label>
+    <label class="font-weight-bold">Sort By:</label>
     <select [(ngModel)]="orderValue" class="form-control" (change)="orderData($event.target.value)" >
       <option value ="dateCreated">Date Created</option>
       <option value ="quantity">Quantity</option>
@@ -62,7 +62,7 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th>SKU Code</th>
                       <th>Event</th>
                       <th *ngIf="!isPartner">Institution Name</th>
                       <th>Blood Type</th>
@@ -121,7 +121,7 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th>SKU Code</th>
                       <th>Event</th>
                       <th>Institution Name</th>
                       <th>Blood Type</th>
@@ -180,7 +180,7 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th>SKU Code</th>
                       <th>Event</th>
                       <th>Institution Name</th>
                       <th>Blood Type</th>

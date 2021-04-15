@@ -34,7 +34,7 @@ export class ViewBatchPartnerComponent implements OnInit{
   ngOnInit(): void {
     this.updateInventoryForm = this.formBuilder.group({
       batchID: [this.value.batchID],
-      quantity: [this.value.quantity, Validators.required]
+      quantity: [this.value.quantity]
     });
   }
 

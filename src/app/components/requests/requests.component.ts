@@ -153,6 +153,7 @@ export class ViewRequestComponent implements OnInit{
   click$ = new Subject<string>();
 
   isDispatchRequestManager = false;
+  forApproval = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -177,6 +178,9 @@ export class ViewRequestComponent implements OnInit{
     this.requester.requesterID = this.value.requesterID
     this.requester.fullName = this.value.fullName
     this.isDispatchRequestManager = this.authService.isDispatchRequestManager();
+    if(this.value.status === "For Approval") {
+      this.forApproval = true;
+    }
   }
 
   formatter = (requester: Requester) => requester.fullName;
@@ -191,6 +195,9 @@ export class ViewRequestComponent implements OnInit{
         : this.requesterData.filter(requester => new RegExp(term, 'mi').test(requester.fullName)).slice(0, 10))
     ));
   }
+
+  
+
 
   editRequest() {
     this.editForm.controls.requesterID.setValue(this.requester.requesterID);
@@ -255,7 +262,8 @@ export class AddPartnerRequestComponent implements OnInit{
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
     private readonly dispatchService: DispatchService,
-    private readonly inventoryService: InventoryService ) {
+    private readonly inventoryService: InventoryService,
+    private readonly alertService: AlertService  ) {
   }
 
   ngOnInit() {
@@ -290,10 +298,13 @@ export class AddPartnerRequestComponent implements OnInit{
       batchID: batchValues.batchID,
       quantity: this.orderQuantity
     }
-
-    this.orderItems.push(orderItem);
-    if (this.orderItems.length === 0) {
-      this.hasPartner = true
+    if(batchValues.quantity >= this.orderQuantity && this.orderQuantity > 0 ) {
+      this.orderItems.push(orderItem);
+      if (this.orderItems.length === 0) {
+        this.hasPartner = true
+      }
+    } else {
+      this.alertService.showToaster("Invalid Value");
     }
   }
 
@@ -339,12 +350,14 @@ export class ViewPartnerRequestComponent implements OnInit{
   orderItems = [];
   isHidden = false;
   hasPartner = false;
+  
 
   constructor(
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
     private readonly dispatchService: DispatchService,
-    private readonly inventoryService: InventoryService ) {
+    private readonly inventoryService: InventoryService,
+    private readonly alertService: AlertService  ) {
   }
 
   ngOnInit() {
@@ -389,11 +402,13 @@ export class ViewPartnerRequestComponent implements OnInit{
       batchID: batchValues.batchID,
       quantity: this.orderQuantity
     }
-
-    this.orderItems.push(orderItem);
-    this.orderQuantity = 0;
-    if (this.orderItems.length === 0) {
-      this.hasPartner = true
+    if(batchValues.quantity >= this.orderQuantity && this.orderQuantity > 0 ) {
+      this.orderItems.push(orderItem);
+      if (this.orderItems.length === 0) {
+        this.hasPartner = true
+      }
+    } else {
+      this.alertService.showToaster("Invalid Value");
     }
   }
 
@@ -449,12 +464,14 @@ export class AddOrderComponent implements OnInit{
   orderQuantity;
   orderItems = [];
   hasPartner = false
+  isValidQuantity = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
     private readonly dispatchService: DispatchService,
-    private readonly inventoryService: InventoryService ) {
+    private readonly inventoryService: InventoryService,
+    private readonly alertService: AlertService ) {
   }
 
   ngOnInit() {
@@ -495,10 +512,13 @@ export class AddOrderComponent implements OnInit{
       batchID: batchValues.batchID,
       quantity: this.orderQuantity
     }
-
-    this.orderItems.push(orderItem);
-    if (this.orderItems.length === 0) {
-      this.hasPartner = true
+    if(batchValues.quantity >= this.orderQuantity && this.orderQuantity > 0 ) {
+      this.orderItems.push(orderItem);
+      if (this.orderItems.length === 0) {
+        this.hasPartner = true
+      }
+    } else {
+      this.alertService.showToaster("Invalid Value");
     }
   }
 

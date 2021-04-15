@@ -125,8 +125,11 @@ export class EventService {
     }).catch(error => {
       throw new Error('Error: Adding document:' + error);
     }).then( () => {
-      this.utilService.sendBroadcastEmail(values.partnerID , 'New Event Added!' , 'Hi! A new event has been added to your Institution('
-      + values.institutionName+') at '+ values.location + ' on ' + values.dateOfEvent);
+      const replacements = {
+        dateOfEvent: values.dateOfEvent,
+        location: values.location
+      }
+      this.utilService.sendBroadcastToPartnerEmail('New Event Added!', 'newEvent' , replacements,  values.partnerID);
       this.alertService.showToaster(values.institutionName+' Event Added' , { classname: 'bg-success text-light', delay: 10000 })
     })
   }

@@ -42,7 +42,7 @@ export class ValidationService {
   }
 
   static passwordValidator(control) {
-    if (control.value.match(/^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,100}$/)) {
+    if (control.value.match(/^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,12}$/)) {
       return null;
     } else {
       return { invalidPassword: true };

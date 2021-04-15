@@ -27,7 +27,7 @@
             <label>Date of Event</label>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd"
-                     name="dp" formControlName="dateOfEvent" ngbDatepicker #d="ngbDatepicker">
+                     name="dp" formControlName="dateOfEvent" ngbDatepicker [minDate]="minDate" #d="ngbDatepicker">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
                   <i class="mdi mdi-calendar "></i>

@@ -56,6 +56,7 @@ export class PartnerRequest {
   dateLastModified: Date;
   createdBy: string;
   lastModifiedBy: string;
+  num: number;
 
   // [RQP , PTR  ]
   // experimental for use in advanced searches using array-contains-any

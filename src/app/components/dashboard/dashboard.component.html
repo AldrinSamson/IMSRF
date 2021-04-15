@@ -1,84 +1,84 @@
-<div class="page-header">
-  <h3 class="page-title">
-    Dashboard
-  </h3>
-</div>
 <div class="row">
-  <div class="col-md-4 stretch-card grid-margin">
-    <div class="card bg-darkBlue card-img-holder text-white">
+  <div class="col-md-6 stretch-card grid-margin">
+    <div class="card bg-darkBlue text-white">
       <div class="card-body">
-        <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
-            <h4 class="font-weight-normal mb-3">Active Requests
-            </h4>
-            <h2 class="mb-5">20</h2>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4 stretch-card grid-margin">
-    <div class="card bg-darkBlue card-img-holder text-white">
-      <div class="card-body">
-        <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
-            <h4 class="font-weight-normal mb-3">Pending Requests
-            </h4>
-            <h2 class="mb-5">70</h2>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4 stretch-card grid-margin">
-    <div class="card bg-darkBlue card-img-holder text-white">
-      <div class="card-body">
-        <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
+       
         <h4 class="font-weight-normal mb-3">In Stock
           <i class="mdi mdi-opacity mdi-24px float-right"></i>
         </h4>
-        <h2 class="mb-1">130</h2>
+        <h2 class="mb-1">{{inventoryFilteredTotal}}</h2>
 
-          <select class="mb-5">
-            <option>UST Hospital</option>
-          </select>
+        <select [(ngModel)]="selectedPartner" (change)="selectPartner()">
+          <option  *ngFor="let partner of partnerData; let i = index" [value]="partner.partnerID">
+            {{partner.institutionName}}
+          </option>
+        </select>
+
+        <br>
+        <br>
 
         <div class="row">
           <div class="col-md-1 d-flex align-items-center">
             <div class="align-items-center">
-              <div class="font-weight-bold">O+</div> <br> <div class="badge badge-pill badge-primary">2</div>
+              <div class="font-weight-bold ">A+</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[0]}}</div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class=" align-items-center">
-              <div class="font-weight-bold">O-</div> <br> <div class="badge badge-pill badge-primary">70</div>
+              <div class="font-weight-bold">A-</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[1]}}</div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class=" align-items-center">
-              <div class="font-weight-bold">A+</div> <br> <div class="badge badge-pill badge-primary">43</div>
+              <div class="font-weight-bold">B+</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[2]}}</div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class=" align-items-center">
-              <div class="font-weight-bold">A-</div> <br> <div class="badge badge-pill badge-primary">742</div>
+              <div class="font-weight-bold">B-</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[3]}}</div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class=" align-items-center">
-              <div class="font-weight-bold">B+</div> <br> <div class="badge badge-pill badge-primary">43</div>
+              <div class="font-weight-bold">O+</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[4]}}</div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class=" align-items-center">
-              <div class="font-weight-bold">B-</div> <br> <div class="badge badge-pill badge-primary">85</div>
+              <div class="font-weight-bold">O-</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[5]}}</div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class="align-items-center">
-              <div class="font-weight-bold">AB+</div> <br> <div class="badge badge-pill badge-primary">15</div>
+              <div class="font-weight-bold">AB+</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[6]}}</div>
             </div>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class="align-items-center">
-              <div class="font-weight-bold">AB-</div> <br> <div class="badge badge-pill badge-primary">63</div>
+              <div class="font-weight-bold">AB-</div> <br> <div class="badge badge-pill badge-primary">{{inventoryFiltered[7]}}</div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 stretch-card grid-margin">
+    <div class="card bg-darkBlue text-white">
+      <div class="card-body">
+            <h4 class="font-weight-normal mb-3">Active Requests
+              <i class="mdi mdi-receipt mdi-24px float-right"></i>
+            </h4>
+            <h1 style="font-size: 100px; text-align:center">{{activeRequestCount}}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 stretch-card grid-margin">
+    <div class="card bg-darkBlue text-white">
+      <div class="card-body">
+            <h4 class="font-weight-normal mb-3">Pending Requests
+              <i class="mdi mdi-reload mdi-24px float-right"></i>
+            </h4>
+            <h1 style="font-size: 100px; text-align:center">{{pendingRequestCount}}</h1>
       </div>
     </div>
   </div>
@@ -122,6 +122,7 @@
     </div>
   </div>
 </div>
+<br>
 <div class="row">
   <div class="col-md-12 grid-margin grid-margin-md-0 stretch-card">
     <div class="card">

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Red Bank IS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    table, td, th {
+    border: 1px solid black;
+    }
+
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+    </style>
+ 
+</head>
+<body>
+    
+    <h3>Hello, {{username}}</h3> 
+    <p>Dispatch it or lose it! These batches of blood from <b>{{institutionName}}</b> will expire <b>{{date}}</b>:</p> <br>
+    <table>
+        <th>
+            #
+        </th>
+        <th>
+            Blood Type
+        </th>
+        <th>
+            Quantity
+        </th>
+         <th>
+            Expiry Date
+        </th>
+        {{#each expiring}}
+    <tr>
+        <td>
+            {{batchID}} 
+        </td>
+        <td>
+            {{bloodType}} 
+        </td>
+        <td>
+             {{quantity}} 
+        </td>
+        <td>
+            {{dateExpiry}} 
+        </td>
+    </tr>
+    {{/each}}
+    </table>
+    
+</body>
+</html>

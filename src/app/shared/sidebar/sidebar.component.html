@@ -17,7 +17,7 @@
         </div>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }" *ngIf = "isAdmin">
+    <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }" *ngIf = "!isPartner">
       <a class="nav-link" routerLink="dashboard" routerLinkActive #dashboard="routerLinkActive">
         <span class="menu-title">Dashboard</span>
         <i class="mdi mdi-home menu-icon"></i>

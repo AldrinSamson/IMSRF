@@ -3,6 +3,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title font-weight-bold">{{value.requestID}}</h5>
+        <button type="button" class="close" (click) = "activeModal.close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <form  [formGroup]="editForm" class="post-form">
@@ -18,6 +21,7 @@
                     (click)="click$.next($any($event).target.value)"
                     #instance="ngbTypeahead"
                     [editable]='false'
+                    [disabled]="forApproval"
                     />
           </div>
           <div class="form-group">
@@ -54,12 +58,12 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="editRequest()" *ngIf="value.status !== 'Dispatch Created' && !isDispatchRequestManager " [disabled]="editForm.invalid" >Modify</button>
+        <button type="button" class="btn btn-success" (click)="editRequest()" *ngIf="value.status !== 'Dispatch Created' " [disabled]="editForm.invalid" >Modify</button>
         <button type="button" class="btn btn-danger" *ngIf="value.status === 'For Approval' || !value.isApproved" (click)="approveRequest()" >Approve</button>
         <button type="button" class="btn btn-danger" *ngIf="value.status === 'For Approval' || value.isApproved" (click)="denyRequest()" >Deny</button>
-        <button type="button" class="btn btn-danger" *ngIf="!value.isArchived && !isDispatchRequestManager" (click)="archiveRequest()" >Archive</button>
-        <button type="button" class="btn btn-danger" *ngIf="value.isArchived && !isDispatchRequestManager"(click)="restoreRequest()" >Restore</button>
-        <button type="button" class="btn btn-danger" *ngIf="!isDispatchRequestManager"(click)="deleteRequest()" >Delete</button>
+        <button type="button" class="btn btn-danger" *ngIf="!value.isArchived" (click)="archiveRequest()" >Archive</button>
+        <button type="button" class="btn btn-danger" *ngIf="value.isArchived "(click)="restoreRequest()" >Restore</button>
+        <button type="button" class="btn btn-danger" (click)="deleteRequest()" >Delete</button>
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
       </div>
     </div>

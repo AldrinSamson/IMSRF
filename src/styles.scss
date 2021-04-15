@@ -66,3 +66,29 @@
 table {
   width: 100%;
 }
+
+select {
+  padding: .4375rem .75rem;
+  border: 0;
+  outline: 1px solid ;
+
+  &:focus {
+    outline: 1px solid ;
+  }
+}
+
+.preview-image {
+  width: 100%;
+  max-width: 45vw;
+  max-height: 250px;
+  object-fit: cover;
+}
+.nav-profile-image {
+  width: 200px;
+  height: 200px;
+  img {
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+  }
+}

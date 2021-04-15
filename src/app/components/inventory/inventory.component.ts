@@ -24,6 +24,7 @@ export class ViewBatchComponent implements OnInit{
   hideEditButton = false;
   hideArchiveButton = false;
   hideRestoreButton = false;
+  hideExpireButton = false;
   isEventManager = false;
 
 
@@ -37,7 +38,7 @@ export class ViewBatchComponent implements OnInit{
   ngOnInit(): void {
     this.updateInventoryForm = this.formBuilder.group({
       batchID: [this.value.batchID],
-      quantity: [this.value.quantity, Validators.required]
+      quantity: [this.value.quantity]
     });
 
     this.isAdmin = this.authService.isAdmin();
@@ -46,8 +47,10 @@ export class ViewBatchComponent implements OnInit{
     if (this.isEventManager === true || this.isArchived === true || this.isExpired === true) {
       this.hideEditButton = true
       this.updateInventoryForm.controls.quantity.disable()
+      this.hideExpireButton = true;
     } else if ( this.isAdmin === true && this.isArchived === true || this.isExpired === true) {
       this.hideEditButton = true
+      this.hideExpireButton = true;
     }
     if (this.isArchived === true) {
       this.hideArchiveButton = true
@@ -131,9 +134,9 @@ export class InventoryComponent implements OnInit {
   }
 
   getData() {
-    this.activeInventory$ = this.inventoryService.getAllActive('dateCreated');
-    this.expiredInventory$ = this.inventoryService.getAllExpired('dateCreated');
-    this.archivedInventory$ = this.inventoryService.getAllArchived('dateCreated');
+    this.activeInventory$ = this.inventoryService.getAllActive('dateExpiry');
+    this.expiredInventory$ = this.inventoryService.getAllExpired('dateExpiry');
+    this.archivedInventory$ = this.inventoryService.getAllArchived('dateExpiry');
     this.partner$ = this.partnerService.getAll().subscribe( res => {
       this.partnerData = res
     });
@@ -218,6 +221,12 @@ export class InventoryComponent implements OnInit {
     modalRef.componentInstance.value = value;
     modalRef.componentInstance.isArchived = isArchived;
     modalRef.componentInstance.isExpired = isExpired;
+  }
+
+  ngOnDestroy() {
+    if (this.partner$ != null) {
+      this.partner$.unsubscribe();
+    }
   }
 
 

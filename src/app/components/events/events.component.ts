@@ -20,6 +20,7 @@ export class InitEventComponent {
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
+  minDate = undefined;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -32,6 +33,13 @@ export class InitEventComponent {
       dateOfEvent: [ this.dateObject ],
       location: ['', Validators.required]
     });
+    const current = new Date();
+    this.minDate = {
+      year: current.getFullYear(),
+      month: current.getMonth() + 1,
+      day: current.getDate()
+    };
+   
   }
 
   formatter = (partner: Partner) => partner.institutionName;
@@ -77,6 +85,7 @@ export class UpdatePreEventComponent implements OnInit{
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
+  minDate = undefined
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -96,6 +105,13 @@ export class UpdatePreEventComponent implements OnInit{
     });
     this.partner.partnerID = this.value.partnerID
     this.partner.institutionName = this.value.institutionName
+
+    const current = new Date();
+    this.minDate = {
+      year: current.getFullYear(),
+      month: current.getMonth() + 1,
+      day: current.getDate()
+    };
   }
 
   formatter = (partner: Partner) => partner.institutionName;
@@ -142,12 +158,19 @@ export class UpdatePostEventComponent implements OnInit {
   donorsDefferTotal : number;
   donorsBledTotal: number;
   quantityTotal: number ;
+  minDate = undefined
 
   constructor(
     private readonly formBuilder: FormBuilder,
     public readonly activeModal: NgbActiveModal,
     private readonly eventService: EventService,
     private readonly alertService: AlertService) {
+      const current = new Date();
+      this.minDate = {
+        year: current.getFullYear(),
+        month: current.getMonth() + 1,
+        day: current.getDate()
+      };
     }
 
   ngOnInit(): void {

@@ -391,7 +391,8 @@ export class DispatchService {
       dateCreated: new Date(),
       dateLastModified: new Date(),
       createdBy: this.authService.userName(),
-      lastModifiedBy: this.authService.userName()
+      lastModifiedBy: this.authService.userName(),
+      num: val.newNum
     })
       this.firebase.audit('Partner Request' , 'Partner Request Created ' + val.newID, val.newID);
     }).catch(error => {

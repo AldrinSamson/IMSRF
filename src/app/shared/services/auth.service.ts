@@ -10,7 +10,6 @@ import { FirebaseService } from './firebase.service';
 @Injectable()
 export class AuthService {
   public token: any;
-  userDetails: Array<any>;
   userUid: any;
   userPosition: any;
 
@@ -23,35 +22,32 @@ export class AuthService {
     ) { }
 
   async login(email: string, password: string) {
-    try {
-      this.alert.showToaster('Authenticating ...');
-      const result = await this.afAuth.signInWithEmailAndPassword(email, password).then( res => {
-        this.userUid = res.user.uid;
-        // tslint:disable-next-line: no-shadowed-variable
-        const auth = this.db.collection('user', ref => ref.where('uid', '==', res.user.uid)).valueChanges({idField: 'id'})
-        .forEach( result2 => {
-          this.userDetails = result2;
-          if (result2.length !== 0) {
-            sessionStorage.setItem('session-alive', 'true');
-            sessionStorage.setItem('session-user-uid', this.userUid);
-            sessionStorage.setItem('session-user-details', JSON.stringify(this.userDetails[0]));
-            this.fbs.audit('Authentication' , 'Logged In', email);
-            this.alert.showToaster('Logged In!');
-            if (this.userDetails[0].position === 'Partner') {
-              this.router.navigate(['/partner']);
-            } else {
-              this.router.navigate(['/main']);
-            }
+
+    this.alert.showToaster('Authenticating ...');
+    await this.afAuth.signInWithEmailAndPassword(email, password).then( res => {
+      this.userUid = res.user.uid;
+      this.db.collection('user', ref => ref.where('uid', '==', this.userUid)).get().subscribe( result2 => {
+
+        if (result2.docs.length !== 0) {
+          sessionStorage.setItem('session-alive', 'true');
+          sessionStorage.setItem('session-user-uid', this.userUid);
+          sessionStorage.setItem('session-user-details', JSON.stringify(result2.docs[0].data()));
+          this.fbs.audit('Authentication' , 'Logged In', email);
+          this.alert.showToaster('Logged In!');
+          if (result2.docs[0].data().position === 'Partner') {
+            this.router.navigate(['/partner']);
           } else {
-            this.alert.showToaster('Invalid Account type');
+            this.router.navigate(['/main']);
           }
+        } else {
+          this.alert.showToaster('Invalid Account type');
+        }
       });
-      });
-    } catch (err) {
-      console.log(err);
+    }).catch((error) => {
+      console.log(error);
       this.alert.showToaster('Email or Password is wrong');
-    }
-  }
+    });
+  } 
 
   public logout(): void {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
@@ -152,5 +148,22 @@ export class AuthService {
   public partnerID() {
     const userName = JSON.parse(sessionStorage.getItem('session-user-details'));
     return userName.partnerID
+  }
+
+  async sendUserPasswordResetEmailForgot(email): Promise<void> {
+
+    await this.db.collection('user', ref => ref.where('email', '==', email)).get().subscribe( res => {
+      if (res.docs.length !== 0) {
+        return firebase.auth().sendPasswordResetEmail(email).then(() => {
+          this.alert.showToaster('Password Reset Email has been sent to you inbox');
+        }, (error) => {
+          this.alert.showToaster(error);
+        });
+      }else{
+        this.alert.showToaster('Email is not registered in our database');
+      }
+    });
+    
+    
   }
 }
