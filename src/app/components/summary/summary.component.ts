@@ -9,7 +9,12 @@ import { InventoryService, DispatchService, EventService} from '@shared'
   styleUrls: ['./summary.component.scss']
 })
 export class SummaryComponent implements OnInit, OnDestroy {
-  p;
+  p1;
+  p2;
+  p3;
+  searchText1;
+  searchText2;
+  searchText3;
   route$: Subscription;
   inventory$: Observable<any>;
   dispatch$: Observable<any>;

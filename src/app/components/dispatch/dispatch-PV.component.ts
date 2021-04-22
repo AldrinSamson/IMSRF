@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
+import { Component, OnInit, Input,  OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { DispatchService, PartnerService, AlertService, BloodTypes, InventoryService,
   Partner, StorageService, UtilService, AuthService, Sexes } from '@shared';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
@@ -6,6 +6,9 @@ import { Observable, Subscription, Subject, merge, EMPTY } from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, filter, catchError, takeUntil} from 'rxjs/operators';
 import { NgbActiveModal, NgbModal, NgbTypeahead, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MEDIA_STORAGE_PATH_IMG , DEFAULT_PROFILE_PIC } from '../../storage.config';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -201,6 +204,7 @@ export class ViewOrderComponent implements OnInit{
   isValidated = false;
   public partner: any = {};
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  @ViewChild('orderData') htmlData:ElementRef;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
   bloodTypes = BloodTypes.bloodTypes;
@@ -280,6 +284,27 @@ export class ViewOrderComponent implements OnInit{
       }
     });
   }
+
+  public openPDF():void {
+    let DATA = document.getElementById('orderData');
+      
+    html2canvas(DATA).then(canvas => {
+        
+        let fileWidth = 208;
+        let fileHeight = canvas.height * fileWidth / canvas.width;
+        
+        const FILEURI = canvas.toDataURL('image/png')
+        let PDF = new jsPDF({
+          orientation: "landscape",
+          unit: "mm",
+          format: 'a4',
+        });
+        let position = 0;
+        PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight)
+        
+        PDF.save(this.value.dispatchID+'.pdf');
+    });     
+  }
 }
 
 @Component({
@@ -297,6 +322,13 @@ export class DispatchPartnerComponent implements OnInit, OnDestroy {
   claimedArchived$;
   partner$;
   partnerData;
+
+  p1;
+  p2;
+  p3;
+  searchText1;
+  searchText2;
+  searchText3;
 
   constructor(
     private readonly modalService: NgbModal,

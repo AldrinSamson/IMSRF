@@ -97,7 +97,7 @@
           </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" *ngIf="!value.isCompleted  " (click)="editPartnerRequest()" [disabled]="" >Edit</button>
-        <button type="button" class="btn btn-success" *ngIf="!value.isCompleted  " (click)="deletePartnerRequest()" [disabled]="" >Delete</button>
+        <!-- <button type="button" class="btn btn-success" *ngIf="!value.isCompleted  " (click)="deletePartnerRequest()" [disabled]="" >Delete</button> -->
         <button type="button" class="btn btn-success" *ngIf="!value.isCompleted && !isPartner" (click)="releasePartnerRequest()" [disabled]="" >Approve/Release</button>
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
       </div>

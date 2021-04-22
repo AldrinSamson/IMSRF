@@ -59,11 +59,11 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" (click)="editRequest()" *ngIf="value.status !== 'Dispatch Created' " [disabled]="editForm.invalid" >Modify</button>
-        <button type="button" class="btn btn-danger" *ngIf="value.status === 'For Approval' || !value.isApproved" (click)="approveRequest()" >Approve</button>
-        <button type="button" class="btn btn-danger" *ngIf="value.status === 'For Approval' || value.isApproved" (click)="denyRequest()" >Deny</button>
-        <button type="button" class="btn btn-danger" *ngIf="!value.isArchived" (click)="archiveRequest()" >Archive</button>
+        <button type="button" class="btn btn-danger" *ngIf="forApproval" (click)="approveRequest()" >Approve</button>
+        <button type="button" class="btn btn-danger" *ngIf="value.status === 'For Approval'|| value.status === 'Approved'" (click)="denyRequest()" >Deny</button>
+        <button type="button" class="btn btn-danger" *ngIf="!value.isArchived && value.status !== 'For Approval'" (click)="archiveRequest()" >Archive</button>
         <button type="button" class="btn btn-danger" *ngIf="value.isArchived "(click)="restoreRequest()" >Restore</button>
-        <button type="button" class="btn btn-danger" (click)="deleteRequest()" >Delete</button>
+        <!-- <button type="button" class="btn btn-danger" *ngIf="value.isArchived" (click)="deleteRequest()" >Delete</button> -->
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
       </div>
     </div>

@@ -16,7 +16,7 @@ export class InventoryFiltered {
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
-  p1;
+  p4;
   p2;
   order$: Observable<any>;
   event$: Observable<any>;

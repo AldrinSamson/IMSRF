@@ -2,7 +2,7 @@
   <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title font-weight-bold">Update Event</h5>
+        <h5 class="modal-title font-weight-bold">Complete Event</h5>
         <button type="button" class="close" (click) = "activeModal.close()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -96,7 +96,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)='divideBy3()' [disabled]="!postEventForm.valid">Divide by 3</button>
         <button type="button" class="btn btn-success" (click)='postEvent()' [disabled]="!postEventForm.valid">Submit</button>
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()">Cancel</button>
       </div>

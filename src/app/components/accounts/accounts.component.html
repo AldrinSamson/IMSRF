@@ -9,6 +9,10 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText1" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
               <p class="card-description">
                 <button type="button" class="btn btn-success btn-fw" (click)= 'openAddUser(false)'>Add User</button>
@@ -24,7 +28,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let staff of staff$ | async; trackBy: trackByFn" (click)="openViewUser(staff , false)">
+                    <tr  *ngFor="let staff of staff$ | async| paginate: {itemsPerPage: 10, currentPage:p1} | filter:searchText1; trackBy: trackByFn" (click)="openViewUser(staff , false)">
                       <td>
                         {{staff.position}}
                       </td>
@@ -40,6 +44,9 @@
                     </tr>
                   </tbody>
                 </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p1=$event"></pagination-controls>
+                </div>
               </div>
             </div>
           </div>
@@ -52,6 +59,10 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText2" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
               <p class="card-description">
                 <button type="button" class="btn btn-success btn-fw" (click)= 'openAddUser(true)'>Add User</button>
@@ -67,7 +78,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let partner of partner$ | async; trackBy: trackByFn" (click)="openViewUser(partner , true)">
+                    <tr  *ngFor="let partner of partner$ | async| paginate: {itemsPerPage: 10, currentPage:p2} | filter:searchText2; trackBy: trackByFn" (click)="openViewUser(partner , true)">
                       <td>
                         {{partner.institutionName}}
                       </td>
@@ -83,6 +94,9 @@
                     </tr>
                   </tbody>
                 </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p2=$event"></pagination-controls>
+                </div>
               </div>
             </div>
           </div>

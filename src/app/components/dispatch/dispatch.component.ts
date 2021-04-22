@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,  OnDestroy, ViewChild} from '@angular/core';
+import { Component, OnInit, Input,  OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { DispatchService, PartnerService, AlertService, BloodTypes, InventoryService,
   Partner, StorageService, UtilService, Sexes, AuthService } from '@shared';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
@@ -8,6 +8,8 @@ import { NgbActiveModal, NgbModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstr
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { MEDIA_STORAGE_PATH_IMG , DEFAULT_PROFILE_PIC } from '../../storage.config';
 import { FixedScaleAxis } from 'chartist';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 // @Component({
 //   // tslint:disable-next-line: component-selector
@@ -301,6 +303,7 @@ export class ViewOrderComponent implements OnInit{
   @Input() partnerData;
   @Input() isClaimed;
   @Input() isArchived;
+  @ViewChild('orderData') htmlData:ElementRef;
   isPartner = false;
   isValidated = false;
   isDelivered = false;
@@ -423,6 +426,28 @@ export class ViewOrderComponent implements OnInit{
 
   openValidateCode() {
   }
+  
+  public openPDF():void {
+    let DATA = document.getElementById('orderData');
+      
+    html2canvas(DATA).then(canvas => {
+        
+        let fileWidth = 208;
+        let fileHeight = canvas.height * fileWidth / canvas.width;
+        
+        const FILEURI = canvas.toDataURL('image/png')
+        let PDF = new jsPDF({
+          orientation: "landscape",
+          unit: "mm",
+          format: 'a4',
+        });
+        let position = 0;
+        PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight)
+        
+        PDF.save(this.value.dispatchID+'.pdf');
+    });     
+  }
+
 }
 @Component({
   selector: 'app-dispatch',
@@ -439,6 +464,13 @@ export class DispatchComponent implements OnInit, OnDestroy {
   claimedArchived$: Observable<any>;
   partner$: Subscription;
   partnerData;
+
+  p1;
+  p2;
+  p3;
+  searchText1;
+  searchText2;
+  searchText3;
 
   constructor(
     private readonly modalService: NgbModal,

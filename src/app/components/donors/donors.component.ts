@@ -161,6 +161,8 @@ export class ViewDonorComponent implements OnInit {
 })
 export class DonorsComponent implements OnInit {
 
+  p;
+  searchText;
   donor$: Observable<any>;
   constructor(
     private readonly donorService: DonorService,

@@ -153,7 +153,9 @@ export class ViewRequestComponent implements OnInit{
   click$ = new Subject<string>();
 
   isDispatchRequestManager = false;
-  forApproval = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  forApproval = false;
+  isAdmin = false;
+  canApprove = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -178,7 +180,10 @@ export class ViewRequestComponent implements OnInit{
     this.requester.requesterID = this.value.requesterID
     this.requester.fullName = this.value.fullName
     this.isDispatchRequestManager = this.authService.isDispatchRequestManager();
-    if(this.value.status === "For Approval") {
+    this.isAdmin = this.authService.isAdmin();
+    if(this.value.status === "For Approval" ) {
+      this.forApproval = true;
+    } else if (this.value.status === "Denied" && this.isAdmin && !this.value.isArchived){
       this.forApproval = true;
     }
   }
@@ -558,6 +563,19 @@ export class RequestsComponent implements OnInit, OnDestroy {
   partner$: Subscription;
   partnerData;
   requesterData;
+
+  p1;
+  p2;
+  p3;
+  p4;
+  p5;
+  p6;
+  searchText1;
+  searchText2;
+  searchText3;
+  searchText4;
+  searchText5;
+  searchText6;
 
   constructor( private readonly modalService: NgbModal,
     private readonly dispatchService: DispatchService,

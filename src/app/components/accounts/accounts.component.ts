@@ -243,6 +243,11 @@ export class AccountsComponent implements OnInit {
   partnerData$: Subscription;
   partnerData;
 
+  p1;
+  p2;
+  searchText1;
+  searchText2;
+
   constructor(
     private readonly modalService: NgbModal,
     private readonly userService: UserService,

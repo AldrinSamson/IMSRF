@@ -8,7 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="orderData">
           <div class="row">
             <div class="col-8">
               <p class="text-justify font-weight-bold">Patient Name: {{value.patientName}} </p>
@@ -106,15 +106,16 @@
               </table>
             </div>
           </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" *ngIf="!isClaimed && !isArchived && !isPartner && !isDelivered " (click)="editOrder()" [disabled]="" >Edit</button>
-        <button type="button" class="btn btn-success" *ngIf="!isClaimed && !isArchived && !isDelivered && !isPartner" (click)="deliverOrder()">Deliver</button>
-        <button type="button" class="btn btn btn-light" *ngIf="isClaimed && !isArchived && !isPartner " (click)="archiveOrder()">Archive</button>
-        <button type="button" class="btn btn btn-light" *ngIf="isClaimed && isArchived && !isPartner " (click)="restoreOrder()">Restore</button>
-        <button type="button" class="btn btn-success" *ngIf="isPartner && isDelivered && !isValidated" (click)="openValidateCode()" [disabled]="" >Validate Code</button>
-        <button type="button" class="btn btn-success" *ngIf="isValidated" (click)="claimOrder()" [disabled]="" >Claim Disptach</button>
-        <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
-      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success" *ngIf="!isClaimed && !isArchived && !isPartner && !isDelivered " (click)="editOrder()" [disabled]="" >Edit</button>
+      <button type="button" class="btn btn-success" *ngIf="!isClaimed && !isArchived && !isDelivered && !isPartner" (click)="deliverOrder()">Deliver</button>
+      <button type="button" class="btn btn btn-light" *ngIf="isClaimed && !isArchived && !isPartner " (click)="archiveOrder()">Archive</button>
+      <button type="button" class="btn btn btn-light" *ngIf="isClaimed && isArchived && !isPartner " (click)="restoreOrder()">Restore</button>
+      <button type="button" class="btn btn-success" *ngIf="isPartner && isDelivered && !isValidated" (click)="openValidateCode()" [disabled]="" >Validate Code</button>
+      <button type="button" class="btn btn-success" *ngIf="isValidated" (click)="claimOrder()" [disabled]="" >Claim Disptach</button>
+      <button type="button" class="btn btn-success" (click)="openPDF()">Export</button>
+      <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
     </div>
   </div>
 </div>

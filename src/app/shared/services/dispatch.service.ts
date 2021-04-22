@@ -58,11 +58,11 @@ export class DispatchService {
       value1: 'isApproved',
       expression1: '==',
       value2: true,
-      value3: '',
-      expression2: '',
-      value4: '',
+      value3: 'isArchived',
+      expression2: '==',
+      value4: false,
     };
-    return this.firebase.getAllData(Request, 1 , filters);
+    return this.firebase.getAllData(Request, 2 , filters);
   }
 
   getDeniedRequests() {
@@ -70,7 +70,7 @@ export class DispatchService {
       value1: 'status',
       expression1: '==',
       value2: 'Denied',
-      value3: 'isApproved',
+      value3: 'isArchived',
       expression2: '==',
       value4: false,
     };

@@ -192,6 +192,10 @@ export class RequesterComponent implements OnInit {
 
   requester$: Observable<any>;
   deactivated$: Observable<any>;
+  p1;
+  p2
+  searchText1;
+  searchText2;
 
   constructor(
     private readonly modalService: NgbModal,

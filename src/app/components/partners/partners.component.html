@@ -6,6 +6,10 @@
 <div class="row">
   <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
+      <div class="card-header">
+        <label class="font-weight-bold">Search:</label>
+        <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Type Here">
+      </div>
       <div class="card-body">
         <!-- <h4 class="card-title">Bordered table</h4> -->
         <p class="card-description">
@@ -21,7 +25,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr  *ngFor="let partner of partner$ | async; trackBy: trackByFn" (click)="openViewPartner(partner)">
+              <tr  *ngFor="let partner of partner$ | async| paginate: {itemsPerPage: 10, currentPage:p} | filter:searchText; trackBy: trackByFn" (click)="openViewPartner(partner)">
                 <td>
                   {{partner.partnerID}}
                 </td>
@@ -34,6 +38,9 @@
               </tr>
             </tbody>
           </table>
+          <div id="pagination">
+            <pagination-controls (pageChange)="p=$event"></pagination-controls>
+          </div>
         </div>
       </div>
     </div>

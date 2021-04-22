@@ -99,7 +99,7 @@
           </thead>
           <tbody>
             <!-- <tr *ngIf="(event$ | async).length == 0" > No Active Events</tr> -->
-            <tr  *ngFor="let event of event$ | async | paginate:{itemsPerPage: 3, currentPage:p1}; trackBy: trackByFn ">
+            <tr  *ngFor="let event of event$ | async | paginate:{itemsPerPage: 3, currentPage:p4}; trackBy: trackByFn ">
               <td>
                 {{event.eventID}}
               </td>
@@ -116,7 +116,7 @@
           </tbody>
         </table>
         <div id="pagination">
-          <pagination-controls (pageChange)="p1=$event"></pagination-controls>
+          <pagination-controls (pageChange)="p4=$event"></pagination-controls>
         </div>
       </div>
     </div>

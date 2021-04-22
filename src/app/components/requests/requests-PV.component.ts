@@ -154,6 +154,7 @@ export class PartnerViewRequestComponent implements OnInit{
 
   isDispatchRequestManager = false;
   forApproval = false;
+  isAdmin = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -461,6 +462,19 @@ export class RequestsPartnerComponent implements OnInit, OnDestroy {
   partner$: Subscription;
   partnerData;
   requesterData;
+
+  p1;
+  p2;
+  p3;
+  p4;
+  p5;
+  p6;
+  searchText1;
+  searchText2;
+  searchText3;
+  searchText4;
+  searchText5;
+  searchText6;
 
   constructor( private readonly modalService: NgbModal,
     private readonly dispatchService: DispatchService,

@@ -27,7 +27,7 @@
         <button type="button" class="btn btn-light" *ngIf="!hideArchiveButton" (click)='archiveBatch()'>Archive</button>
         <button type="button" class="btn btn-warning" *ngIf="!hideRestoreButton" (click)='restoreBatch()'>Restore</button>
         <button type="button" class="btn btn-danger" *ngIf="!hideEditButton" (click)='manualExpire()'>Expire</button>
-        <button type="button" class="btn btn-danger" *ngIf="isAdmin" (click)='deleteBatch()'>Delete</button>
+        <!-- <button type="button" class="btn btn-danger" *ngIf="isAdmin" (click)='deleteBatch()'>Delete</button> -->
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()">Cancel</button>
       </div>
     </div>

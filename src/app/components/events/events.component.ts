@@ -235,6 +235,8 @@ export class UpdatePostEventComponent implements OnInit {
 
     if (this.postEventForm.dirty && this.postEventForm.valid) {
 
+        this.divideBy3();
+
         const dateExpiry = new Date(this.postEventForm.value.dateExpiry.year, this.postEventForm.value.dateExpiry.month - 1,
           this.postEventForm.value.dateExpiry.day)
         this.postEventForm.controls.dateExpiry.setValue(new Date(dateExpiry.setHours(13)));
@@ -289,6 +291,12 @@ export class EventsComponent implements OnInit, OnDestroy {
   archivedEvent$: Observable<any>;
   partner$: Subscription;
   partnerData;
+  p1;
+  p2;
+  p3;
+  searchText1;
+  searchText2;
+  searchText3;
 
   constructor(
     private readonly modalService: NgbModal,

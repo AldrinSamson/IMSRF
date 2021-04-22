@@ -78,6 +78,8 @@ export class ViewPartnerComponent implements OnInit {
 })
 export class PartnersComponent implements OnInit {
 
+  p;
+  searchText;
   partner$: Observable<any>;
   constructor(
     private readonly partnerService: PartnerService,

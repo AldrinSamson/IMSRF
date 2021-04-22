@@ -9,8 +9,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText1" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(authenticationlog,"Authentication-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -23,7 +27,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audits of authenticationLog$ | async| paginate:{itemsPerPage: 10, currentPage:p6}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audits of authenticationLog$ | async| paginate:{itemsPerPage: 10, currentPage:p6}| filter:searchText1; trackBy: trackByFn ">
                       <td>
                         {{audits.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -57,8 +61,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText2" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(eventlog,"Event-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -71,7 +79,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of eventLog$ | async| paginate:{itemsPerPage: 10, currentPage:p5}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audit of eventLog$ | async| paginate:{itemsPerPage: 10, currentPage:p5}| filter:searchText2; trackBy: trackByFn ">
                       <td>
                         {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -105,8 +113,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText3" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(requestlog,"Request-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -119,7 +131,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of requestLog$ | async| paginate:{itemsPerPage: 10, currentPage:p4}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audit of requestLog$ | async| paginate:{itemsPerPage: 10, currentPage:p4}| filter:searchText3; trackBy: trackByFn ">
                       <td>
                         {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -153,8 +165,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText4" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(dispatchlog,"Dispatch-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -167,7 +183,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of dispatchLog$ | async| paginate:{itemsPerPage: 10, currentPage:p3}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audit of dispatchLog$ | async| paginate:{itemsPerPage: 10, currentPage:p3}| filter:searchText4; trackBy: trackByFn ">
                       <td>
                         {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -201,8 +217,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText5" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(inventorylog,"Inventory-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -215,7 +235,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of inventoryLog$ | async| paginate:{itemsPerPage: 10, currentPage:p2}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audit of inventoryLog$ | async| paginate:{itemsPerPage: 10, currentPage:p2}| filter:searchText5; trackBy: trackByFn ">
                       <td>
                         {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -249,10 +269,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="inventorySearchText" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to PDF</button> <br>
-                <label class="font-weight-bold">Search:</label>
-                <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="inventorySearchText" autocomplete="off" placeholder="Type Here">
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(manifest,"Inventory-Manifest")'  *ngIf="!isPartner">Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -303,8 +325,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText6" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(donorlog,"Donor-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -317,7 +343,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of donorLog$ | async| paginate:{itemsPerPage: 10, currentPage:p7}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audit of donorLog$ | async| paginate:{itemsPerPage: 10, currentPage:p7}| filter:searchText6; trackBy: trackByFn ">
                       <td>
                         {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -351,8 +377,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText7" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(requesterlog,"Requester-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -365,7 +395,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of requesterLog$ | async| paginate:{itemsPerPage: 10, currentPage:p8}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audit of requesterLog$ | async| paginate:{itemsPerPage: 10, currentPage:p8}| filter:searchText7; trackBy: trackByFn ">
                       <td>
                         {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -399,8 +429,12 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText8" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(accountlog,"Accounts-Logs")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>
@@ -413,7 +447,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let audit of accountLog$ | async| paginate:{itemsPerPage: 10, currentPage:p9}; trackBy: trackByFn ">
+                    <tr  *ngFor="let audit of accountLog$ | async| paginate:{itemsPerPage: 10, currentPage:p9}| filter:searchText8; trackBy: trackByFn ">
                       <td>
                         {{audit.date.seconds * 1000 | date:'MM-dd-yyyy hh:mm:ss'}}
                       </td>
@@ -447,6 +481,10 @@
       <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText9" autocomplete="off" placeholder="Type Here">
+            </div>
             <div class="card-body">
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
@@ -461,7 +499,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let dispatch of feedbackReport$ | async| paginate: {itemsPerPage: 10, currentPage:p10}; trackBy: trackByFn "  (click)= 'openViewFeedback(dispatch)'>
+                    <tr  *ngFor="let dispatch of feedbackReport$ | async| paginate: {itemsPerPage: 10, currentPage:p10}| filter:searchText9; trackBy: trackByFn "  (click)= 'openViewFeedback(dispatch)'>
                       <td>
                         {{dispatch.dispatchID}}
                       </td>
