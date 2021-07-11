@@ -299,7 +299,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  *ngFor="let request of partnerRequestsAll$ | async| paginate: {itemsPerPage: 10, currentPage:p6} | filter:searchText6; trackBy: trackByFn" (click)= 'openViewPartnerRequest(request)'>
+                    <tr  *ngFor="let request of partnerRequestsOne$ | async| paginate: {itemsPerPage: 10, currentPage:p6} | filter:searchText6; trackBy: trackByFn" (click)= 'openViewPartnerRequest(request)'>
                       <td>
                         {{request.partnerRequestID}}
                       </td>

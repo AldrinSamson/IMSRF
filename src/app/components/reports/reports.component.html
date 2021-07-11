@@ -274,7 +274,7 @@
               <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="inventorySearchText" autocomplete="off" placeholder="Type Here">
             </div>
             <div class="card-body">
-              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(manifest,"Inventory-Manifest")'  *ngIf="!isPartner">Export to CSV</button>
+              <button type="button" class="btn btn-primary btn-fw"  (click)= 'downloadCSVFile(manifest,"Inventory-Manifest")'>Export to CSV</button>
               <div class="table-responsive pt-3">
                 <table class="table table-bordered table-hover">
                   <thead>

@@ -92,3 +92,13 @@ select {
     border-radius: 100%;
   }
 }
+
+.required
+{
+    color: red;
+}
+
+ngb-typeahead-window.dropdown-menu {
+  max-height: 100px !important;
+  overflow-y: auto;
+}

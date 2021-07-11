@@ -7,11 +7,13 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
 import { Error404Component } from './pages/error-pages/error404/error404.component'
 import { Error500Component } from './pages/error-pages/error500/error500.component';
+import { FaqComponent } from './pages/faq/faq.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login' , component: LoginComponent},
+  { path: 'faq' , component: FaqComponent},
   { path: 'main' , component: MainComponent ,  loadChildren: './pages/main/main.module#MainModule',
   canActivate: [MainAuthGuardService]},
   { path: 'partner' , component: PartnerComponent ,  loadChildren: './pages/partner/partner.module#PartnerModule',
@@ -21,7 +23,7 @@ const routes: Routes = [
   { path: 'partner/profile', component: ProfileComponent ,
   canActivate: [PartnerAuthGuardService] },
   { path: '500', component: Error500Component },
-  { path: '**', component: Error404Component },
+  { path: '**', component: Error404Component }
 ];
 
 @NgModule({

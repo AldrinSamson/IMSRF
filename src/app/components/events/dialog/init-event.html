@@ -10,7 +10,7 @@
       <div class="modal-body">
         <form [formGroup]="initEventForm">
           <div class="form-group">
-            <label>Institution Name</label>
+            <label>Institution Name</label><span class="required">*</span>
             <input type="text" class="form-control"
                     [(ngModel)]="partner"
                     [ngModelOptions]="{standalone: true}"
@@ -24,7 +24,7 @@
                     />
           </div>
           <div class="form-group">
-            <label>Date of Event</label>
+            <label>Date of Event</label><span class="required">*</span>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd"
                      name="dp" formControlName="dateOfEvent" ngbDatepicker [minDate]="minDate" #d="ngbDatepicker">
@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Location</label>
+            <label>Location</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="location" >
             <control-messages [control]="initEventForm.get('location')"></control-messages>
           </div>

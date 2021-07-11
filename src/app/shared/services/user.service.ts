@@ -132,7 +132,7 @@ export class UserService {
     });
   }
 
-  updateOne(id, value) {
+  updateOne(id, value, uid) {
     this.db.collection<User>(User.collectionName).doc(id).update({
       firstName: value.firstName,
       lastName: value.lastName,
@@ -147,8 +147,19 @@ export class UserService {
     }).then( () => {
       this.firebase.audit('Account' , 'Modified Account: ' + value.fullName, value.institutionName);
       this.alertService.showToaster(value.firstName + ' ' + value.lastName+' User Modified',
-    { classname: 'bg-success text-light', delay: 10000 })
+      { classname: 'bg-success text-light', delay: 10000 })
+      // var userUid = JSON.parse(sessionStorage.getItem('session-user-uid'));
+      this.db.collection('user', ref => ref.where('uid', '==', uid)).get().subscribe( result2 => {
+
+        if (result2.docs.length !== 0) {
+          sessionStorage.setItem('session-alive', 'true');
+          sessionStorage.setItem('session-user-details', JSON.stringify(result2.docs[0].data()));
+          sessionStorage.setItem('session-user-details-doc-id', JSON.stringify(result2.docs[0].id));
+        }
+      });
     });
+    
+    
   }
 
   archive(id) {

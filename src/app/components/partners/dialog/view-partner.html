@@ -15,7 +15,7 @@
             <control-messages [control]="editForm.get('institutionName')"></control-messages> -->
             <p class="text-justify font-weight-bold">Institution: {{value.institutionName}}</p>
             <div class="form-group">
-            <label>Address</label>
+            <label>Address</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="address">
             </div>
           </div>
@@ -24,7 +24,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" routerLink="main/partners/summary"
         [queryParams]="{ id: value.partnerID , partner: value.institutionName}" (click) = "activeModal.close()">Go to Page</button>
-        <button type="button" class="btn btn-success" (click)='updatePartner()' [disabled]="!editForm.valid">Edit</button>
+        <button type="button" class="btn btn-success" (click)='updatePartner()' [disabled]="!editForm.valid">Save Changes</button>
         <!-- <button type="button" class="btn btn-warning" (click)='deletePartner()'>Delete</button> -->
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()">Cancel</button>
       </div>

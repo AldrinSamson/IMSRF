@@ -32,6 +32,7 @@ export class AuthService {
           sessionStorage.setItem('session-alive', 'true');
           sessionStorage.setItem('session-user-uid', this.userUid);
           sessionStorage.setItem('session-user-details', JSON.stringify(result2.docs[0].data()));
+          sessionStorage.setItem('session-user-details-doc-id', JSON.stringify(result2.docs[0].id));
           this.fbs.audit('Authentication' , 'Logged In', email);
           this.alert.showToaster('Logged In!');
           if (result2.docs[0].data().position === 'Partner') {
@@ -69,25 +70,33 @@ export class AuthService {
 
   public isAuthenticated(): string {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (this.userPosition.position === 'System Admin' || this.userPosition.position === 'Event Manager'
-    || this.userPosition.position === 'Blood Donor Manager' || this.userPosition.position === 'Dispatch & Request Manager') {
-      return sessionStorage.getItem('session-alive');
+    if ( !this.userPosition ) {
+      return 'false'
+    } else {
+      if (this.userPosition.position === 'System Admin' || this.userPosition.position === 'Event Manager'
+      || this.userPosition.position === 'Blood Donor Manager' || this.userPosition.position === 'Dispatch & Request Manager') {
+        return sessionStorage.getItem('session-alive');
+      }
+      return 'false'
     }
-    return 'false'
+   
   }
 
   public isPartnerAuthenticated(): string {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (this.userPosition.position === 'Partner') {
-      return sessionStorage.getItem('session-alive');
+    if ( !this.userPosition ) {
+      return 'false'
+    } else { 
+      if (this.userPosition.position === 'Partner') {
+        return sessionStorage.getItem('session-alive');
+      }
+      return 'false'
     }
-
-    return 'false'
   }
 
   public isAdmin() {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (!this.isAuthenticated()) {
+    if (this.isAuthenticated() === 'false') {
       return false;
     } else if (this.userPosition.position === 'System Admin') {
       return true;
@@ -98,7 +107,7 @@ export class AuthService {
 
   public isEventManager() {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (!this.isAuthenticated()) {
+    if (this.isAuthenticated() === 'false') {
       return false;
     } else if (this.userPosition.position === 'Event Manager') {
       return true;
@@ -109,7 +118,7 @@ export class AuthService {
 
   public isBloodDonorManager() {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (!this.isAuthenticated()) {
+    if (this.isAuthenticated() === 'false') {
       return false;
     } else if (this.userPosition.position === 'Blood Donor Manager') {
       return true;
@@ -120,7 +129,7 @@ export class AuthService {
 
   public isDispatchRequestManager() {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (!this.isAuthenticated()) {
+    if (this.isAuthenticated() === 'false') {
       return false;
     } else if (this.userPosition.position === 'Dispatch & Request Manager') {
       return true;
@@ -131,7 +140,7 @@ export class AuthService {
 
   public isPartner() {
     this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
-    if (!this.isAuthenticated() || !this.isPartnerAuthenticated()) {
+    if (this.isAuthenticated() === 'false' && this.isPartnerAuthenticated() === 'false') {
       return false;
     } else if (this.userPosition.position === 'Partner') {
       return true;

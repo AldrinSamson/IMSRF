@@ -58,7 +58,7 @@
                         <div ngbDropdown class="d-inline-block">
                           <button class="btn btn-outline-primary" ngbDropdownToggle>Select</button>
                           <div ngbDropdownMenu aria-labelledby="dropdownForm1">
-                            <label>Quantity</label>
+                            <label>Quantity</label><span class="required">*</span>
                             <input type="number" [(ngModel)]="orderQuantity" >
                             <div class="dropdown-divider"></div>
                             <button ngbDropdownItem (click)="addToOrder(batch)" >Enter</button>
@@ -96,7 +96,7 @@
             </div>
           </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" *ngIf="!value.isCompleted  " (click)="editPartnerRequest()" [disabled]="" >Edit</button>
+        <button type="button" class="btn btn-success" *ngIf="!value.isCompleted  " (click)="editPartnerRequest()" [disabled]="" >Save Changes</button>
         <!-- <button type="button" class="btn btn-success" *ngIf="!value.isCompleted  " (click)="deletePartnerRequest()" [disabled]="" >Delete</button> -->
         <button type="button" class="btn btn-success" *ngIf="!value.isCompleted && !isPartner" (click)="releasePartnerRequest()" [disabled]="" >Approve/Release</button>
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>

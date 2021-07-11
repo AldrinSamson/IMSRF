@@ -12,22 +12,22 @@
           <div class="row">
             <div class="col-7">
               <div class="form-group">
-                <label>Donors Screening (Interview)</label>
+                <label>Donors Screening (Interview)</label><span class="required">*</span>
                 <input type="number" class="form-control" formControlName="donorsDefferScreen" >
                 <control-messages [control]="postEventForm.get('donorsDefferScreen')"></control-messages>
               </div>
               <div class="form-group">
-                <label>Donors w/ Low Hemoglobin</label>
+                <label>Donors w/ Low Hemoglobin</label><span class="required">*</span>
                 <input type="number" class="form-control" formControlName="donorsDefferLow" >
                 <control-messages [control]="postEventForm.get('donorsDefferLow')"></control-messages>
               </div>
               <div class="form-group">
-                <label>No. of Successful Phlebotomy </label>
+                <label>No. of Successful Phlebotomy </label><span class="required">*</span>
                 <input type="number" class="form-control" formControlName="donorsBledOk" >
                 <control-messages [control]="postEventForm.get('donorsBledOk')"></control-messages>
               </div>
               <div class="form-group">
-                <label>No. of Unsuccessful Phlebotomy</label>
+                <label>No. of Unsuccessful Phlebotomy</label><span class="required">*</span>
                 <input type="number" class="form-control" formControlName="donorsBledFail" >
                 <control-messages [control]="postEventForm.get('donorsBledFail')"></control-messages>
               </div>
@@ -38,7 +38,7 @@
               </div>
               <br>
               <div class="form-group">
-                <label>Date of Expiry</label><br>
+                <label>Date of Expiry</label><span class="required">*</span><br>
                 <div class="input-group">
                   <input class="form-control" placeholder="yyyy-mm-dd"
                          name="dp" formControlName="dateExpiry" ngbDatepicker [minDate]="minDate" #d="ngbDatepicker">

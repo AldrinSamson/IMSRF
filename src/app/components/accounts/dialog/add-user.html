@@ -31,24 +31,24 @@
             </mat-form-field>
 
             <div class="form-group">
-              <label for="exampleInputName1">First Name</label>
+              <label for="exampleInputName1">First Name</label><span class="required">*</span>
               <input type="text" class="form-control" formControlName="firstName"autocomplete="off">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail3">Last Name</label>
+              <label for="exampleInputEmail3">Last Name</label><span class="required">*</span>
               <input type="text" class="form-control" formControlName="lastName"autocomplete="off">
             </div>
             <div class="form-group">
-              <label >Email</label>
+              <label >Email</label><span class="required">*</span>
               <input type="email" class="form-control form-control-lg" formControlName="email"autocomplete="off">
               <control-messages [control]="addForm.get('email')"></control-messages>
             </div>
             <div class="form-group">
-              <label >Contact Number</label>
-              <input type="text" class="form-control" formControlName="contactNumber"autocomplete="off" >
+              <label >Contact Number</label><span class="required">*</span>
+              <input type="number" class="form-control" formControlName="contactNumber"autocomplete="off" >
             </div>
             <div class="form-group" *ngIf="isPartnerUser === false">
-              <label>Position</label>
+              <label>Position</label><span class="required">*</span>
               <select class="form-control" formControlName="position">
                 <option>Select Position</option>
                 <option *ngFor="let position of positions">
@@ -57,7 +57,7 @@
               </select>
             </div>
             <div class="form-group" *ngIf="isPartnerUser" >
-              <label >Institution Name</label>
+              <label >Institution Name</label><span class="required">*</span>
               <input type="text" class="form-control" autocomplete="off"
                     [(ngModel)]="partner"
                     [ngModelOptions]="{standalone: true}"

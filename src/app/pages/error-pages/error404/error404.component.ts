@@ -7,13 +7,15 @@ import { AuthService } from '@shared'
   styleUrls: ['./error404.component.scss']
 })
 export class Error404Component implements OnInit {
-  homeRoute
+  homeRoute: any
 
   constructor(private readonly authService: AuthService) {
-    if(this.authService.isPartner()) {
+    if(this.authService.isPartnerAuthenticated()) {
       this.homeRoute = '/partner'
-    }else{
+    }else if (this.authService.isAuthenticated()) {
       this.homeRoute = '/main'
+    }else {
+      this.homeRoute = '/login'
     }
   }
 

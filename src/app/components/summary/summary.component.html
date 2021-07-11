@@ -3,147 +3,162 @@
     {{institutionName}}
   </h3>
 </div>
-<div class="row">
-  <div class="col-lg-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-header">
-        <label class="font-weight-bold">Search:</label>
-        <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText1" autocomplete="off" placeholder="Type Here">
-      </div>
-      <div class="card-body">
-        <div class="table-responsive pt-3">
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Event</th>
-                <th>Blood Type</th>
-                <th>Quantity</th>
-                <th>Date of Expiry</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr  *ngFor="let batch of inventory$ | async| paginate:{itemsPerPage: 3, currentPage:p1}| filter:searchText1; trackBy: trackByFn" >
-                <td>
-                  {{batch.batchID}}
-                </td>
-                <td>
-                  {{batch.eventID}}
-                </td>
-                <td>
-                  {{batch.bloodType}}
-                </td>
-                <td>
-                  {{batch.quantity}}
-                </td>
-                <td>
-                  {{batch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div id="pagination">
-						<pagination-controls (pageChange)="p1=$event"></pagination-controls>
-					</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-lg-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-header">
-        <label class="font-weight-bold">Search:</label>
-        <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText2" autocomplete="off" placeholder="Type Here">
-      </div>
-      <div class="card-body">
-        <h4 class="card-title">Requests</h4>
-        <div class="table-responsive pt-3">
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>Dispatch ID</th>
-                <th>Request ID</th>
-                <th>Institution Name</th>
-                <th>Patient Name</th>
-                <th>Date Created</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr  *ngFor="let dispatch of dispatch$ | async| paginate:{itemsPerPage: 3, currentPage:p2}| filter:searchText2; trackBy: trackByFn">
-                <td>
-                  {{dispatch.dispatchID}}
-                </td>
-                <td>
-                  {{dispatch.requestID}}
-                </td>
-                <td>
-                  {{dispatch.institutionName}}
-                </td>
-                <td>
-                  {{dispatch.patientName}}
-                </td>
-                <td>
-                  {{dispatch.dateOrderCreated.seconds * 1000 | date:'MM-dd-yyyy'}}
-                </td>
-                <td>
-                  {{dispatch.status}}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div id="pagination">
-            <pagination-controls (pageChange)="p2=$event"></pagination-controls>
+<ngb-tabset type="pills" class="pills-primary">
+  <ngb-tab title="Inventory">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText1" autocomplete="off" placeholder="Type Here">
+            </div>
+            <div class="card-body">
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Event</th>
+                      <th>Blood Type</th>
+                      <th>Quantity</th>
+                      <th>Date of Expiry</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let batch of inventory$ | async| paginate:{itemsPerPage: 5, currentPage:p1}| filter:searchText1; trackBy: trackByFn" >
+                      <td>
+                        {{batch.batchID}}
+                      </td>
+                      <td>
+                        {{batch.eventID}}
+                      </td>
+                      <td>
+                        {{batch.bloodType}}
+                      </td>
+                      <td>
+                        {{batch.quantity}}
+                      </td>
+                      <td>
+                        {{batch.dateExpiry.seconds * 1000 | date:'MM-dd-yyyy'}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p1=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-lg-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-header">
-        <label class="font-weight-bold">Search:</label>
-        <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText3" autocomplete="off" placeholder="Type Here">
-      </div>
-      <div class="card-body">
-        <h4 class="card-title">Active Events</h4>
-        <div class="table-responsive pt-3">
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>Event ID</th>
-                <th>Institution Name</th>
-                <th>Date Of Event</th>
-                <th>Location</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr  *ngFor="let event of event$ | async| paginate:{itemsPerPage: 3, currentPage:p3}| filter:searchText3; trackBy: trackByFn">
-                <td>
-                  {{event.eventID}}
-                </td>
-                <td>
-                  {{event.institutionName}}
-                </td>
-                <td>
-                  {{event.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy' }}
-                </td>
-                <td>
-                  {{event.location}}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div id="pagination">
-            <pagination-controls (pageChange)="p3=$event"></pagination-controls>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Requests">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText2" autocomplete="off" placeholder="Type Here">
+            </div>
+            <div class="card-body">
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Dispatch ID</th>
+                      <th>Request ID</th>
+                      <th>Institution Name</th>
+                      <th>Patient Name</th>
+                      <th>Date Created</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let dispatch of dispatch$ | async| paginate:{itemsPerPage: 5, currentPage:p2}| filter:searchText2; trackBy: trackByFn">
+                      <td>
+                        {{dispatch.dispatchID}}
+                      </td>
+                      <td>
+                        {{dispatch.requestID}}
+                      </td>
+                      <td>
+                        {{dispatch.institutionName}}
+                      </td>
+                      <td>
+                        {{dispatch.patientName}}
+                      </td>
+                      <td>
+                        {{dispatch.dateOrderCreated.seconds * 1000 | date:'MM-dd-yyyy'}}
+                      </td>
+                      <td>
+                        {{dispatch.status}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p2=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Active Events">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-header">
+              <label class="font-weight-bold">Search:</label>
+              <input class="form-control form-control-lg" type="text" name="search" [(ngModel)]="searchText3" autocomplete="off" placeholder="Type Here">
+            </div>
+            <div class="card-body">
+              <div class="table-responsive pt-3">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Event ID</th>
+                      <th>Institution Name</th>
+                      <th>Date Of Event</th>
+                      <th>Location</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let event of event$ | async| paginate:{itemsPerPage: 5, currentPage:p3}| filter:searchText3; trackBy: trackByFn">
+                      <td>
+                        {{event.eventID}}
+                      </td>
+                      <td>
+                        {{event.institutionName}}
+                      </td>
+                      <td>
+                        {{event.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy' }}
+                      </td>
+                      <td>
+                        {{event.location}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="pagination">
+                  <pagination-controls (pageChange)="p3=$event"></pagination-controls>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
+
+
+
 

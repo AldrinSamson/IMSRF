@@ -462,6 +462,7 @@ export class RequestsPartnerComponent implements OnInit, OnDestroy {
   partner$: Subscription;
   partnerData;
   requesterData;
+  userName
 
   p1;
   p2;
@@ -480,18 +481,15 @@ export class RequestsPartnerComponent implements OnInit, OnDestroy {
     private readonly dispatchService: DispatchService,
     public partnerService: PartnerService,
     public requesterService: RequesterService,
-    private readonly authService: AuthService ) { }
+    private readonly authService: AuthService ) {  }
 
   ngOnInit(): void {
+    this.userName = JSON.parse(sessionStorage.getItem('session-user-details'));
     this.getData();
   }
 
   getData() {
-    this.forApproval$ = this.dispatchService.getForApprovalRequests();
-    this.approved$ = this.dispatchService.getApprovedRequests();
-    this.partnerRequestsAll$ =this.dispatchService.getAllActivePartnerRequest();
-    this.denied$ = this.dispatchService.getDeniedRequests();
-    this.archived$ = this.dispatchService.getArchivedRequests();
+    this.partnerRequestsOne$ = this.dispatchService.getPartnerRequest(this.userName.partnerID)
     this.partner$ = this.partnerService.getAll().subscribe( res => {
       this.partnerData = res
     });

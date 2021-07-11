@@ -16,22 +16,22 @@
           </div>
 
             <div class="form-group">
-              <label for="exampleInputName1">First Name</label>
+              <label for="exampleInputName1">First Name</label><span class="required">*</span>
               <input type="text" class="form-control" formControlName="firstName">
             </div>
 
             <div class="form-group">
-              <label for="exampleInputEmail3">Last Name</label>
+              <label for="exampleInputEmail3">Last Name</label><span class="required">*</span>
               <input type="text" class="form-control" formControlName="lastName">
             </div>
 
             <div class="form-group">
-              <label >Contact Number</label>
-              <input type="text" class="form-control" formControlName="contactNumber">
+              <label >Contact Number</label><span class="required">*</span>
+              <input type="number" class="form-control" formControlName="contactNumber">
             </div>
 
             <div class="form-group" *ngIf="isPartnerUser">
-              <label >Institution Name</label>
+              <label >Institution Name</label><span class="required">*</span>
               <input type="text" class="form-control"
                     [(ngModel)]="partner"
                     [ngModelOptions]="{standalone: true}"
@@ -47,7 +47,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="editUser()" [disabled]="editForm.invalid" >Edit</button>
+        <button type="button" class="btn btn-success" (click)="editUser()" [disabled]="editForm.invalid" >Save Changes</button>
         <button type="button" class="btn btn-warning" (click)="deleteUser()" >Delete</button>
         <button type="button" class="btn  btn-outline-dark" (click) = "activeModal.close()" >Cancel</button>
       </div>

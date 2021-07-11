@@ -8,7 +8,7 @@
         </h4>
         <h2 class="mb-1">{{inventoryFilteredTotal}}</h2>
 
-        <select [(ngModel)]="selectedPartner" (change)="selectPartner()">
+        <select [(ngModel)]="selectedPartner" (change)="selectPartner()" onmousedown="if(this.options.length>5){this.size=5;}"  onchange='this.size=0;' onblur="this.size=0;">
           <option  *ngFor="let partner of partnerData; let i = index" [value]="partner.partnerID">
             {{partner.institutionName}}
           </option>
@@ -83,89 +83,99 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="col-md-12 grid-margin grid-margin-md-0 stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Active Events</h4>
-        <table class="table table-bordered table-hover ">
-          <thead>
-            <tr>
-              <th>Event ID</th>
-              <th>Institution Name</th>
-              <th>Date of Event</th>
-              <th>Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- <tr *ngIf="(event$ | async).length == 0" > No Active Events</tr> -->
-            <tr  *ngFor="let event of event$ | async | paginate:{itemsPerPage: 3, currentPage:p4}; trackBy: trackByFn ">
-              <td>
-                {{event.eventID}}
-              </td>
-              <td>
-                {{event.institutionName}}
-              </td>
-              <td>
-                {{event.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}
-              </td>
-              <td>
-                {{event.location}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div id="pagination">
-          <pagination-controls (pageChange)="p4=$event"></pagination-controls>
+<ngb-tabset type="pills" class="pills-primary">
+  <ngb-tab title="Active Events">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-bordered table-hover ">
+                <thead>
+                  <tr>
+                    <th>Event ID</th>
+                    <th>Institution Name</th>
+                    <th>Date of Event</th>
+                    <th>Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <tr *ngIf="(event$ | async).length == 0" > No Active Events</tr> -->
+                  <tr  *ngFor="let event of event$ | async | paginate:{itemsPerPage: 5, currentPage:p4}; trackBy: trackByFn ">
+                    <td>
+                      {{event.eventID}}
+                    </td>
+                    <td>
+                      {{event.institutionName}}
+                    </td>
+                    <td>
+                      {{event.dateOfEvent.seconds * 1000 | date:'MM-dd-yyyy'}}
+                    </td>
+                    <td>
+                      {{event.location}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="pagination">
+                <pagination-controls (pageChange)="p4=$event"></pagination-controls>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-md-12 grid-margin grid-margin-md-0 stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Active Dispatches</h4>
-        <table class="table table-bordered table-hover ">
-          <thead>
-            <tr>
-              <th>Dispatch ID</th>
-              <th>Request ID</th>
-              <th>Institution Name</th>
-              <th>Patient Name</th>
-              <th>Date Created</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- <tr *ngIf="(order$ | async).length == 0" > No Active Dispatches</tr> -->
-            <tr  *ngFor="let order of order$ | async | paginate:{itemsPerPage: 3, currentPage:p2}; trackBy: trackByFn ">
-              <td>
-                {{order.dispatchID}}
-              </td>
-              <td>
-                {{order.requestID}}
-              </td>
-              <td>
-                {{order.institutionName}}
-              </td>
-              <td>
-                {{order.patientName}}
-              </td>
-              <td>
-                {{order.dateOrderCreated.seconds * 1000 | date:'MM-dd-yyyy'}}
-              </td>
-              <td>
-                {{order.status}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div id="pagination">
-          <pagination-controls (pageChange)="p2=$event"></pagination-controls>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Active Dispatches">
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-bordered table-hover ">
+                <thead>
+                  <tr>
+                    <th>Dispatch ID</th>
+                    <th>Request ID</th>
+                    <th>Institution Name</th>
+                    <th>Patient Name</th>
+                    <th>Date Created</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <tr *ngIf="(order$ | async).length == 0" > No Active Dispatches</tr> -->
+                  <tr  *ngFor="let order of order$ | async | paginate:{itemsPerPage: 5, currentPage:p2}; trackBy: trackByFn ">
+                    <td>
+                      {{order.dispatchID}}
+                    </td>
+                    <td>
+                      {{order.requestID}}
+                    </td>
+                    <td>
+                      {{order.institutionName}}
+                    </td>
+                    <td>
+                      {{order.patientName}}
+                    </td>
+                    <td>
+                      {{order.dateOrderCreated.seconds * 1000 | date:'MM-dd-yyyy'}}
+                    </td>
+                    <td>
+                      {{order.status}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="pagination">
+                <pagination-controls (pageChange)="p2=$event"></pagination-controls>
+              </div>
+            </div>
+        </div>
         </div>
       </div>
-  </div>
-</div>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
+
+

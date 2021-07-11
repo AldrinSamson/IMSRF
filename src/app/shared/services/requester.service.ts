@@ -28,7 +28,7 @@ export class RequesterService {
       expression2: '',
       value4: '',
     };
-    return this.firebase.getAllData<Requester>(Requester, 0, filters, 'requesterID', 'asc');
+    return this.firebase.getAllData<Requester>(Requester, 0, filters);
   }
 
   getActive(){
@@ -40,7 +40,7 @@ export class RequesterService {
       expression2: '',
       value4: '',
     };
-    return this.firebase.getAllData<Requester>(Requester, 1, filters, 'requesterID', 'asc');
+    return this.firebase.getAllData<Requester>(Requester, 1, filters);
   }
 
   getDeactivated(){
@@ -52,7 +52,7 @@ export class RequesterService {
       expression2: '',
       value4: '',
     };
-    return this.firebase.getAllData<Requester>(Requester, 1, filters, 'requesterID', 'asc');
+    return this.firebase.getAllData<Requester>(Requester, 1, filters);
   }
 
   getOne(id){

@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
 
   editForm: any;
   userDetails;
+  userDetailsid;
   isPartnerUser = false;
   route = '/main'
 
@@ -53,6 +54,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
 
     this.userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
+    this.userDetailsid = JSON.parse(sessionStorage.getItem('session-user-details-doc-id'));
     if( this.userDetails.position === 'Partner') {
       this.isPartnerUser = true;
       this.route = '/partner'
@@ -70,8 +72,11 @@ export class ProfileComponent implements OnInit {
 
   editUser() {
     if (this.editForm.dirty && this.editForm.valid) {
-      this.userService.updateOne(this.userDetails.id , this.editForm.value);
+      this.editForm.controls.fullName.setValue(this.editForm.value.firstName + this.editForm.value.lastName);
+      this.userService.updateOne(this.userDetailsid , this.editForm.value, this.userDetails.uid);
     }
+
+    
   }
 
   openChangePassword() {

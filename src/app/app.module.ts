@@ -31,6 +31,7 @@ import { ToasterComponent } from './shared/toaster/toaster.component';
 import { ControlMessagesComponent } from './shared/control-messages/control-messages.component';
 import { PartnerComponent } from './pages/partner/partner.component';
 import { ProfileComponent, ChangePasswordComponent } from './pages/profile/profile.component';
+import { FaqComponent } from './pages/faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ProfileComponent, ChangePasswordComponent } from './pages/profile/profi
     PartnerComponent,
     ProfileComponent,
     ChangePasswordComponent,
-    PasswordResetDialogComponent
+    PasswordResetDialogComponent,
+    FaqComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseKeys),

@@ -652,6 +652,36 @@ exports.validateCode = functions.https.onRequest((req, res) => {
   });
 });
 
+exports.sendEmailVerification = functions.auth.user().onCreate((user) => {
+
+  const email = user.email;
+
+  // const url = '...'  //Optional, see https://firebase.google.com/docs/auth/custom-email-handler
+  // const actionCodeSettings = {
+  //     url: url
+  // };
+
+  // Use the Admin SDK to generate the email verification link.
+  return admin.auth().generateEmailVerificationLink(email)
+      .then((link) => {
+        const replacements = {
+          link: link,
+        }
+
+        const mailOptions = {
+          from: 'The RedBank Foundation <imsrf.dev@gmail.com>',
+          to: email,
+          subject: 'Verify your account'
+        };
+
+        sendEmail(mailOptions, 'verifyEmail', replacements)
+      })
+      .catch((error) => {
+          // Some error occurred.
+      });
+
+});
+
 // exports.computeRating = functions.https.onRequest( async (req, res) => {
 
 //         let uid = req.query.uid;

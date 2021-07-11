@@ -44,7 +44,7 @@ export class AddRequesterComponent implements OnInit, OnDestroy{
       email: ['', Validators.required],
       contactNumber: ['', Validators.required],
       password: ['', Validators.required],
-      birthday: [this.dateObject],
+      birthday: [this.dateObject, Validators.required],
       sex: ['', Validators.required],
       requesterPhoto: ['', [ this.image.bind(this)]],
       requesterPhotoUrl: [],
@@ -148,7 +148,7 @@ export class ViewRequesterComponent implements OnInit{
       lastName: [this.value.lastName, Validators.required],
       fullName: [],
       mailingAddress: [this.value.mailingAddress, Validators.required],
-      birthday: [this.dateObject],
+      birthday: [this.dateObject, Validators.required],
       sex: [this.value.sex, Validators.required]
     });
 

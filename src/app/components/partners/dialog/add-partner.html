@@ -10,12 +10,12 @@
       <div class="modal-body">
         <form [formGroup]="addForm">
           <div class="form-group">
-            <label>Institution Name</label>
+            <label>Institution Name</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="institutionName" >
             <control-messages [control]="addForm.get('institutionName')"></control-messages>
           </div>
           <div class="form-group">
-            <label>Address</label>
+            <label>Address</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="address">
           </div>
         </form>

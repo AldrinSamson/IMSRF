@@ -21,7 +21,7 @@ export class ViewFeedbackComponent implements OnInit{
     public readonly activeModal: NgbActiveModal,
     ) {
   }
-
+  
   public openPDF():void {
     let DATA = document.getElementById('feedbackData');
       
@@ -31,7 +31,11 @@ export class ViewFeedbackComponent implements OnInit{
         let fileHeight = canvas.height * fileWidth / canvas.width;
         
         const FILEURI = canvas.toDataURL('image/png')
-        let PDF = new jsPDF('p', 'mm', 'a4');
+        let PDF = new jsPDF({
+          orientation: "landscape",
+          unit: "mm",
+          format: 'a4',
+        });
         let position = 0;
         PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight)
         

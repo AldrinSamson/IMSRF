@@ -10,7 +10,7 @@
       <div class="modal-body">
         <form  [formGroup]="editForm" class="post-form">
           <div class="form-group">
-            <label>Requester Name</label>
+            <label>Requester Name</label><span class="required">*</span>
             <input type="text" class="form-control"
                     [(ngModel)]="requester"
                     [ngModelOptions]="{standalone: true}"
@@ -25,31 +25,31 @@
                     />
           </div>
           <div class="form-group">
-            <label>Patient Name</label>
+            <label>Patient Name</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="patientName">
           </div>
           <div class="form-group">
-            <label>Hospital Name</label>
+            <label>Hospital Name</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="hospitalName">
           </div>
           <div class="form-group">
-            <label>Diagnosis</label>
+            <label>Diagnosis</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="patientDiagnosis">
           </div>
           <div class="form-group">
-            <label>Blood Type</label>
+            <label>Blood Type</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="patientBloodType">
           </div>
           <div class="form-group">
-            <label>Blood Component</label>
+            <label>Blood Component</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="patientBloodComponent">
           </div>
           <div class="form-group">
-            <label>Units</label>
+            <label>Units</label><span class="required">*</span>
             <input type="text" class="form-control" formControlName="patientBloodUnits">
           </div>
 
-          <label>Diagnosis Photo</label>
+          <label>Medical Prescription Photo</label><span class="required">*</span>
               <img
               [src]="value.patientDiagnosisPhotoUrl"
               alt="patientDiagnosisPhoto"

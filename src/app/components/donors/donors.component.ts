@@ -38,7 +38,7 @@ export class AddDonorComponent implements OnInit, OnDestroy{
       lastName:['', Validators.required],
       mailingAddress: ['', Validators.required],
       email: ['', Validators.required],
-      birthday: [ this.dateObject ],
+      birthday: [ this.dateObject, Validators.required ],
       sex: [''],
       bloodType: [''],
       donorPhoto: [],
@@ -132,7 +132,7 @@ export class ViewDonorComponent implements OnInit {
       lastName:[this.value.lastName, Validators.required],
       mailingAddress: [this.value.mailingAddress, Validators.required],
       email: [this.value.email, Validators.required],
-      birthday: [ this.dateObject ],
+      birthday: [ this.dateObject, Validators.required ],
       sex: [this.value.sex],
       bloodType: [this.value.bloodType],
     });
@@ -148,7 +148,7 @@ export class ViewDonorComponent implements OnInit {
   }
 
   deleteDonor() {
-    this.donorService.delete(this.value.id , this.editForm.values);
+    this.donorService.delete(this.value.id , this.editForm.value);
     this.activeModal.close();
   }
 

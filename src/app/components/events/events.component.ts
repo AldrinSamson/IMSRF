@@ -30,7 +30,7 @@ export class InitEventComponent {
     this.initEventForm = this.formBuilder.group({
       partnerID: [],
       institutionName: [],
-      dateOfEvent: [ this.dateObject ],
+      dateOfEvent: [ this.dateObject, Validators.required ],
       location: ['', Validators.required]
     });
     const current = new Date();
@@ -188,17 +188,17 @@ export class UpdatePostEventComponent implements OnInit {
       donorsBledOk: ['', Validators.required],
       donorsBledFail: ['', Validators.required],
 
-      dateExpiry: [this.dateObject],
-      quantityAP: ['', Validators.required],
-      quantityAN: ['', Validators.required],
-      quantityBP: ['', Validators.required],
-      quantityBN: ['', Validators.required],
-      quantityOP: ['', Validators.required],
-      quantityON: ['', Validators.required],
-      quantityABP: ['', Validators.required],
-      quantityABN: ['', Validators.required],
+      dateExpiry: [this.dateObject, Validators.required],
+      quantityAP: [''],
+      quantityAN: [''],
+      quantityBP: [''],
+      quantityBN: [''],
+      quantityOP: [''],
+      quantityON: [''],
+      quantityABP: [''],
+      quantityABN: [''],
       quantityTotal: [],
-      remarks: ['', Validators.required]
+      remarks: [''],
     });
   }
 

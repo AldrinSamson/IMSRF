@@ -29,7 +29,7 @@ export class PartnerService {
       expression2: '',
       value4: '',
     };
-    return this.firebase.getAllData<Partner>(Partner, 0, filters, 'partnerID', 'asc');
+    return this.firebase.getAllData<Partner>(Partner, 0);
   }
   getOne(id){
     return this.firebase.getOne<Partner>(Partner , id);

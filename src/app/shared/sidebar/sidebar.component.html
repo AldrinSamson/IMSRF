@@ -14,18 +14,20 @@
             <span class="text-secondary text-small">>> Go to your profile</span></a>
             <a *ngIf = "isPartner" routerLink="/partner/profile" routerLinkActive #home="routerLinkActive">
               <span class="text-secondary text-small">>> Go to your profile</span></a>
+              <a  routerLink="/faq" routerLinkActive #home="routerLinkActive">
+                <span class="text-secondary text-small">>> FAQs</span></a>
         </div>
       </a>
     </li>
     <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }" *ngIf = "!isPartner">
       <a class="nav-link" routerLink="dashboard" routerLinkActive #dashboard="routerLinkActive">
-        <span class="menu-title">Dashboard</span>
+        <span class="menu-title">Monitoring Panel</span>
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
     <li class="nav-item" [ngClass]="{ 'active': home.isActive }" *ngIf = "isPartner">
       <a class="nav-link" routerLink="summary" [queryParams]="{ id: userDetails.partnerID , partner: userDetails.institutionName}"routerLinkActive #home="routerLinkActive">
-        <span class="menu-title">Home</span>
+        <span class="menu-title">Monitoring Panel</span>
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
